@@ -1,0 +1,23 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link href="styles/bootstrap.css" rel="stylesheet" />
+    <link href="styles/app.css" rel="stylesheet" />
+</head>
+<body ng-app="qarin">
+    <div class="device-root">
+        <div ui-view="notifications"></div>
+
+        <ui-view></ui-view>
+    </div>
+
+    <script src="vendor/angular.js"></script>
+    <script src="vendor/angular-ui-router.js"></script>
+    <script src="vendor/socket.io.js"></script>
+    <script src="vendor/socket.js"></script>
+    <script src="scripts/app.js"></script>
+</body>
+</html>
