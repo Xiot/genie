@@ -33,6 +33,7 @@
     <Compile Include="app.js" />
     <Compile Include="config\configuration.js" />
     <Compile Include="config\socket.js" />
+    <Compile Include="models\ChatLog.js" />
     <Compile Include="models\Product.js" />
     <Compile Include="routes\index.js" />
     <Compile Include="routes\products.js" />

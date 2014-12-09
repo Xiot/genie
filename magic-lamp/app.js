@@ -1,8 +1,8 @@
 ﻿
 var Promise = require('bluebird');
 var express = require('express');
-var http = require('http');
-var io = require('socket.io')(http);
+//var http = require('http');
+//var io = require('socket.io')(http);
 var cors = require('cors');
 
 var path = require('path');
@@ -13,8 +13,6 @@ var bodyParser = require('body-parser');
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
-
-
 var debug = require('debug')('magic_lamp');
 
 var socketConfig = require('./config/socket');
@@ -23,18 +21,32 @@ Promise.promisifyAll(mongoose);
 
 mongoose.connect('mongodb://localhost/genie');
 
+/*
 var app = express();
-app.run = function (port, callback){
-    
-    var server = http.createServer(app);
+var server = require('http').createServer(app);
+var io = require('socket.io').listen(server);
+...
+server.listen(app.get('port')); // not 'app.listen'!
+*/
+//var ioHost = require('socket.io');
+
+var app = express();
+var http = require('http');
+var server = http.createServer(app);
+var io = require('socket.io').listen(server);
+
+
+app.run = function (port, callback) {
+        
     server.listen(port, callback);
     return server;
-}
+};
 
-//app.options('*', cors());
+app.options('*', cors());
 app.use(function (req, res, next) {
-    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Origin", "http://localhost:49993");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    res.header("Access-Control-Allow-Credentials", "true");
     next();
 });
 
@@ -49,9 +61,14 @@ app.set('view engine', 'jade');
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-//app.use(cookieParser());
+app.use(cookieParser());
 //app.use(require('stylus').middleware(path.join(__dirname, 'public')));
 //app.use(express.static(path.join(__dirname, 'public')));
+
+socketConfig(io);
+//io.on('connection', function (socket) {
+//    debug('generic socket connected');
+//});
 
 app.use('/', routes);
 app.use('/users', users);
@@ -59,7 +76,7 @@ app.use('/users', users);
 var products = require('./routes/products.js');
 app.use('/products', products);
 
-socketConfig(io);
+
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
@@ -69,7 +86,7 @@ app.use(function (req, res, next) {
 });
 
 // error handlers
-
+ 
 // development error handler
 // will print stacktrace
 if (app.get('env') === 'development') {

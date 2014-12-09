@@ -1,9 +1,9 @@
 ﻿angular.module('qarin')
-.controller('HomeController', function ($scope, $http, env) {
+.controller('HomeController', function ($scope, $http, env, notificationSocket) {
 
     $scope.requestHelp = function () {
         //notificationSocket
-        //notificationSocket.emit('help-requested', {});
+        notificationSocket.emit('help-requested', {});
     };
 
     $http.get(env.apiRoot)

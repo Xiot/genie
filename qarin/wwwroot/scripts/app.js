@@ -53,30 +53,42 @@ angular.module('qarin')
 .constant('env', {
     apiRoot: 'http://localhost:3000'
 });
-//angular.module('qarin')
-//    .factory('socketBuilder', function (socketFactory, env) {
+angular.module('qarin')
+    .factory('socketBuilder', function (socketFactory, env) {
 
-//        var builder = function (namespace) {
-//            var myIoSocket = io.connect(env.apiRoot + namespace);
+        var builder = function (namespace) {
+            var myIoSocket = io.connect(env.apiRoot + namespace);
 
-//            mySocket = socketFactory({
-//                ioSocket: myIoSocket
-//            });
+            mySocket = socketFactory({
+                ioSocket: myIoSocket
+            });
 
-//            return mySocket;
-//        }
+            return mySocket;
+        }
 
-//        return builder;
+        return builder;
 
-//    })
-//    .factory('chatSocket', function (socketBuilder) {
-//        //return socketBuilder('/chat');
-//        return null;
-//    })
-//.factory('notificationSocket', function (socketBuilder) {
-//    //return socketBuilder('/notifications');
-//    return null;
-//});
+    })
+    .factory('chatSocket', function (socketBuilder) {
+        return socketBuilder('/chat');        
+    })
+.factory('notificationSocket', function (socketBuilder) {
+    return socketBuilder('/notifications');   
+});
+angular.module('qarin')
+.controller('HomeController', function ($scope, $http, env, notificationSocket) {
+
+    $scope.requestHelp = function () {
+        //notificationSocket
+        notificationSocket.emit('help-requested', {});
+    };
+
+    $http.get(env.apiRoot)
+    .then(function (x) {
+        $scope.data = x.data;
+    });
+
+});
 
 angular.module('qarin')
 .controller('ChatController', function (chatSocket) {
@@ -100,25 +112,11 @@ angular.module('qarin')
 
 });
 angular.module('qarin')
-.controller('HomeController', function ($scope, $http, env) {
-
-    $scope.requestHelp = function () {
-        //notificationSocket
-        //notificationSocket.emit('help-requested', {});
-    };
-
-    $http.get(env.apiRoot)
-    .then(function (x) {
-        $scope.data = x.data;
-    });
-
-});
-angular.module('qarin')
-.controller('NotificationsController', function ($scope) {
+.controller('NotificationsController', function ($scope, notificationSocket) {
 
     $scope.current = {};
     //notificationSocket
-    //notificationSocket.on('help', function (data) {
-    //    $scope.current = data;
-    //});
+    notificationSocket.on('help', function (data) {
+        $scope.current = data;
+    });
 });
