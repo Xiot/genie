@@ -75,20 +75,6 @@ angular.module('qarin')
 .factory('notificationSocket', function (socketBuilder) {
     return socketBuilder('/notifications');   
 });
-angular.module('qarin')
-.controller('HomeController', function ($scope, $http, env, notificationSocket) {
-
-    $scope.requestHelp = function () {
-        //notificationSocket
-        notificationSocket.emit('help-requested', {});
-    };
-
-    $http.get(env.apiRoot)
-    .then(function (x) {
-        $scope.data = x.data;
-    });
-
-});
 
 angular.module('qarin')
 .controller('ChatController', function (chatSocket) {
@@ -109,6 +95,20 @@ angular.module('qarin')
     this.send = function () {
         chatSocket.emit('chat', this.message);
     }
+
+});
+angular.module('qarin')
+.controller('HomeController', function ($scope, $http, env, notificationSocket) {
+
+    $scope.requestHelp = function () {
+        //notificationSocket
+        notificationSocket.emit('help-requested', {});
+    };
+
+    $http.get(env.apiRoot)
+    .then(function (x) {
+        $scope.data = x.data;
+    });
 
 });
 angular.module('qarin')
