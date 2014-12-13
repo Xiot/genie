@@ -2,6 +2,7 @@
 
 <html ng-app="solomon" ng-strict-di>
 <head>
+    <base href="/" />
     <meta charset="utf-8" />
     <title></title>
 
@@ -12,14 +13,17 @@
 <body>
     <div>
         <div ng-include="'app/layout/shell.html'"></div>
-        <div id="splash-page" ng-show="false">
+        <div id="splash-page" >
             <div class="page-splash">
                 <div class="page-splash-message">
                     hottowelDemo
                 </div>
-                <div class="progress progress-striped active page-progress-bar">
+                <div class="progress">
+                <progressbar class="progress-striped active" value="1" max="1"></progressbar>
+                    </div>
+                <!--<div class="progress progress-striped active page-progress-bar">
                     <div class="bar"></div>
-                </div>
+                </div>-->
             </div>
         </div>
     </div>

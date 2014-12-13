@@ -105,6 +105,7 @@ angular.module('qarin')
         notificationSocket.emit('help-requested', {});
     };
 
+
     $http.get(env.apiRoot)
     .then(function (x) {
         $scope.data = x.data;

@@ -1,1 +1,1 @@
-﻿angular.module('solomon.layout', []);
+﻿angular.module('solomon.layout', ['ui.bootstrap']); 

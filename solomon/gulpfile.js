@@ -4,6 +4,8 @@ var wrap = require('gulp-wrap');
 var wiredep = require('wiredep');
 var es = require('event-stream');
 
+var run = require('run-sequence');
+
 var paths = {
     src: {
         js: 'app/**/*.js',        
@@ -19,26 +21,48 @@ var paths = {
     }
 }
 
-//gulp.task('wiredep', function () {
-//    //log('Wiring the bower dependencies into the html');
+gulp.task('compile:src:html', function () {
+    return gulp.src(paths.src.templates)
+        .pipe(plug.size({ title: 'before' }))
+        .pipe(plug.htmlmin({ removeComments: true, collapseWhitespace: true }))
+        .pipe(plug.angularTemplatecache('app.partials.js', {
+            module: 'solomon.partials',
+            standalone: true,
+            root: 'app/'
+        }))
 
-//    var wiredep = require('wiredep').stream;
-//    var index = './index.html';
+        .pipe(plug.uglify())
+        .pipe(plug.size({ title: 'after' }))
+    .pipe(plug.size({ title: 'gzip', gzip: true }))
+        .pipe(gulp.dest(paths.output.js));
+})
+
+gulp.task('wiredep', function () {
+    //log('Wiring the bower dependencies into the html');
+
+    var wiredep = require('wiredep').stream;
+    var index = './index.html';
     
-//    return gulp.src(index)
-//        .pipe(wiredep({
-//            directory: './bower_components/',
-//            bowerJson: require('./bower.json'),
-//            ignorePath: '../..' // bower files will be relative to the root
-//        }))
-//        .pipe(gulp.dest(paths.output.root));
-//});
+    return gulp.src(index)
+        .pipe(wiredep({
+            directory: './bower_components/',
+            bowerJson: require('./bower.json'),
+            ignorePath: '../..', // bower files will be relative to the root,
+            overrides: {
+                'socket.io-client': {
+                    'main': 'socket.io.js'
+                }
+            }
+        }))
+        .pipe(gulp.dest(paths.output.root));
+});
 
 gulp.task('inject',['build-vendor', 'build-app'], function () {
 
     var vendorJs = paths.output.js + '/vendor.js';
     var vendorCss = paths.output.css + '/vendor.css';
     var appJs = paths.output.js + '/app.js';
+    var appHtml = paths.output.js + '/app.partials.js';
     var appCss = paths.output.css + '/app.css';
     var index = paths.output.root + '/index.html'
 
@@ -47,17 +71,26 @@ gulp.task('inject',['build-vendor', 'build-app'], function () {
     return gulp.src(paths.src.index)
         //.pipe(gulp.dest(paths.output.root))
         
-        .pipe(plug.inject(gulp.src([vendorCss, appCss], { read: false }), options))
-        .pipe(plug.inject(gulp.src([vendorJs, appJs], { read: false }), options))
+        .pipe(plug.inject(gulp.src([
+            vendorJs, vendorCss
+            , appJs, appCss, appHtml
+        ], { read: false }), options))
+        //.pipe(plug.inject(gulp.src([appJs, appCss], { read: false }), options))
         
         .pipe(gulp.dest(paths.output.root));
 });
 
 gulp.task('compile:src:js', function () {
     return gulp.src(paths.src.js)
-        .pipe(wrap('(function(){\n"use strict";\n<%= contents %>\n})();'))
+        .pipe(plug.sourcemaps.init())
+        //.pipe(wrap('(function(){\r\n"use strict";\r\n<%= contents %>\r\n})();'))
+        //.pipe(plug.wrapJs('(function(){\r\n"use strict";\r\n{%= body %}\r\n})();'))
+        //.pipe(plug.wrapJs('(function()\r\n{%= body %}\r\n)();', { newline: '\r\n' }))
         .pipe(plug.ngAnnotate())
+        //.pipe(wrap('(function(){\r\n"use strict";\r\n<%= contents %>\r\n})();'))
+        .pipe(plug.angularFilesort())
         .pipe(plug.concat('app.js'))
+        .pipe(plug.sourcemaps.write())
         //.pipe(plug.uglify())
         .pipe(gulp.dest(paths.output.js));
 });
@@ -70,8 +103,16 @@ gulp.task('compile:src:less', function () {
 
 gulp.task('compile:vendor:js', function () {
 
-    var vendor = wiredep().js;
+    var vendor = wiredep({
+        exclude: ['bootstrap.js', 'jquery.js'],
+        overrides: {
+            'socket.io-client': {
+                'main': 'socket.io.js'
+            }
+        }
+    }).js;
     return gulp.src(vendor)
+        //.pipe(plug.uglify())
        .pipe(plug.concat('vendor.js'))
        .pipe(gulp.dest(paths.output.js))
 });
@@ -84,6 +125,37 @@ gulp.task('compile:vendor:css', function () {
 });
 
 gulp.task('build-vendor', ['compile:vendor:js', 'compile:vendor:css']);
-gulp.task('build-app', ['compile:src:js', 'compile:src:less']);
+gulp.task('build-app', ['compile:src:js', 'compile:src:less', 'compile:src:html']);
 
 gulp.task('default', ['inject', 'build-app', 'build-vendor']);
+
+
+gulp.task('serve', ['default'],  function () {
+    plug.connect.server({
+        //livereload: true,
+        root: ['wwwroot']
+    });
+});
+
+//gulp.task('livereload', function () {
+//    return gulp.src(['wwwroot/**/*.*'])
+//        .pipe(plug.watch())
+//        .pipe(plug.connect.reload());
+//});
+
+gulp.task('watch', function () {
+    plug.livereload.listen();
+
+    gulp.watch('app/**/*.js', ['compile:src:js']);
+    gulp.watch('app/**/*.less', ['compile:src:less']);
+
+    //gulp.watch('wwwroot/**').on('change', function (e) {
+    //    console.log('File ' + e.path + ' was ' + e.type + ', running tasks...');
+    //    plug.connect.reload();        
+    //});
+    gulp.watch(paths.output.root + '/**').on('change', plug.livereload.changed);
+});
+
+gulp.task('dev', function (cb) {
+    run('default', 'serve', 'watch', cb);
+});

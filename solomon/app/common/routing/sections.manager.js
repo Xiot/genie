@@ -13,11 +13,10 @@ function sectionManagerProvider($stateProvider, $locationProvider) {
 		angular.extend(config, opts);
 	};
 
-
 	$locationProvider.html5Mode(true);
 
 
-	this.$get = sectionManagerService;
+	this.$get = SectionManagerService;
 
 	// @ngInject
 	function SectionManagerService($rootScope, $state) {

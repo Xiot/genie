@@ -2,5 +2,6 @@
     [
         'solomon.layout',
         'app.logging',
-        'app.sections'
+        'app.sections',
+        'solomon.partials'
     ]);
