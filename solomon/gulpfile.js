@@ -6,10 +6,13 @@ var es = require('event-stream');
 
 var run = require('run-sequence');
 
+var env = plug.util.env;
+
 var paths = {
     src: {
         js: 'app/**/*.js',        
-        less: 'less/app.less',
+        less: 'app/less/**/*.less',
+        lessRoot: 'app/less/app.less',
         index: 'index.html',
         templates: 'app/**/*.html'
     },
@@ -31,7 +34,7 @@ gulp.task('compile:src:html', function () {
             root: 'app/'
         }))
 
-        .pipe(plug.uglify())
+        //.pipe(plug.uglify())
         .pipe(plug.size({ title: 'after' }))
     .pipe(plug.size({ title: 'gzip', gzip: true }))
         .pipe(gulp.dest(paths.output.js));
@@ -83,20 +86,19 @@ gulp.task('inject',['build-vendor', 'build-app'], function () {
 gulp.task('compile:src:js', function () {
     return gulp.src(paths.src.js)
         .pipe(plug.sourcemaps.init())
-        //.pipe(wrap('(function(){\r\n"use strict";\r\n<%= contents %>\r\n})();'))
-        //.pipe(plug.wrapJs('(function(){\r\n"use strict";\r\n{%= body %}\r\n})();'))
-        //.pipe(plug.wrapJs('(function()\r\n{%= body %}\r\n)();', { newline: '\r\n' }))
+        
+        .pipe(plug.wrapJs('(function() {\r\n"use strict";\r\n%= body %\r\n})();', { newline: '\r\n' }))
         .pipe(plug.ngAnnotate())
-        //.pipe(wrap('(function(){\r\n"use strict";\r\n<%= contents %>\r\n})();'))
+        
         .pipe(plug.angularFilesort())
         .pipe(plug.concat('app.js'))
-        .pipe(plug.sourcemaps.write())
-        //.pipe(plug.uglify())
+        .pipe(plug.uglify())
+        .pipe(plug.sourcemaps.write())        
         .pipe(gulp.dest(paths.output.js));
 });
 
 gulp.task('compile:src:less', function () {
-    return gulp.src(paths.src.less)
+    return gulp.src(paths.src.lessRoot)
         .pipe(plug.less())
         .pipe(gulp.dest(paths.output.css));
 })
@@ -129,10 +131,31 @@ gulp.task('build-app', ['compile:src:js', 'compile:src:less', 'compile:src:html'
 
 gulp.task('default', ['inject', 'build-app', 'build-vendor']);
 
+/*
+gulp.task('server', function (next) {
+    var connect = require('connect'),
+        server = connect();
+    server.use(connect.static(dest)).listen(process.env.PORT || 80, next);
+});
 
-gulp.task('serve', ['default'],  function () {
+gulp.task('watch', ['server'], function () {
+    var server = livereload();
+    gulp.watch(dest + '/**').on('change', function (file) {
+        server.changed(file.path);
+    });
+});
+*/
+var port = process.env.PORT || 3002;
+
+gulp.task('serve',  function (next) {
+
+    //var server = plug.connect();
+    //server.use(plug.connect.static('wwwroot'))
+    //    .listen(port, next);
+
     plug.connect.server({
-        //livereload: true,
+        //livereload: reloadPort,
+        port: port,
         root: ['wwwroot']
     });
 });
@@ -144,18 +167,23 @@ gulp.task('serve', ['default'],  function () {
 //});
 
 gulp.task('watch', function () {
+
+    if (!env.sync)
+        return;
+
     plug.livereload.listen();
 
-    gulp.watch('app/**/*.js', ['compile:src:js']);
-    gulp.watch('app/**/*.less', ['compile:src:less']);
-
+    gulp.watch(paths.src.js, ['compile:src:js']);
+    gulp.watch(paths.src.less, ['compile:src:less']);
+    gulp.watch(paths.src.templates, ['compile:src:html']);
+    gulp.watch(paths.src.index, ['inject']);
     //gulp.watch('wwwroot/**').on('change', function (e) {
-    //    console.log('File ' + e.path + ' was ' + e.type + ', running tasks...');
-    //    plug.connect.reload();        
+    //    console.log('File ' + e.path + ' was ' + e.type);
+    //    plug.connect.reload(e);        
     //});
     gulp.watch(paths.output.root + '/**').on('change', plug.livereload.changed);
 });
 
 gulp.task('dev', function (cb) {
-    run('default', 'serve', 'watch', cb);
+    run('default', 'watch', 'serve', cb);
 });

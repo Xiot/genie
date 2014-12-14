@@ -1,7 +1,8 @@
 ﻿angular.module('solomon',
     [
-        'solomon.layout',
+        'app.layout',
         'app.logging',
         'app.sections',
-        'solomon.partials'
+        'solomon.partials',
+        'app.dashboard'
     ]);

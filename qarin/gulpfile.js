@@ -7,6 +7,9 @@ var less = require('gulp-less');
 var livereload = require('gulp-livereload');
 var ngAnnotate = require('gulp-ng-annotate');
 var watch = require('gulp-watch');
+var connect = require('gulp-connect');
+
+var port = process.env.PORT || 3001;
 
 var vendorFiles = [
     'bower_components/socket.io-client/socket.io.js',
@@ -59,6 +62,14 @@ gulp.task('watch', ['default'], function () {
     //gulp.watch('app/partials/**/*.html', ['compile:partials']);
 
     gulp.watch('wwwroot/**').on('change', livereload.changed);
+});
+
+gulp.task('serve', ['watch'], function () {
+    connect.server({
+        port: port,
+        //livereload: true,
+        root: ['wwwroot']
+    });
 });
 
 gulp.task('default', ['copy', 'compile:src', 'compile:less']);

@@ -5,6 +5,7 @@
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
     <Name>magic-lamp</Name>
     <RootNamespace>magic-lamp</RootNamespace>
+    <NodeExeArguments>www</NodeExeArguments>
   </PropertyGroup>
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -12,7 +13,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>2dd91fc5-0396-4744-afbe-3ef46d07238d</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>bin\www</StartupFile>
+    <StartupFile>www</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
@@ -21,7 +22,7 @@
     <ProjectTypeGuids>{3AF33F2E-1136-4D97-BBB7-1795711AC8B8};{349c5851-65df-11da-9384-00065b846f21};{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}</ProjectTypeGuids>
     <ProjectView>ProjectFiles</ProjectView>
     <NodejsPort>1337</NodejsPort>
-    <StartWebBrowser>true</StartWebBrowser>
+    <StartWebBrowser>False</StartWebBrowser>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
@@ -31,14 +32,35 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="app.js" />
-    <Compile Include="config\configuration.js" />
-    <Compile Include="config\socket.js" />
-    <Compile Include="models\ChatLog.js" />
+    <Compile Include="areas\chat\index.js" />
+    <Compile Include="areas\index.js" />
+    <Compile Include="areas\products\index.js" />
+    <Compile Include="areas\products\routes.js" />
+    <Compile Include="config\connections.js" />
+    <Compile Include="config\express.js" />
+    <Compile Include="config\passport.js" />
+    <Compile Include="config\passport\basic.js" />
+    <Compile Include="config\passport\token.js" />
+    <Compile Include="config\routes.js" />
+    <Compile Include="core\errors\httperror.js" />
+    <Compile Include="core\errors\index.js" />
+    <Compile Include="core\errors\notfound.js" />
+    <Compile Include="core\errors\servererror.js" />
+    <Compile Include="core\registration.js" />
+    <Compile Include="config\config.js" />
+    <Compile Include="areas\chat\chat.socket.js" />
+    <Compile Include="areas\chat\models\ChatLog.js" />
+    <Compile Include="core\security\authentication.service.js" />
+    <Compile Include="models\Organization.js" />
+    <Compile Include="models\OrganizationLocation.js" />
     <Compile Include="models\Product.js" />
+    <Compile Include="areas\chat\chat.config.js" />
+    <Compile Include="models\Token.js" />
+    <Compile Include="models\User.js" />
     <Compile Include="routes\index.js" />
-    <Compile Include="routes\products.js" />
     <Compile Include="routes\users.js" />
-    <Compile Include="bin\www" />
+    <Compile Include="www" />
+    <Content Include="areas\chat\chat.routes.js" />
     <Content Include="package.json" />
     <Content Include="public\stylesheets\style.styl" />
     <Content Include="README.md" />
@@ -47,9 +69,17 @@
     <Content Include="views\error.jade" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="areas\chat\" />
+    <Folder Include="areas\chat\models\" />
+    <Folder Include="areas\products\" />
+    <Folder Include="config\passport\" />
+    <Folder Include="core\" />
     <Folder Include="bin\" />
     <Folder Include="config\" />
+    <Folder Include="core\errors\" />
+    <Folder Include="core\security\" />
     <Folder Include="models\" />
+    <Folder Include="areas\" />
     <Folder Include="public\" />
     <Folder Include="public\images\" />
     <Folder Include="public\javascripts\" />

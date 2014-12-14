@@ -1,7 +1,7 @@
 ﻿var debug = require('debug')('magic-lamp-chat');
 //var uuid = require('node-uuid');
 
-var ChatLog = require('../models/ChatLog');
+var ChatLog = require('./models/ChatLog');
 
 // http://stackoverflow.com/questions/8467784/sending-a-message-to-a-client-via-its-socket-id
 

@@ -6,6 +6,14 @@
     <meta charset="utf-8" />
     <title></title>
 
+    <style>
+        /* This helps the ng-show/ng-hide animations start at the right place. */
+        /* Since Angular has this but needs to load, this gives us the class early. */
+        .ng-hide {
+            display: none !important;
+        }
+    </style>
+
     <!-- inject:css -->
     <!-- endinject -->
 
@@ -13,7 +21,7 @@
 <body>
     <div>
         <div ng-include="'app/layout/shell.html'"></div>
-        <div id="splash-page" >
+        <div id="splash-page" ng-show="false">
             <div class="page-splash">
                 <div class="page-splash-message">
                     hottowelDemo
