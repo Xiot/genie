@@ -2,10 +2,8 @@
 
 function ServerError(msg) {
     HttpError.call(this, 500, msg);
-    
-    this.name = 'ServerError';
 }
 ServerError.prototype = new HttpError();
-//NotFound.prototype.constructor = ServerError;
+ServerError.prototype.name = "ServerError";
 
 module.exports = ServerError;

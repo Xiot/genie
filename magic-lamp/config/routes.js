@@ -20,12 +20,28 @@ module.exports = function (app, io, passport){
     // will print stacktrace
     if (app.get('env') === 'development') {
         app.use(function (err, req, res, next) {
-            debug(err);
-            res.status(err.statusCode || 500);
-            res.send({
-                message: err.message,
-                stackTrace: err.stack,
-            });
+            
+            debug('message: ' + err.message);
+            debug('stack: ' + err.stack);
+
+            //if (err.message instanceof HttpError) {
+            //    err = err.message;
+            //}
+            
+            //debug(err);
+            
+            if (typeof err === 'string') {
+                res.status(500);
+                res.send({ message: err });
+            } else {
+                
+                res.status(err.statusCode || 500);
+                res.send({
+                    message: err.message,
+                    stackTrace: err.stack,
+                });    
+            }
+
         });
     }
     

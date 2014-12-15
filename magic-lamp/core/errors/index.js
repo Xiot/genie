@@ -2,5 +2,6 @@
 
 module.exports = {
     NotFound: require('./notfound'),
-    ServerError: require('./servererror')
+    ServerError: require('./servererror'),
+    NotAuthorized: require('./notauthorized.js')
 };

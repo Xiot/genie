@@ -44,6 +44,7 @@
     <Compile Include="config\routes.js" />
     <Compile Include="core\errors\httperror.js" />
     <Compile Include="core\errors\index.js" />
+    <Compile Include="core\errors\notauthorized.js" />
     <Compile Include="core\errors\notfound.js" />
     <Compile Include="core\errors\servererror.js" />
     <Compile Include="core\registration.js" />
