@@ -24,8 +24,8 @@ function authenticate(key, done){
     .then(function (token) {
         
         if (!token) {
-            debug("The token '" + token + "' was not found.");
-            return done(new errors.NotAuthorized('key not found.'));
+            debug("The token '" + key + "' was not found.");
+            return done(null, false, new errors.NotAuthorized('key not found.'));
         }
 
         done(null, token.user);

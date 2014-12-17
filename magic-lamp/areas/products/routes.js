@@ -4,10 +4,20 @@ var Product = load('~/models/Product');
 var errors = load('~/core/errors/index');
 var debug = require('debug')('magic-lamp-products');
 
+function ensureAuthenticated(req, res, next) {
+    if (req.isAuthenticated()) { return next(null); }
+    next();
+    //res.redirect('/error')
+}
+
 module.exports = function (passport) {
     
     /* GET users listing. */
-    router.get('/', passport.authenticate('localapikey'), function (req, res) {
+    router.get('/', 
+        passport.authenticate([  'bearer']), 
+        //passport.authenticate('localapikey'),
+        
+        function (req, res) {
         
         debug(req.user);
 

@@ -36,10 +36,14 @@
     <Compile Include="areas\index.js" />
     <Compile Include="areas\products\index.js" />
     <Compile Include="areas\products\routes.js" />
+    <Compile Include="areas\tokens\tokens.module.js" />
+    <Compile Include="areas\users\users.module.js" />
+    <Compile Include="areas\users\users.routes.js" />
     <Compile Include="config\connections.js" />
     <Compile Include="config\express.js" />
     <Compile Include="config\passport.js" />
     <Compile Include="config\passport\basic.js" />
+    <Compile Include="config\passport\bearer.js" />
     <Compile Include="config\passport\token.js" />
     <Compile Include="config\routes.js" />
     <Compile Include="core\errors\httperror.js" />
@@ -52,6 +56,7 @@
     <Compile Include="areas\chat\chat.socket.js" />
     <Compile Include="areas\chat\models\ChatLog.js" />
     <Compile Include="core\security\authentication.service.js" />
+    <Compile Include="core\security\tokenStore.js" />
     <Compile Include="models\Organization.js" />
     <Compile Include="models\OrganizationLocation.js" />
     <Compile Include="models\Product.js" />
@@ -60,7 +65,7 @@
     <Compile Include="models\User.js" />
     <Compile Include="routes\index.js" />
     <Compile Include="routes\users.js" />
-    <Compile Include="www" />
+    <Compile Include="server.js" />
     <Content Include="areas\chat\chat.routes.js" />
     <Content Include="package.json" />
     <Content Include="public\stylesheets\style.styl" />
@@ -72,17 +77,17 @@
   <ItemGroup>
     <Folder Include="areas\chat\" />
     <Folder Include="areas\chat\models\" />
+    <Folder Include="areas\tokens\" />
+    <Folder Include="areas\users\" />
     <Folder Include="areas\products\" />
     <Folder Include="config\passport\" />
     <Folder Include="core\" />
-    <Folder Include="bin\" />
     <Folder Include="config\" />
     <Folder Include="core\errors\" />
     <Folder Include="core\security\" />
     <Folder Include="models\" />
     <Folder Include="areas\" />
     <Folder Include="public\" />
-    <Folder Include="public\images\" />
     <Folder Include="public\javascripts\" />
     <Folder Include="public\stylesheets\" />
     <Folder Include="routes\" />

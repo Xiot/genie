@@ -1,5 +1,6 @@
 ﻿var area = require('../areas');
 var debug = require('debug')('magic-lamp-error');
+var mongoose = require('mongoose');
 
 module.exports = function (app, io, passport){
     
@@ -35,11 +36,18 @@ module.exports = function (app, io, passport){
                 res.send({ message: err });
             } else {
                 
-                res.status(err.statusCode || 500);
-                res.send({
-                    message: err.message,
-                    stackTrace: err.stack,
-                });    
+                if (err instanceof mongoose.Document.ValidationError) {
+                    res.status(400);
+                    res.send(err);
+                } else {
+                    res.status(err.statusCode || 500);
+                    res.send({
+                        message: err.message,
+                        stackTrace: err.stack,
+                    });
+                }
+
+                    
             }
 
         });

@@ -7,15 +7,18 @@ module.exports = new BasicStrategy(authenticate);
 var debug = require('debug')('magic-lamp-auth');
 
 function authenticate(username, password, done) {
+    
+    debug('basic: ' + username);
+
     User.findOneAsync({ username: username })
     .then(function (user) {
-
+        
         if (!user) {
             debug('The user \'' + username + "' was not found.");
             return done(null, false, { message: "User not found." });
         }
             
-        if (!user.validatePassword(password)) {
+        if (!user.authenticate(password)) {
             debug("Invalid password for user '" + username + "'.");
             return done(null, false, { message: "Invalid username or password." });
         }
