@@ -5,7 +5,9 @@
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
     <Name>magic-lamp</Name>
     <RootNamespace>magic-lamp</RootNamespace>
-    <NodeExeArguments>www</NodeExeArguments>
+    <NodeExeArguments>.\server.js --debug-brk</NodeExeArguments>
+    <DebuggerPort>5858</DebuggerPort>
+    <Environment>DEBUG="magic-lamp*"</Environment>
   </PropertyGroup>
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -21,7 +23,7 @@
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <ProjectTypeGuids>{3AF33F2E-1136-4D97-BBB7-1795711AC8B8};{349c5851-65df-11da-9384-00065b846f21};{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}</ProjectTypeGuids>
     <ProjectView>ProjectFiles</ProjectView>
-    <NodejsPort>1337</NodejsPort>
+    <NodejsPort>3000</NodejsPort>
     <StartWebBrowser>False</StartWebBrowser>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
@@ -34,6 +36,7 @@
     <Compile Include="app.js" />
     <Compile Include="areas\chat\index.js" />
     <Compile Include="areas\index.js" />
+    <Compile Include="areas\locations\locations.module.js" />
     <Compile Include="areas\products\index.js" />
     <Compile Include="areas\products\routes.js" />
     <Compile Include="areas\tokens\tokens.module.js" />
@@ -63,6 +66,7 @@
     <Compile Include="areas\chat\chat.config.js" />
     <Compile Include="models\Token.js" />
     <Compile Include="models\User.js" />
+    <Compile Include="models\util\geo.js" />
     <Compile Include="routes\index.js" />
     <Compile Include="routes\users.js" />
     <Compile Include="server.js" />
@@ -77,6 +81,7 @@
   <ItemGroup>
     <Folder Include="areas\chat\" />
     <Folder Include="areas\chat\models\" />
+    <Folder Include="areas\locations\" />
     <Folder Include="areas\tokens\" />
     <Folder Include="areas\users\" />
     <Folder Include="areas\products\" />
@@ -87,6 +92,7 @@
     <Folder Include="core\security\" />
     <Folder Include="models\" />
     <Folder Include="areas\" />
+    <Folder Include="models\util\" />
     <Folder Include="public\" />
     <Folder Include="public\javascripts\" />
     <Folder Include="public\stylesheets\" />
