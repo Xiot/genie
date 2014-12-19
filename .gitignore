@@ -5,6 +5,9 @@
 node_modules/
 bower_components/
 
+#compiled
+**/docs/*.html
+
 #reference
 qarin-ref/
 .ntvs_analysis.dat

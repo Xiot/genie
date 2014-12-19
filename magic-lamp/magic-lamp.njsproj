@@ -39,6 +39,7 @@
     <Compile Include="areas\locations\locations.module.js" />
     <Compile Include="areas\products\index.js" />
     <Compile Include="areas\products\routes.js" />
+    <Compile Include="areas\stores\stores.module.js" />
     <Compile Include="areas\tokens\tokens.module.js" />
     <Compile Include="areas\users\users.module.js" />
     <Compile Include="areas\users\users.routes.js" />
@@ -64,6 +65,7 @@
     <Compile Include="models\OrganizationLocation.js" />
     <Compile Include="models\Product.js" />
     <Compile Include="areas\chat\chat.config.js" />
+    <Compile Include="models\Task.js" />
     <Compile Include="models\Token.js" />
     <Compile Include="models\User.js" />
     <Compile Include="models\util\geo.js" />
@@ -82,6 +84,7 @@
     <Folder Include="areas\chat\" />
     <Folder Include="areas\chat\models\" />
     <Folder Include="areas\locations\" />
+    <Folder Include="areas\stores\" />
     <Folder Include="areas\tokens\" />
     <Folder Include="areas\users\" />
     <Folder Include="areas\products\" />
