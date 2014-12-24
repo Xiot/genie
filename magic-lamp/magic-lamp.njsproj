@@ -43,6 +43,7 @@
     <Compile Include="areas\tokens\tokens.module.js" />
     <Compile Include="areas\users\users.module.js" />
     <Compile Include="areas\users\users.routes.js" />
+    <Compile Include="areas\_init\index.js" />
     <Compile Include="config\connections.js" />
     <Compile Include="config\express.js" />
     <Compile Include="config\passport.js" />
@@ -84,6 +85,7 @@
     <Folder Include="areas\chat\" />
     <Folder Include="areas\chat\models\" />
     <Folder Include="areas\locations\" />
+    <Folder Include="areas\_init\" />
     <Folder Include="areas\stores\" />
     <Folder Include="areas\tokens\" />
     <Folder Include="areas\users\" />

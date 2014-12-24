@@ -1,0 +1,32 @@
+﻿
+<div ng-if="searching">
+    Determining Current Store
+</div>
+<div ng-if="!searching">
+    <div ng-if="searchError">
+        <span class="danger">{{searchError}}</span>
+    </div>
+    <div ng-if="!searchError">
+        <h1>
+            {{store.organization.name}}
+        </h1>
+        <div>
+            {{store.name}}
+        </div>
+
+        <div>
+            <button class="btn btn-lg" ui-sref="chat">Chat</button>
+            <button class="btn btn-lg" ng-click="requestHelp()">Request Help</button>
+            <button class="btn btn-lg">Find</button>
+        </div>
+
+    </div>
+</div>
+
+<!--<h2>Home</h2>
+
+<button class="btn btn-lg" ui-sref="chat">Chat</button>
+<button class="btn btn-lg" ng-click="requestHelp()">Request Help</button>
+<button class="btn btn-lg">Find</button>
+<pre>{{data}}</pre>
+<pre>{{store | json}}</pre>-->

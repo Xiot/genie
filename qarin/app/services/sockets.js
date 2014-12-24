@@ -4,7 +4,7 @@
         var builder = function (namespace) {
             var myIoSocket = io.connect(env.apiRoot + namespace);
 
-            mySocket = socketFactory({
+            var mySocket = socketFactory({
                 ioSocket: myIoSocket
             });
 

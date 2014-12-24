@@ -17,8 +17,9 @@ function config(io){
     notifications.on('connection', function (socket) {
         debug('connected: ' + socket.id);
         
-        socket.on('help-requested', function () {
+        socket.on('help-requested', function (info) {
             debug('help-requested: ' + socket.id);
+            debug(info);
             socket.emit('help', { message: 'help incoming' });
         });
     });

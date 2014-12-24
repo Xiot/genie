@@ -1,5 +1,9 @@
 ﻿
-angular.module('qarin', ['ui.router', 'btford.socket-io'])
+angular.module('qarin', [
+    'genie.common',
+    'qarin.partials',
+    'ui.router',
+    'btford.socket-io'])
 
 
 .config(function ($stateProvider) {
@@ -10,11 +14,11 @@ angular.module('qarin', ['ui.router', 'btford.socket-io'])
             views: {
                 '': {
                     //controller: 'RootController',
-                    templateUrl: 'partials/layout.html'
+                    templateUrl: 'app/areas/layout/layout.html'
                 },
                 notifications: {
                     controller: 'NotificationsController',
-                    templateUrl: 'partials/notifications.html'
+                    templateUrl: 'app/areas/notifications/notifications.html'
                 }
             }
         })
@@ -27,13 +31,13 @@ angular.module('qarin', ['ui.router', 'btford.socket-io'])
         .state('home', {
             url: '',
             parent: 'layout',
-            templateUrl: 'partials/home.html',
+            templateUrl: 'app/areas/home/home.html',
             controller: 'HomeController'
         })
         .state('chat', {
             url: '/chat',
             parent: 'layout',
-            templateUrl: 'partials/chat.html',
+            templateUrl: 'app/areas/chat/chat.html',
             controller: 'ChatController',
             controllerAs: 'vm'
         });

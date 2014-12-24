@@ -1,6 +1,8 @@
 ﻿var mongoose = require('mongoose');
 var crypto = require('crypto');
 
+var oid = mongoose.Schema.Types.ObjectId;
+
 // based on https://github.com/madhums/node-express-mongoose-demo/blob/master/app/models/user.js
 
 var userSchema = new mongoose.Schema({
@@ -10,7 +12,13 @@ var userSchema = new mongoose.Schema({
     email: { type: String, required: false },
     
     password_hash: { type: String, required: true },
-    password_salt: { type: String }
+    password_salt: { type: String },
+    
+    role: { type: String, enum: ['admin', 'org_admin', 'store_admin', 'employee', 'customer'] },
+    auth: {
+        orgs: { type: [oid], ref: 'Organization' },
+        stores: { type: [oid], ref: 'OrganizationLocation' }
+    }
 });
 
 userSchema

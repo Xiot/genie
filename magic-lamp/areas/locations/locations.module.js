@@ -21,11 +21,23 @@ module.exports.init = function (app, config){
         
         // http://stackoverflow.com/questions/24197235/how-do-i-populate-sub-document-after-geonear
 
-        Store.geoNear(point, opt)
-        .execAsync()
-        .then(function (r) {
-            console.log(r);
-            res.send(r);
+        Store.geoNearAsync(point, opt)        
+        .spread(function (results, stats) {
+            console.log(stats);
+            
+            var stores = results.map(function (storeData) {
+                var store = new Store(storeData.obj);
+                return store;
+            });
+            
+            Store.populateAsync(stores, { path: "organization" })
+            .then(function (obj){
+                res.send(obj);
+            }).catch(function (ex){
+                next(new ServerError(ex));
+            })
+
+            //res.send(results);
 
         }).catch(function (ex) {
             next(new ServerError(ex));
@@ -33,5 +45,5 @@ module.exports.init = function (app, config){
 
     });
 
-    app.use('/location', router);
+    app.use('/locations', router);
 }
