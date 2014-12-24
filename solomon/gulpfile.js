@@ -114,8 +114,11 @@ gulp.task('compile:vendor:js', function () {
         }
     }).js;
     return gulp.src(vendor)
-        //.pipe(plug.uglify())
+        
+        .pipe(plug.using())
        .pipe(plug.concat('vendor.js'))
+       //.pipe(plug.uglify())
+       .pipe(plug.size({title:'vendor gzip', gzip: true}))
        .pipe(gulp.dest(paths.output.js))
 });
 
@@ -126,7 +129,12 @@ gulp.task('compile:vendor:css', function () {
         .pipe(gulp.dest(paths.output.css));
 });
 
-gulp.task('build-vendor', ['compile:vendor:js', 'compile:vendor:css']);
+gulp.task('fonts', function(){
+    return gulp.src('./bower_components/bootstrap/fonts/*.*')
+        .pipe(gulp.dest(paths.output.fonts));
+})
+
+gulp.task('build-vendor', ['fonts', 'compile:vendor:js', 'compile:vendor:css']);
 gulp.task('build-app', ['compile:src:js', 'compile:src:less', 'compile:src:html']);
 
 gulp.task('default', ['inject', 'build-app', 'build-vendor']);

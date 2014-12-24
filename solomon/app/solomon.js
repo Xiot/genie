@@ -4,5 +4,6 @@
         'app.logging',
         'app.sections',
         'solomon.partials',
-        'app.dashboard'
+        'app.dashboard',
+        'symbiote.common'
     ]);
