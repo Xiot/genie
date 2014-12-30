@@ -1,15 +1,15 @@
 ﻿
 
-var routes = require('./chat.routes');
+var routes = require('./chat.routes.js');
 var socketConfig = require('./chat.socket.js');
 
 module.exports = {
     init: initialize
 };
 
-function initialize(app, config) {
-    app.use('/chat', routes);
-
+function initialize(server, config) {
+    //server.use('/chat', routes);
+    routes(server);
     socketConfig(config.io);
 
 }

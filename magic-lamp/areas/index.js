@@ -9,7 +9,7 @@ function getDirectories(srcpath) {
     });
 }
 
-function loadAreas(app, config){
+function loadAreas(server, config){
     
     var folders = getDirectories(__dirname);
     folders.forEach(function (folderName) {
@@ -17,14 +17,14 @@ function loadAreas(app, config){
         var folderPath = path.join(__dirname, folderName);
         var moduleConfig = getModuleConfig(folderPath);
         if (moduleConfig) {
-            require(moduleConfig).init(app, config);
+            require(moduleConfig).init(server, config);
             debug('loaded: ' + folderName);
         }
         //var configName = path.join(folderPath, 'index.js');
         
         //if (fs.existsSync(configName)) {
         //    var module = require(configName);
-        //    module.init(app, config);
+        //    module.init(server, config);
         //    debug('loaded: ' + folderName);
         //}
     });

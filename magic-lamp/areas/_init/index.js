@@ -1,5 +1,5 @@
-﻿var express = require('express');
-var router = express.Router();
+﻿//var express = require('express');
+//var router = express.Router();
 var mongoose = require('mongoose');
 var User = mongoose.model('User');
 
@@ -7,12 +7,12 @@ module.exports = {
     init: initialize
 }
 
-function initialize(app, config) {
+function initialize(server, config) {
     
     
-    router.post('/', function (req, res, next) {
+    server.post('/init', function (req, res, next) {
         
-        User.removeAsync()
+    User.removeAsync()
     .then(function () {
             
             var admin = new User({
@@ -33,5 +33,5 @@ function initialize(app, config) {
         });
     });
 
-    app.use('/init', router);
+    //server.use('/init', router);
 }

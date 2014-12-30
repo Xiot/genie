@@ -2,14 +2,12 @@
 var debug = require('debug')('magic-lamp-error');
 var mongoose = require('mongoose');
 
-module.exports = function (app, io, passport){
+module.exports = function (server, io, passport){
     
-    area.init(app, { io: io, passport: passport });
-    
-    
+    area.init(server, { io: io, passport: passport });
     
     // catch 404 and forward to error handler
-    app.use(function (req, res, next) {
+    server.use(function (req, res, next) {
         var err = new Error('Not Found');
         err.statusCode = 404;
         next(err);
@@ -19,8 +17,9 @@ module.exports = function (app, io, passport){
     
     // development error handler
     // will print stacktrace
-    if (app.get('env') === 'development') {
-        app.use(function (err, req, res, next) {
+
+    //if (app.get('env') === 'development') {
+        server.use(function (err, req, res, next) {
             
             debug('message: ' + err.message);
             debug('stack: ' + err.stack);
@@ -51,11 +50,11 @@ module.exports = function (app, io, passport){
             }
 
         });
-    }
+    //}
     
     // production error handler
     // no stacktraces leaked to user
-    app.use(function (err, req, res, next) {
+    server.use(function (err, req, res, next) {
         debug(err);
         res.status(err.status || 500);
         res.render('error', {

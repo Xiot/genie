@@ -1,6 +1,6 @@
 ﻿var mongoose = require('mongoose');
-var router = require('express').Router();
-var storeRoutes = require('express').Router();
+//var router = require('express').Router();
+//var storeRoutes = require('express').Router();
 
 var passport = require('passport');
 
@@ -12,13 +12,13 @@ var Store = mongoose.model('OrganizationLocation');
 var Product = mongoose.model('Product');
 var Task = mongoose.model('Task');
 
-module.exports.init = function (app, config) {
+module.exports.init = function (server, config) {
     
-    storeRoutes.get('/', function (req, res) {
+    server.get('/stores/:store_id',storeMiddleware, function (req, res) {
         res.send(req.store);
     });
     
-    storeRoutes.get('/products', function (req, res, next) {
+    server.get('/stores/:store_id/products',storeMiddleware, function (req, res, next) {
         
         Product.findAsync({ store: req.store.id })
         .then(function (products) {
@@ -28,7 +28,7 @@ module.exports.init = function (app, config) {
         });
     });
     
-    storeRoutes.get('/tasks', function (req, res, next) {
+    server.get('/stores/:store_id/tasks', storeMiddleware, function (req, res, next) {
         
         Task.findAsync({ store: req.store.id })
         .then(function (tasks) {
@@ -39,7 +39,8 @@ module.exports.init = function (app, config) {
         })
     });
     
-    storeRoutes.post('/tasks', 
+    server.post('/stores/:store_id/tasks', 
+        storeMiddleware,
         passport.authenticate('bearer'), 
         function (req, res, next) {
         
@@ -57,11 +58,11 @@ module.exports.init = function (app, config) {
 
     });
     
-    app.use('/stores/:store_id',         
-        storeMiddleware,
-        storeRoutes);
+    // server.use('/stores/:store_id',         
+    //     storeMiddleware,
+    //     storeRoutes);
     
-    app.use('/stores', router);
+    // server.use('/stores', router);
 }
 
 //function 

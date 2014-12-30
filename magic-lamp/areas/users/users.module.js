@@ -1,8 +1,8 @@
 ﻿
 var routeConfig = require('./users.routes.js');
 
-module.exports.init = function (app, config) {
+module.exports.init = function (server, config) {
     
-    app.use('/users', routeConfig(config.passport));
+    routeConfig(server, config.passport);
 
 };

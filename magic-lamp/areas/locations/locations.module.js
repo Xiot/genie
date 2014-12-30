@@ -1,12 +1,12 @@
-﻿var router = require('express').Router();
+﻿//var router = require('express').Router();
 var mongoose = require('mongoose');
 var Store = mongoose.model('OrganizationLocation');
 var ServerError = load("~/core/errors").ServerError;
 var geoUtil = load("~/models/util/geo");
 
-module.exports.init = function (app, config){
+module.exports.init = function (server, config){
 
-    router.get('/', function (req, res, next) {
+    server.get('/locations', function (req, res, next) {
         var beacon = req.query.beacon_id;
         
         var lat = parseFloat(req.query.lat);
@@ -45,5 +45,5 @@ module.exports.init = function (app, config){
 
     });
 
-    app.use('/locations', router);
+    
 }

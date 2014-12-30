@@ -52,7 +52,9 @@
     <Compile Include="config\passport\basic.js" />
     <Compile Include="config\passport\bearer.js" />
     <Compile Include="config\passport\token.js" />
+    <Compile Include="config\restify.js" />
     <Compile Include="config\routes.js" />
+    <Compile Include="config\socket.js" />
     <Compile Include="core\errors\httperror.js" />
     <Compile Include="core\errors\index.js" />
     <Compile Include="core\errors\notauthorized.js" />

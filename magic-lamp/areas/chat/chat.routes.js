@@ -1,16 +1,17 @@
 ﻿var ChatLog = require('./models/ChatLog');
-var router = require('express').Router();
+//var router = require('express').Router();
 var errors = load('~/core/errors');
 
-router.get('/', function (req, res, next) {
-	ChatLog.findAsync()
-	.then(function (results) {
+module.exports = function(server) {
 
-		res.send(results);
+	server.get('/chat', function(req, res, next) {
+		ChatLog.findAsync()
+			.then(function(results) {
 
-	}).catch(function (ex) {
-		next(new errors.ServerError(ex));
+				res.send(results);
+
+			}).catch(function(ex) {
+				next(new errors.ServerError(ex));
+			});
 	});
-});
-
-module.exports = router;
+};
