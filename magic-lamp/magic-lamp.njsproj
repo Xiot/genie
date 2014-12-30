@@ -37,6 +37,8 @@
     <Compile Include="areas\chat\index.js" />
     <Compile Include="areas\index.js" />
     <Compile Include="areas\locations\locations.module.js" />
+    <Compile Include="areas\organizations\organizations.module.js" />
+    <Compile Include="areas\organizations\organizations.routes.js" />
     <Compile Include="areas\products\index.js" />
     <Compile Include="areas\products\routes.js" />
     <Compile Include="areas\stores\stores.module.js" />
@@ -85,6 +87,7 @@
     <Folder Include="areas\chat\" />
     <Folder Include="areas\chat\models\" />
     <Folder Include="areas\locations\" />
+    <Folder Include="areas\organizations\" />
     <Folder Include="areas\_init\" />
     <Folder Include="areas\stores\" />
     <Folder Include="areas\tokens\" />
