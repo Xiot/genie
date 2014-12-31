@@ -1,3 +1,10 @@
+.clearfix:after {
+  content: "";
+  display: block;
+  height: 0;
+  clear: both;
+  visibility: hidden;
+}
 html,
 body {
   margin: 0;
@@ -59,4 +66,40 @@ body {
 .page-splash-message.page-splash-message-subtle {
   margin: 30% auto 0 auto;
   font-size: 200%;
+}
+.store-badge {
+  margin: 4px;
+  border: 1px solid black;
+  padding: 8px;
+  cursor: pointer;
+}
+.store-badge:hover {
+  background-color: gray;
+}
+.store-badge a {
+  text-decoration: none;
+}
+.store-badge .org-label {
+  font-size: 14px;
+}
+.store-badge .store-label {
+  font-size: 12px;
+}
+.store-list {
+  width: 200px;
+  float: left;
+}
+.store-info {
+  margin-left: 200px;
+}
+.task-badge {
+  margin: 4px;
+  border: 1px solid black;
+  padding: 0px;
+}
+.task-badge.task {
+  border: 2px solid green;
+}
+.task-badge.complete {
+  border-left-width: 10px;
 }

@@ -23,7 +23,7 @@ fs.readdirSync(__dirname + '/models').forEach(function (file) {
     if (~file.indexOf('.js')) require(__dirname + '/models/' + file);
 });
 
-require('./config/passport.js')(passport);
+require('./config/passport.js')(server, passport);
 //require('./config/express.js')(app, passport);
 require('./config/routes.js')(server, io, passport);
 

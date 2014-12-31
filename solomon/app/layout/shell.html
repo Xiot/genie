@@ -7,7 +7,7 @@
             sidebar
             <ul>
                 <li ng-repeat="item in vm.sections">
-                    {{item.name}}
+                   <a ng-href ="{{item.url}}"> {{item.name}}</a>
                 </li>
             </ul>
             <a ui-sref="dashboard">Dashboard</a>

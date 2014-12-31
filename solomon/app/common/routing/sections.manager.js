@@ -7,7 +7,7 @@ function sectionManagerProvider($stateProvider, $locationProvider) {
 
 	var config = {
 		resolveAlways: {}
-	}
+	};
 
 	this.configure = function (opts) {
 		angular.extend(config, opts);

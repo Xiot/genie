@@ -37,5 +37,5 @@ function getStates() {
                 order: 1
             }
         }
-    ]
+    ];
 }

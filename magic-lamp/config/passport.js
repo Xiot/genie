@@ -5,7 +5,7 @@ var bearer = require('./passport/bearer.js');
 
 var User = require('mongoose').model('User');
 
-module.exports = function (passport){
+module.exports = function (server, passport){
     
     passport.serializeUser(function (user, done) {
         done(null, user.id);
@@ -19,6 +19,8 @@ module.exports = function (passport){
             done(ex);
         });
     });
+
+    server.use(passport.initialize());
 
     passport.use(basic);
     passport.use(apiKey);

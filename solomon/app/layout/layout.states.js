@@ -1,7 +1,7 @@
 ﻿angular.module('app.layout')
-    .config(intializeStates);
+    .config(initializeStates);
 
-
+/* @ngInject */
 function initializeStates($stateProvider) {
     $stateProvider
         .state('root', {
@@ -18,7 +18,7 @@ function initializeStates($stateProvider) {
             controller: 'ShellController',
             templateUrl: 'app/layout/shell.html',
             resolve: {
-                user: function()
+                //user: function()
             }
         });
 }

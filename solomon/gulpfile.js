@@ -4,6 +4,7 @@ var wrap = require('gulp-wrap');
 var wiredep = require('wiredep');
 var es = require('event-stream');
 
+var indexFallback = require('connect-history-api-fallback');
 var run = require('run-sequence');
 
 var env = plug.util.env;
@@ -85,6 +86,8 @@ gulp.task('inject',['build-vendor', 'build-app'], function () {
 
 gulp.task('compile:src:js', function () {
     return gulp.src(paths.src.js)
+        .pipe(plug.jshint())
+        .pipe(plug.jshint.reporter('default'))
         .pipe(plug.sourcemaps.init())
         
         .pipe(plug.wrapJs('(function() {\r\n"use strict";\r\n%= body %\r\n})();', { newline: '\r\n' }))
@@ -92,7 +95,7 @@ gulp.task('compile:src:js', function () {
         
         .pipe(plug.angularFilesort())
         .pipe(plug.concat('app.js'))
-        .pipe(plug.uglify())
+        //.pipe(plug.uglify())
         .pipe(plug.sourcemaps.write())        
         .pipe(gulp.dest(paths.output.js));
 });
@@ -164,7 +167,10 @@ gulp.task('serve',  function (next) {
     plug.connect.server({
         //livereload: reloadPort,
         port: port,
-        root: ['wwwroot']
+        root: ['wwwroot'],
+        middleware: function(connect, opt){
+            return [indexFallback];
+        }
     });
 });
 

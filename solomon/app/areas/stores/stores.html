@@ -1,0 +1,30 @@
+<div class="clearfix">
+<div class="store-list">
+    <h2>Stores</h2>
+    <div>
+        <div ng-repeat="store in vm.stores" class="store-badge">
+            <a ng-click="vm.select(store)">
+
+                <div class="org-label">{{store.organization.name}}</div>
+                <div class="store-label">{{store.name}}</div>
+
+                <div>
+                    {{store.address.city}}, {{store.address.state}}
+                </div>
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="store-info">
+    <h1>{{vm.selected.organization.name}}</h1>
+    <h2>{{vm.selected.name}}</h2>
+
+    <h2>Tasks</h2>
+    <div>
+        <div ng-repeat="task in vm.tasks" class="task-badge {{task.type}}" ng-class="{complete: task.complete}">
+            <span>{{task.title}}</span>            
+        </div>
+    </div>
+</div>
+</div>

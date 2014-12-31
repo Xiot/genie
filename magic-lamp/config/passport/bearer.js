@@ -11,7 +11,9 @@ module.exports = new BearerStrategy(authenticate);
 function authenticate(encryptedToken, done) {
     
     var jtoken = jwt.decode(encryptedToken);
-        
+    
+debug('token: '+ jtoken.token_id);
+
     Token.findById(jtoken.token_id)
     .populate('user')
     .execAsync()

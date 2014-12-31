@@ -11,7 +11,7 @@ function securityService(storageService, $state, httpClient, $q) {
 
         login: _login,
         logout: _logout
-    }
+    };
 
     return service;
 
@@ -26,11 +26,11 @@ function securityService(storageService, $state, httpClient, $q) {
         return httpClient.get('/tokens/current')
         .then(function (response) {
 
-        })
+        });
     }
 
     function _login(username, password, persist) {
-    };
+    }
 
     function _logout() {
         storageService.remove('token');
