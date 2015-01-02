@@ -8,9 +8,10 @@
             <ul>
                 <li ng-repeat="item in vm.sections">
                    <a ng-href ="{{item.url}}"> {{item.name}}</a>
+                   [<a ui-state="item.name">link</a>]
                 </li>
             </ul>
-            <a ui-sref="dashboard">Dashboard</a>
+            <a href="/">Dashboard</a>
         </div>
         <div ui-view class="content">
             {{vm.message}}

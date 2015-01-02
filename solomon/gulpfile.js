@@ -15,15 +15,23 @@ var paths = {
         less: 'app/less/**/*.less',
         lessRoot: 'app/less/app.less',
         index: 'index.html',
-        templates: 'app/**/*.html'
+        templates: 'app/**/*.html',
+        images: 'resources/images/*.*'
     },
     output: {
         root: 'wwwroot',
         js: 'wwwroot/scripts',
         css: 'wwwroot/styles',
-        fonts: 'wwwroot/fonts'
+        fonts: 'wwwroot/fonts',
+        images: 'wwwroot/img'
     }
 }
+
+gulp.task('compile:src:img', function(){
+    return gulp.src(paths.src.images)
+        //.pipe(plug.imagemin())
+        .pipe(gulp.dest(paths.output.images));
+})
 
 gulp.task('compile:src:html', function () {
     return gulp.src(paths.src.templates)
@@ -133,8 +141,19 @@ gulp.task('compile:vendor:css', function () {
 });
 
 gulp.task('fonts', function(){
-    return gulp.src('./bower_components/bootstrap/fonts/*.*')
+
+    var fontTypes = ['.eot', '.svg', '.ttf', '.woff'];
+    var fonts = [];
+
+    fontTypes.forEach(function (ext) {
+        fonts.push("resources/fonts/**/*" + ext);
+        fonts.push('bower_components/bootstrap/dist/fonts/*' + ext);        
+        fonts.push('bower_components/font-awesome/fonts/*' + ext);
+    });
+
+    return gulp.src(fonts)
         .pipe(gulp.dest(paths.output.fonts));
+
 })
 
 gulp.task('build-vendor', ['fonts', 'compile:vendor:js', 'compile:vendor:css']);

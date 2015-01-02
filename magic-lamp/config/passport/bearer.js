@@ -10,6 +10,7 @@ module.exports = new BearerStrategy(authenticate);
 
 function authenticate(encryptedToken, done) {
     
+    debug('bearer');
     var jtoken = jwt.decode(encryptedToken);
     
 debug('token: '+ jtoken.token_id);

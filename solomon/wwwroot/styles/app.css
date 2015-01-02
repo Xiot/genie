@@ -1,9 +1,75 @@
+@font-face {
+  font-family: 'Source Sans Pro';
+  font-style: normal;
+  font-weight: 300;
+  src: local('Source Sans Pro Light'), local('SourceSansPro-Light'), url('../fonts/sourcesanspro/sourcesanspro-light.woff') format('woff');
+}
+@font-face {
+  font-family: 'Source Sans Pro';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Source Sans Pro'), local('SourceSansPro-Regular'), url('../fonts/sourcesanspro/sourcesanspro.woff') format('woff');
+}
+@font-face {
+  font-family: 'Source Sans Pro';
+  font-style: normal;
+  font-weight: 700;
+  src: local('Source Sans Pro Bold'), local('SourceSansPro-Bold'), url('../fonts/sourcesanspro/sourcesanspro-bold.woff') format('woff');
+}
+.font-thin {
+  font-weight: 300;
+}
 .clearfix:after {
   content: "";
   display: block;
   height: 0;
   clear: both;
   visibility: hidden;
+}
+.ribbon {
+  color: #fff;
+  margin: 10px 0 20px;
+  position: relative;
+  text-transform: uppercase;
+  background: #8ea636;
+  border: 1px solid rgba(0, 0, 0, 0.3);
+  box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.2);
+  padding: 10px 15px;
+  clear: both;
+}
+.ribbon h2 {
+  margin: 0 22px;
+  color: white;
+}
+.ribbon-fold-left {
+  color: #000;
+  margin-left: -20px;
+  z-index: 5;
+}
+.ribbon-fold-left::before {
+  display: block;
+  width: 20px;
+  height: 0px;
+  position: absolute;
+  bottom: -10px;
+  left: -1px;
+  content: "";
+  border-bottom: 10px solid transparent;
+  border-right: 20px solid #4c591d;
+}
+.ribbon-fold-right {
+  margin-right: -20px;
+}
+.ribbon-fold-right:after {
+  display: block;
+  width: 20px;
+  height: 0px;
+  position: absolute;
+  bottom: -10px;
+  right: 1px;
+  content: "";
+  border-bottom: 10px solid transparent;
+  border-left: 20px solid #4c591d;
 }
 html,
 body {
@@ -66,6 +132,30 @@ body {
 .page-splash-message.page-splash-message-subtle {
   margin: 30% auto 0 auto;
   font-size: 200%;
+}
+#login {
+  font-family: "Source Sans Pro", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  width: 100%;
+  height: 100vh;
+  background-image: url('../img/bg.jpg');
+  background-color: white;
+  border: 1px solid gray;
+  width: 400px;
+  margin: auto;
+  margin-top: 50px;
+  position: relative;
+}
+#login .login-header {
+  background-color: #c8c8c8;
+  border-bottom: 1px solid gray;
+  padding: 10px;
+}
+#login .login-header h1 {
+  font-weight: 300;
+  margin: 0px;
+}
+#login h2 {
+  font-weight: 300;
 }
 .store-badge {
   margin: 4px;

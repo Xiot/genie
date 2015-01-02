@@ -8,6 +8,14 @@ var moment = require('moment');
 module.exports.init = function (server, config){
     
     var basicAuth = config.passport.authenticate('basic');
+    var bearerAuth = config.passport.authenticate('bearer');
+
+    server.get('/tokens/current', /*bearerAuth,*/ function(req, res, next){
+        
+console.log('/tokens/current');
+        res.send(req.user);
+        next();
+    });
 
     server.post('/tokens', basicAuth, function (req, res, next) {
                 

@@ -3,6 +3,9 @@
 var mongoose = require('mongoose');
 
 var Organization = mongoose.model('Organization');
+var Store = mongoose.model('OrganizationLocation');
+
+var debug = require('debug')('magic-lamp-org');
 
 module.exports = function(server, passport) {
 
@@ -24,11 +27,37 @@ module.exports = function(server, passport) {
         }
     ]);
 
+    server.get('/organizations/:org_id/stores', idParser, function(req, res, next){
+        var orgId = req.org.id;
+
+        Store.findAsync({organization: orgId})
+        .then(function(stores){
+
+            var ret = stores.map(function(store){
+                var s = store.toObject();
+                s.id = s._id;
+                delete s._id;
+                s.href = server.router.render('store.get',{store_id: store.id});
+                return s;
+            })
+
+            debug(ret);
+            res.send(ret);
+            next();
+        }).catch(function(ex){
+            next(ex);
+        });
+
+    });
+
     return server;
 }
 
 function idParser(req, res, next) {
-    var id = req.params.id;
+    var id = req.params.org_id;
+
+    if(!id)
+        return next(new Error('id was not specified.'));
 
     var orgSearch = isObjectId(id) ? Organization.findByIdAsync(id) : Organization.findOneAsync({
         alias: id

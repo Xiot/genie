@@ -33,6 +33,10 @@ function sectionManagerProvider($stateProvider, $locationProvider) {
 
 		function registerSections(sections) {
 			sections.forEach(function (state) {
+
+				if(state.parent === undefined)
+					state.parent = 'app-root';
+
 				state.resolve =
 					angular.extend(state.resolve || {}, config.resolveAlways);
 				$stateProvider.state(state);

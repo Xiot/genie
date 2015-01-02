@@ -28,7 +28,7 @@ module.exports.init = function(server, config) {
             });
     });
 
-    server.get('/stores/:store_id', storeMiddleware, function(req, res) {
+    server.get({name:'store.get', path:'/stores/:store_id'}, storeMiddleware, function(req, res) {
         res.send(req.store);
     });
 
@@ -63,10 +63,22 @@ module.exports.init = function(server, config) {
         function(req, res, next) {
 
             debug('post');
+            var body = null;
 
-            var task = new Task(req.body);
+            try {
+                body = req.body;
+            } catch(ex){
+                debug('error with body. ', ex);
+                next(ex);
+            }
+
+            debug('after get. ', body);
+            debug(typeof body);
+try{
+            var task = new Task(body);
             task.store = req.store;
             task.created_by = req.user;
+debug('saving');
 
             task.saveAsync()
                 .spread(function(ret) {
@@ -77,7 +89,11 @@ module.exports.init = function(server, config) {
                     debug('fail: ', ex);
                     next(ex);
                 });
-
+} catch(ex){
+    debug('error creating. ', ex);
+    //next(ex);
+    throw ex;
+}
         });
 
     // server.use('/stores/:store_id',         
