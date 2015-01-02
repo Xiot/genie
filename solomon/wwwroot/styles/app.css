@@ -92,6 +92,14 @@ body {
 #splash-page {
   z-index: 99999 !important;
 }
+#splash-page.ng-hide-add-active {
+  display: block!important;
+  -webkit-transition: 0.5s linear all;
+  transition: 0.5s linear all;
+}
+#splash-page.ng-hide {
+  opacity: 0;
+}
 #splash-page .bar {
   width: 100%;
 }
@@ -103,7 +111,6 @@ body {
   width: 100%;
   height: 100%;
   background-color: #333;
-  opacity: .9;
   pointer-events: auto;
   -webkit-backface-visibility: hidden;
   -moz-backface-visibility: hidden;
@@ -138,6 +145,9 @@ body {
   width: 100%;
   height: 100vh;
   background-image: url('../img/bg.jpg');
+  overflow: hidden;
+}
+#login .login-box {
   background-color: white;
   border: 1px solid gray;
   width: 400px;
@@ -145,16 +155,16 @@ body {
   margin-top: 50px;
   position: relative;
 }
-#login .login-header {
+#login .login-box .login-header {
   background-color: #c8c8c8;
   border-bottom: 1px solid gray;
   padding: 10px;
 }
-#login .login-header h1 {
+#login .login-box .login-header h1 {
   font-weight: 300;
   margin: 0px;
 }
-#login h2 {
+#login .login-box h2 {
   font-weight: 300;
 }
 .store-badge {

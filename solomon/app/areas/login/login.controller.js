@@ -29,6 +29,6 @@ function LoginController(securityService, $state){
 				vm.busy = false;
 			});
 
-	}
+	};
 
 }

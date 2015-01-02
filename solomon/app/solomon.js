@@ -7,7 +7,8 @@
         'solomon.partials',
         'app.dashboard',
         'app.stores',
-        'symbiote.common'
+        'symbiote.common',
+        'ngAnimate'
     ]);
 
 angular.module('solomon')

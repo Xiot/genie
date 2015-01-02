@@ -111,6 +111,9 @@ gulp.task('compile:src:js', function () {
 gulp.task('compile:src:less', function () {
     return gulp.src(paths.src.lessRoot)
         .pipe(plug.less())
+        .on('error', function(err){
+            console.log(err);
+        })
         .pipe(gulp.dest(paths.output.css));
 })
 
