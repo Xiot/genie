@@ -99,6 +99,8 @@ gulp.task('compile:src:js', function () {
         .pipe(plug.sourcemaps.init())
         
         .pipe(plug.wrapJs('(function() {\r\n"use strict";\r\n%= body %\r\n})();', { newline: '\r\n' }))
+        .on('error', function(){})
+        
         .pipe(plug.ngAnnotate())
         
         .pipe(plug.angularFilesort())

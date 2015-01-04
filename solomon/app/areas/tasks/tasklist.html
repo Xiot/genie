@@ -1,0 +1,6 @@
+<h2>Tasks</h2>
+<div>
+    <div ng-repeat="task in vm.tasks" class="task-badge {{task.type}}" ng-class="{complete: task.complete}">
+        <span>{{task.title}}</span>
+    </div>
+</div>

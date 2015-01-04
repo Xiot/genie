@@ -5,10 +5,13 @@
 function securityService(storageService, $state, httpClient, $q) {
 
     var _currentUser = null;
+    var _listeners = {};
 
     var service = {
         currentUser: function(){return _currentUser;},
         requestCurrentUser: _requestCurrentUser,
+
+        on: addListener,
 
         login: _login,
         logout: _logout
@@ -16,6 +19,21 @@ function securityService(storageService, $state, httpClient, $q) {
 
     return service;
 
+    function addListener(eventName, listener){
+        if(!_listeners[eventName])
+            _listeners[eventName] = [];
+        _listeners[eventName].push(listener);
+    }
+    function fireEvent(eventName, args){
+        var handler = _listeners[eventName];
+        if(!handler) 
+            return;
+
+        var eventArgs = [].splice.call(args, 1);
+        handler.forEach(function(cb){
+            cb(eventArgs);
+        });
+    }
 
     function _requestCurrentUser(token) {
 
@@ -73,5 +91,10 @@ function securityService(storageService, $state, httpClient, $q) {
     function _logout() {
         storageService.remove('token');
         $state.go('login');
+    }
+
+    function _setUser(user){
+        _currentUser = user;
+        fireEvent('userChanged', user);
     }
 }

@@ -41473,6 +41473,25 @@ function toArray(list, index) {
 }());
 (function () {
     'use strict';
+    angular.module('symbiote.data').factory('eventService', EventService);
+    /* ngInject */
+    function EventService($rootScope) {
+        var service = {
+            on: addListener,
+            raise: fireEvent
+        };
+        return service;
+        function addListener(eventName, listener) {
+            return $rootScope.$on(eventName, listener);
+        }
+        function fireEvent(eventName, args) {
+            $rootScope.$emit(eventName, args);
+        }
+    }
+    EventService.$inject = ["$rootScope"];
+}());
+(function () {
+    'use strict';
     if (typeof String.prototype.startsWith != 'function') {
         String.prototype.startsWith = function (str) {
             return this.slice(0, str.length) == str;

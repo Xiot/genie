@@ -9,13 +9,11 @@ function ensureAuthenticated($rootScope, $state, securityService, $timeout) {
 	$rootScope.$on('$stateChangeStart', function(e, toState, toParams, fromState, fromParams) {
 
 		if (toState.name === 'login') {
-			//$rootScope.showSplash = false;
 			return;
 		}
 
 		var user = securityService.currentUser();
 		if (user) {
-			//$rootScope.showSplash = false;
 			return;
 		}
 		e.preventDefault();
@@ -23,36 +21,37 @@ function ensureAuthenticated($rootScope, $state, securityService, $timeout) {
 		securityService.requestCurrentUser()
 			.then(function(u) {
 
-                var targetState = u ? toState : 'login';
+				var targetState = u ? toState : 'login';
 
 				$state.go(targetState);
 			}).catch(function(ex) {
 				$state.go('login');
-			})
-
-		//console.log('$stateChangeStart to ' + toState.to + '- fired when the transition begins. toState,toParams : \n', toState, toParams);
+			});
 	});
 
-    var waitingForView = false;
-    $rootScope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams) {
-        //console.log('$stateChangeSuccess to ' + toState.name + '- fired once the state transition is complete.');
-        //console.log('state.success: ' + toState.name);
-        waitingForView = true;
-        
-    });
-	$rootScope.$on('$viewContentLoaded', function(e) {
+	var waitingForView = false;
+	$rootScope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams) {
 		
-        if(waitingForView){
-            waitingForView = false;
+		if(!$rootScope.showSplash)
+			return;
 
-console.log('give time to render');
-            $timeout(function(){
-                console.log('showSplash = false');
-                $rootScope.showSplash = false;                    
-            }, 1000);
-            
-        }
-        
+		waitingForView = true;
+	});
+
+	$rootScope.$on('$viewContentLoaded', function(e) {
+
+
+		if (waitingForView && $rootScope.showSplash) {
+			waitingForView = false;
+
+			console.log('give time to render');
+			$timeout(function() {
+				console.log('showSplash = false');
+				$rootScope.showSplash = false;
+			}, 10);
+
+		}
+
 	});
 }
 

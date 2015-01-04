@@ -25,9 +25,9 @@ module.exports = function(server, io, passport) {
         server: server
     });
 
-server.on('after', function(req, res, route, err){
-    debug('after: ',route, err);
-});
+// server.on('after', function(req, res, route, err){
+//     debug('after: ',route, err);
+// });
 
     //server.use(handler);
     server.on('uncaughtException', function(req, res, route, err) {

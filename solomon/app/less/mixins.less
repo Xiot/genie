@@ -1,13 +1,20 @@
 @ribbon: rgb(142,166,54);
 @ribbon-dark: darken(@ribbon, 20%);
 
-.clearfix:after {
-    content: "";
+.clearfix {
+  display: block;
+  zoom: 1;
+
+  &:after {
+    content: " ";
     display: block;
+    font-size: 0;
     height: 0;
     clear: both;
     visibility: hidden;
+  }
 }
+
 .ribbon {
     color: #fff;
     margin: 10px 0 20px;

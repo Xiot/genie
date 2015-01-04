@@ -20,16 +20,19 @@ module.exports = function (server, passport){
         });
     });
 
-    var init = passport.initialize();
-    server.use(function(req, res, next){
-        try{
-            console.log('passport try');
-            return init(req,res,next);
-        } catch(ex){
-            console.log('passport fail');
-            next(ex);
-        } 
-    });
+    // var init = passport.initialize();
+    // server.use(function(req, res, next){
+    //     try{
+
+    //         return init(req,res,next);
+
+    //     } catch(ex){
+            
+    //         next(ex);
+    //     } 
+    // });
+
+    server.use(passport.initialize());
 
     passport.use(basic);
     passport.use(apiKey);

@@ -7,10 +7,10 @@ function uiState($state) {
 	return {
 		restrict: 'A',
 		link: link,
-
+		require: '?^uiSrefActive'
 	};
  
-	function link(scope, element, attrs) {
+	function link(scope, element, attrs, uiSrefActive) {
 
 		var name = scope.$eval(attrs.uiState);
 		var params = scope.$eval(attrs.uiStateParams);

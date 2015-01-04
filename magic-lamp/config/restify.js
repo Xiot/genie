@@ -23,10 +23,10 @@ var log = function(text){
 	}
 }
 
-server.use(function(req, res, next){
-	console.log('random');
-	next();
-});
+// server.use(function(req, res, next){
+// 	console.log('random');
+// 	next();
+// });
 
 server.use(logger('dev'));
 server.use(restify.acceptParser(server.acceptable));

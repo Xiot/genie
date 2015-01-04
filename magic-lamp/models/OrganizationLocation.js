@@ -16,6 +16,19 @@ var locationSchema = new Schema({
     geo: {type: [Number], index:'2dsphere'}
 });
 
+locationSchema.options.toJSON = {
+  transform: function(store) {
+    
+    var obj = store.toObject();
+    //delete obj.password_hash;
+    //delete obj.password_salt;
+    obj.id = obj._id;
+    delete obj._id;
+    delete obj.__v;
+    return obj;
+  }
+};
+
 locationSchema.statics.nearInKmAsync = function (coords, distance, cb) {
     return geoUtil.nearInKmAsync(this, coords, distance, cb);
     //distance = distance || 0.01;

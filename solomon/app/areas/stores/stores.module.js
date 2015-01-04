@@ -18,7 +18,8 @@ function getStates() {
             templateUrl: 'app/areas/stores/stores.html',
             settings: {
                 module: true,
-                order: 2
+                order: 2,
+                icon: ['glyphicon', 'glyphicon-map-marker']
             }
         }
     ];

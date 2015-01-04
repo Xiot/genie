@@ -18,17 +18,30 @@ var userSchema = new mongoose.Schema({
     auth: {
         orgs: { type: [oid], ref: 'Organization' },
         stores: { type: [oid], ref: 'OrganizationLocation' }
-    }
+    },
+
+    store: {type: oid, ref: 'OrganizationLocation'}
 });
 
 userSchema
-.virtual('password')
-.set(function (password) {
-    this._password = password;
-    this.password_salt = this.makeSalt();
-    this.password_hash = this.encryptPassword(password);
-})
-.get(function () { return this._password });
+    .virtual('password')
+    .set(function (password) {
+        this._password = password;
+        this.password_salt = this.makeSalt();
+        this.password_hash = this.encryptPassword(password);
+    })
+    .get(function () { return this._password });
+
+userSchema.options.toJSON = {
+  transform: function(user) {
+    
+    var obj = user.toObject();
+    delete obj.password_hash;
+    delete obj.password_salt;
+    delete obj.__v;
+    return obj;
+  }
+};
 
 userSchema.methods = {
     

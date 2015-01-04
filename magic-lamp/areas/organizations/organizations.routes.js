@@ -41,7 +41,7 @@ module.exports = function(server, passport) {
                 return s;
             })
 
-            debug(ret);
+            //debug(ret);
             res.send(ret);
             next();
         }).catch(function(ex){
@@ -49,14 +49,14 @@ module.exports = function(server, passport) {
         });
 
     });
-
+ 
     return server;
 }
 
 function idParser(req, res, next) {
     var id = req.params.org_id;
 
-    if(!id)
+    if(!id || id === 'undefined')
         return next(new Error('id was not specified.'));
 
     var orgSearch = isObjectId(id) ? Organization.findByIdAsync(id) : Organization.findOneAsync({

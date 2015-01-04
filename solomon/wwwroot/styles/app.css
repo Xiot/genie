@@ -19,9 +19,14 @@
 .font-thin {
   font-weight: 300;
 }
-.clearfix:after {
-  content: "";
+.clearfix {
   display: block;
+  zoom: 1;
+}
+.clearfix:after {
+  content: " ";
+  display: block;
+  font-size: 0;
   height: 0;
   clear: both;
   visibility: hidden;
@@ -76,18 +81,16 @@ body {
   margin: 0;
   padding: 0;
 }
-.side-bar {
-  border: 1px solid red;
-  float: left;
-  width: 200px;
+body {
+  font-family: "Source Sans Pro", "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 .content {
   border: 1px solid black;
   height: 100%;
   margin-left: 200px;
 }
-.top-bar {
-  border: 1px solid green;
+.debug-panel {
+  margin-left: 200px;
 }
 #splash-page {
   z-index: 99999 !important;
@@ -202,4 +205,65 @@ body {
 }
 .task-badge.complete {
   border-left-width: 10px;
+}
+.top-bar {
+  min-height: 30px;
+  background-color: green;
+  color: white;
+  display: block;
+  zoom: 1;
+}
+.top-bar:after {
+  content: " ";
+  display: block;
+  font-size: 0;
+  height: 0;
+  clear: both;
+  visibility: hidden;
+}
+.avatar {
+  padding: 10px;
+  vertical-align: middle;
+  color: white;
+  display: inline-block;
+}
+.brand {
+  width: 200px;
+  background-color: #323232;
+  display: inline-block;
+  float: left;
+  padding: 10px;
+}
+select {
+  background-color: gray;
+}
+aside {
+  float: left;
+  width: 200px;
+  color: white;
+  background-color: #323232;
+}
+aside:before {
+  content: "";
+  position: absolute;
+  width: inherit;
+  top: 0;
+  bottom: 0;
+  z-index: -1;
+  background-color: inherit;
+  border: inherit;
+}
+aside .nav {
+  font-size: 14px;
+}
+aside > .nav > li > a {
+  color: white;
+}
+aside > .nav > li > a:hover,
+aside > .nav > li > a:focus {
+  background-color: #3c3c3c;
+  color: red;
+}
+.sidebar-label {
+  margin-left: 10px;
 }
