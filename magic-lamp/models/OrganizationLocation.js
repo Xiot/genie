@@ -20,8 +20,7 @@ locationSchema.options.toJSON = {
   transform: function(store) {
     
     var obj = store.toObject();
-    //delete obj.password_hash;
-    //delete obj.password_salt;
+
     obj.id = obj._id;
     delete obj._id;
     delete obj.__v;
@@ -29,15 +28,16 @@ locationSchema.options.toJSON = {
   }
 };
 
+
+locationSchema.links = {
+    href: {route: 'store.get', params: {store_id: 'id'}}
+}
+
 locationSchema.statics.nearInKmAsync = function (coords, distance, cb) {
-    return geoUtil.nearInKmAsync(this, coords, distance, cb);
-    //distance = distance || 0.01;
-    //return this.find({ geo: { $near: coords, $maxDistance: distance } }, cb);
+    return geoUtil.nearInKmAsync(this, coords, distance, cb);    
 }
 
 var model = mongoose.model('OrganizationLocation', locationSchema);
 
-//bluebird.promisifyAll(model);
-//bluebird.promisifyAll(model.prototype);
 
 module.exports = model;

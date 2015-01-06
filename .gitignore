@@ -5,6 +5,9 @@
 node_modules/
 bower_components/
 
+#temp folders
+.tmp/
+
 #compiled
 **/docs/*.html
 

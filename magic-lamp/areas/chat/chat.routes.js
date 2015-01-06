@@ -1,5 +1,7 @@
-﻿var ChatLog = require('./models/ChatLog');
-//var router = require('express').Router();
+﻿//var ChatLog = require('./models/ChatLog');
+var mongoose = require('mongoose');
+var ChatLog = mongoose.model('ChatLog');
+
 var errors = load('~/core/errors');
 
 module.exports = function(server) {

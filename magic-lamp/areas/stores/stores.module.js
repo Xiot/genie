@@ -12,8 +12,11 @@ var Store = mongoose.model('OrganizationLocation');
 var Product = mongoose.model('Product');
 var Task = mongoose.model('Task');
 var User = mongoose.model('User');
+var ChatLog = mongoose.model('ChatLog');
+var Product = mongoose.model('Product');
 
 var debug = require('debug')('magic-lamp-stores');
+var multer = require('multer');
 
 module.exports.init = function(server, config) {
 
@@ -36,18 +39,6 @@ module.exports.init = function(server, config) {
 		res.send(req.store);
 	});
 
-	server.get('/stores/:store_id/products', storeMiddleware, function(req, res, next) {
-
-		Product.findAsync({
-				store: req.store.id
-			})
-			.then(function(products) {
-				res.send(products);
-			}).catch(function(ex) {
-				next(new ServerError(ex));
-			});
-	});
-
 	server.get('/stores/:store_id/tasks', storeMiddleware, function(req, res, next) {
 
 		Task.findAsync({
@@ -65,7 +56,7 @@ module.exports.init = function(server, config) {
 		storeMiddleware,
 		passport.authenticate('bearer'),
 		function(req, res, next) {
-			
+
 			var body = null;
 
 			try {
@@ -84,7 +75,7 @@ module.exports.init = function(server, config) {
 						res.send(ret);
 						next();
 
-					}).catch(function(ex) {						
+					}).catch(function(ex) {
 						next(ex);
 					});
 			} catch (ex) {
@@ -140,6 +131,93 @@ module.exports.init = function(server, config) {
 					next(ex);
 				});
 
+		});
+
+	server.get('/stores/:store_id/chatlogs',
+		storeMiddleware,
+		function(req, res, next) {
+
+			ChatLog.findAsync({
+					store: req.store.id
+				})
+				.then(function(chats) {
+					res.send(chats);
+					next();
+				}).catch(function(ex) {
+					next(new Error(ex));
+				});
+		});
+
+	server.get('/stores/:store_id/products',
+		storeMiddleware,
+		function(req, res, next) {
+
+			debug('search: ' + req.query.search);
+
+			var query = {
+				store: req.store.id
+			};
+			if (req.query.search)
+				query.$text = {
+					$search: req.query.search
+				};
+
+			Product.findAsync(query)
+				.then(function(products) {
+					res.send(products);
+					next();
+				}).catch(function(ex) {
+					next(new Error(ex));
+				});
+		});
+
+
+
+	//server.use(multer(multerOptions ));
+
+	server.post('stores/:store_id/products',
+		storeMiddleware,
+		// function(req, res, next) {
+		// 	debug('multer-start');
+
+		// 	var multerOptions = {
+		// 		dest: './tmp/',
+		// 		rename: function(field, filename) {
+		// 			return filename + Date.now();
+		// 		},
+		// 		onFileUploadStart: function(file) {
+		// 			console.log(file.originalname + ' is starting ...');
+		// 		},
+		// 		onFileUploadComplete: function(file) {
+		// 			console.log(file.fieldname + ' uploaded to ' + file.path);
+		// 			req.file = file;
+		// 			next();
+		// 		},
+		// 		onError: function(err, next) {
+		// 			console.log('Error: ' + err);
+		// 			next(error);
+		// 		}
+		// 	};
+		// 	try {
+		// 		multer(multerOptions)(req,res,next);
+		// 	} catch (ex) {
+		// 		console.log('me: ' + ex);
+		// 		next(ex);
+		// 	}
+		// },
+
+		function(req, res, next) {
+			console.log('after upload');
+			try {
+				//			var p = new Product(req.body);
+				console.log(req.files);
+				//console.log(req.files[0]);
+				console.log(req.body);
+				res.send(204);
+				next();
+			} catch (ex) {
+				next(ex);
+			}
 		});
 }
 

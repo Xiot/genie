@@ -1,6 +1,6 @@
 ﻿var restify = require('restify');
 var logger = require('morgan');
-
+var multer = require('multer');
 
 var server = restify.createServer();
 
@@ -28,12 +28,14 @@ var log = function(text){
 // 	next();
 // });
 
+
+
 server.use(logger('dev'));
 server.use(restify.acceptParser(server.acceptable));
 server.use(restify.dateParser());
 server.use(restify.queryParser());
 //server.use(restify.gzipResponse());
-server.use(restify.bodyParser());
+server.use(restify.bodyParser({uploadDir: './.tmp/', keepExtensions: true}));
 server.use(restify.conditionalRequest());
 
 server.opts('/', function(req, res,next){

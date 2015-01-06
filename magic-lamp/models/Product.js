@@ -1,4 +1,5 @@
 ﻿var mongoose = require('mongoose');
+//var 
 var Schema = mongoose.Schema;
 var id = Schema.Types.ObjectId;
 
@@ -8,6 +9,7 @@ var productSchema = new Schema({
     store: {type: id, ref: 'OrganizationLocation'}
 });
 
+productSchema.index({name: 'text', description: 'text'});
 //var model = mongoose.Model('Product', productSchema);
 
 var model = mongoose.model('Product', productSchema);
