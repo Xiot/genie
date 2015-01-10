@@ -9,7 +9,7 @@ module.exports = {
 
 function initialize(server, config) {
     //server.use('/chat', routes);
-    routes(server);
+    routes(server, config.io);
     socketConfig(config.io);
 
 }

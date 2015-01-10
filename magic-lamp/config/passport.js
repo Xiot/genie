@@ -5,6 +5,8 @@ var bearer = require('./passport/bearer.js');
 
 var User = require('mongoose').model('User');
 
+var localAuth = load('~/core/security/authentication.service');
+
 module.exports = function (server, passport){
     
     passport.serializeUser(function (user, done) {
@@ -32,6 +34,7 @@ module.exports = function (server, passport){
     //     } 
     // });
 
+    server.use(localAuth.basic());
     server.use(passport.initialize());
 
     passport.use(basic);

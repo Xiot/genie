@@ -27,6 +27,8 @@ require('./config/passport.js')(server, passport);
 //require('./config/express.js')(app, passport);
 require('./config/routes.js')(server, io, passport);
 
+require('./areas/chat/chat.service').init(io);
+
 module.exports.run = function (port, callback) {
     server.listen(port, callback);
     return server;

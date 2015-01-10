@@ -2,6 +2,8 @@
 var logger = require('morgan');
 var multer = require('multer');
 
+var router = load('~/core/routes');
+
 var server = restify.createServer();
 
 restify.CORS.ALLOW_HEADERS.push('accept');
@@ -40,6 +42,8 @@ server.use(restify.conditionalRequest());
 
 server.opts('/', function(req, res,next){
 	next();
-})
+});
+
+router(server);
 
 module.exports = server;

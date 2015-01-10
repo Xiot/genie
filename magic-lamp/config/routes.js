@@ -31,7 +31,9 @@ module.exports = function(server, io, passport) {
 
     //server.use(handler);
     server.on('uncaughtException', function(req, res, route, err) {
-        debug('server uncaught. ', err);
+        debug('server uncaught. ', err.message);
+        debug(' stack: ', err.stack);
+        
         handleError(req, res, route, err);
     });
 

@@ -1,62 +1,145 @@
-function RouteBuilder(server, baseRoute, baseHandlers) {
+var url = require('url');
+var debug = require('debug')('magic-lamp-router');
 
-	var routesByName = {};
-	var paramHandlers = {};
+function RouteBuilder(server, baseRoute) {
+	this.server = server;
+	this.baseRoute = baseRoute;
 
-	this.param = function(name, handler) {
-		paramHandlers[key] = handler;
-	}
+	this.routesByName = {};
+	debug(baseRoute);
+};
 
+//	var routesByName = {};
+//var paramHandlers = {};
 
-	this.get = function(name, route, handlers) {
+RouteBuilder.prototype.param = function(name, handler) {
 
-	}
+	// try{
+	// 	this.server.param(name, handler);
+	// } catch(ex){
+	// 	console.log(ex);
+	// }
+	this.server.use(function(req, res, next) {
 
-	function _paramMiddleware(req, res, next) {
+		debug('route: ' + JSON.stringify(req.route));
 
-		for(var key in paramHandlers){
-			
-			var value = req.params[key];
-			if(!value)
-				continue;
-
-			paramHandlers[key](req, res, next, value);
+		debug('', req.params);
+		if (req.params && req.params[name]) {
+			handler(req, res, next, req.params[name]);
+		} else {
+			next();
 		}
-	}
+	});
+	return this;
+};
 
-	function _interceptor(def){
+RouteBuilder.prototype.use = function(handler) {
+	this.server.use(handler);
+	return this;
+};
 
-		var route = server.router.find()
+//['get','post','delete','patch','options','head']
 
-		return function(req, res, next){
 
-			
+[
+	'del',
+	'get',
+	'head',
+	'opts',
+	'post',
+	'put',
+	'patch'
+].forEach(function(method) {
 
-		}
-	}
+	RouteBuilder.prototype[method] = function(route, name, handlers) {
 
-	function _add(name, method, route, handlers) {
+		var args = [].slice.call(arguments, 1);
+
+		var httpMethod = method;
+		if (httpMethod === 'del')
+			httpMethod = 'delete';
+		if (httpMethod === 'opts')
+			httpMethod = 'options';
+		httpMethod = httpMethod.toUpperCase();
+
+		var subRoute = urlJoin(this.baseRoute, route);
 
 		var def = {
 			name: name,
 			method: method,
 			parent: null,
-			route: route,
-			handlers: [].slice.call(arguments, 3)
+			route: subRoute,
+			handlers: [].slice.call(arguments, 2)
 		};
 
-		routesByName[name] = def;
+		this.routesByName[name] = def;
+
+		this.server[method]({
+			name: name,
+			path: def.route
+		}, def.handlers);
+
+		debug(httpMethod + ' ' + subRoute);
+
+		return this;
+	};
+});
+
+// 	this[method] = function(route, name, handlers) {
+// 		_add(method, route, name, handlers);
+// 		return this;
+// 	}
+// })
+
+RouteBuilder.prototype.route = function(route) {
+
+	var subRoute = urlJoin(baseRoute, route);
+
+	return new RouteBuilder(server, subRoute);
+};
+
+// function _add(method, route, name, handlers) {
+
+// 	var args = [].slice.call(arguments, 1);
 
 
-		server[method]({name:name, path:route}, def.handlers);
-	}
+// 	var def = {
+// 		name: name,
+// 		method: method,
+// 		parent: null,
+// 		route: route,
+// 		handlers: [].slice.call(arguments, 3)
+// 	};
 
-}
+// 	routesByName[name] = def;
+
+
+// 	server[method]({
+// 		name: name,
+// 		path: route
+// 	}, def.handlers);
+// }
+
+//}
 
 function RouteBuilderFactory(server) {
-	server.route = function(server, baseRoute, baseHandlers) {
-		return new RouteBuilder(server, baseRoute, baseHandlers);
+	server.route = function(baseRoute) {
+		return new RouteBuilder(server, baseRoute);
 	}
 }
 
 module.exports = RouteBuilderFactory;
+
+function urlJoin(left, right){
+	var uri = left;
+	if (uri.substr(-1) === '/')
+		uri = url.slice(0, -1);
+
+	if (right[0] !== '/')
+		right += '/';
+
+	if (right.length > 1)
+		uri += right;
+
+	return uri;
+}
