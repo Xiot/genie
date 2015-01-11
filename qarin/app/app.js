@@ -1,9 +1,11 @@
 ﻿
 angular.module('qarin', [
     'genie.common',
+    'symbiote.common',
     'qarin.partials',
     'ui.router',
-    'btford.socket-io'])
+    'btford.socket-io'
+    ])
 
 
 .config(function ($stateProvider) {

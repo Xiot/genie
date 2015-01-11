@@ -4,13 +4,20 @@ var ChatLog = mongoose.model('ChatLog');
 var errors = load('~/core/errors');
 var chatService = require('./chat.service');
 
-module.exports = function(server, io) {
+module.exports = function(server, io, passport) {
 
 	server.get('/chat', function(req, res, next) {
 		ChatLog.findAsync()
 			.then(function(results) {
 
-				res.send(results);
+				var obj = results.toObject();
+				obj.forEach(function(c){
+					c.messages.forEach(function(m){
+						m.sent = m.user == req.user.id;
+					});
+				});
+
+				res.send(obj);
 				next();
 
 			}).catch(function(ex) {
@@ -21,7 +28,7 @@ module.exports = function(server, io) {
 	server.post('/chat', function(req, res, next) {
 		var newChat = new ChatLog();
 		newChat.saveAsync()
-			.then(function(s) {
+			.spread(function(s) {			
 
 				res.send(s);
 				next();
@@ -32,18 +39,25 @@ module.exports = function(server, io) {
 	});
 
 	server.get('/chat/:id', function(req, res, next) {
-		ChatLog.findByIdAsync(req.params.id)
+		ChatLog.findByIdA(req.params.id)
+			.populate('participants')
+			.execAsync()
 			.then(function(chat) {
+
+				var obj = chat.toObject();
+				obj.messages.forEach(function(m){
+					m.sent = m.user == req.user.id;
+				});
 
 				res.send(chat);
 				next();
 
 			}).catch(function(ex) {
 				next(ex);
-			})
+			});
 	})
 
-	server.post('/chat/:id/messages', function(req, res, next) {
+	server.post('/chat/:id/messages', passport.authenticate(['bearer', 'device']), function(req, res, next) {
 
 		var message = {
 			message: req.body.message,
@@ -58,6 +72,8 @@ module.exports = function(server, io) {
 			res.send(204, 'OK');
 
 		}).catch(function(ex){
+			console.log(ex.message);
+			console.log(ex.stack);
 			next(new Error(ex));
 			
 		});

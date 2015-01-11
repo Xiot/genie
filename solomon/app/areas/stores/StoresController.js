@@ -12,7 +12,7 @@ function StoresController(httpClient){
 	vm.select = function(store){
 		vm.selected = store;
 
-		httpClient.get('/stores/' + store._id + '/tasks')
+		httpClient.get('/stores/' + store.id + '/tasks')
 		.then(function(x){
 			vm.tasks = x.data;
 		});

@@ -42,17 +42,17 @@ function createNewChat() {
 function ChatRoom(id, io) {
 
 	this.id = null;
+	var roomId = 'chat-' + id;
 
 	this.post = function(msg) {
 
-		return ChatLog.updateAsync({
-				_id: id
-			}, {
+		return ChatLog.findByIdAndUpdateAsync(id
+				, {
 				$push: {
 					messages: msg
 				},
 				$addToSet: {
-					participants: msg.user.id
+					participants: msg.user
 				}
 			})
 			.spread(function(affected) {
@@ -60,8 +60,10 @@ function ChatRoom(id, io) {
 				if (affected === 0)
 					throw new Error('room not found');
 
-				io.to(id).emit('message', {
-					from: msg.user.id,
+				debug('chat-message: ' + id);
+				io.to(roomId).emit('message', {
+					chat: id,
+					from: msg.user,
 					date: msg.timestamp,
 					message: msg.message
 				});
@@ -100,10 +102,12 @@ function ChatService() {
 
 		socket.on('join', function(opts) {
 			var id = opts.id;
+			debug('chat-join: ', opts);
 			socket.join('chat-' + id);
 		});
 
 		socket.on('leave', function(opts) {
+			debug('chat-leave: ' + id);
 			socket.leave('chat-' + opts.id);
 		});
 

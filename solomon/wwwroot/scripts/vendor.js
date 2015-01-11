@@ -41450,8 +41450,7 @@ function toArray(list, index) {
                 return uri.indexOf('://', 0) < 0 ? provider.baseUri + uri : uri;
             }
             function _extendConfig(config) {
-                if (!config)
-                    return {};
+                config = config || {};
                 //TODO: Move the authentication token stuff into an interceptor
                 if (config.auth) {
                     var authKey = '';

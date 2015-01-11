@@ -2,7 +2,7 @@
 var basic = require('./passport/basic.js');
 var apiKey = require('./passport/token.js');
 var bearer = require('./passport/bearer.js');
-
+var device = require('./passport/device.js');
 var User = require('mongoose').model('User');
 
 var localAuth = load('~/core/security/authentication.service');
@@ -34,11 +34,25 @@ module.exports = function (server, passport){
     //     } 
     // });
 
-    server.use(localAuth.basic());
-    server.use(passport.initialize());
+    server.use(localAuth.device());
+    server.use(passport.initialize());  
 
     passport.use(basic);
     passport.use(apiKey);
     passport.use(bearer);
+    passport.use(device);
+
+
+    var deviceMiddleware = function(req, res, next){
+        passport.authenticate(['device', 'bearer'], function(err, user, info){
+            req.authenticated = !!user;
+            req.user = user;
+
+            //console.log(info);
+
+            next();
+        })(req, res,next);
+    };
+    server.use(deviceMiddleware);
 }
 

@@ -10,10 +10,10 @@ module.exports = new BearerStrategy(authenticate);
 
 function authenticate(encryptedToken, done) {
     
-    debug('bearer');
+    //debug('bearer');
     var jtoken = jwt.decode(encryptedToken);
     
-debug('token: '+ jtoken.token_id);
+//debug('token: '+ jtoken.token_id);
 
     Token.findById(jtoken.token_id)
     .populate('user')

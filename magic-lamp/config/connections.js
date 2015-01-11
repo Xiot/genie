@@ -13,7 +13,7 @@ var grid = require('./gridfs');
 bluebird.promisifyAll(mongoose);
 
 // Should get location and credentials from config
-mongoose.connect('mongodb://localhost/genie');
+mongoose.connect('mongodb://genie:solomon@htpc/genie');
 var gfs = grid(mongoose);
 
 module.exports = {

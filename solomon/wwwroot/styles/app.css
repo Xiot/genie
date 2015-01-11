@@ -267,3 +267,52 @@ aside > .nav > li > a:focus {
 .sidebar-label {
   margin-left: 10px;
 }
+.chat-window {
+  width: 400px;
+  border: 1px solid black;
+  min-height: 300px;
+}
+.chat-window .message-pane {
+  overflow-y: scroll;
+  position: relative;
+  max-height: 400px;
+  display: block;
+  zoom: 1;
+}
+.chat-window .message-pane:after {
+  content: " ";
+  display: block;
+  font-size: 0;
+  height: 0;
+  clear: both;
+  visibility: hidden;
+}
+.chat-bubble {
+  width: 300px;
+  margin: 5px;
+}
+.chat-bubble.sent {
+  float: left;
+}
+.chat-bubble.sent .message-body {
+  background-color: green;
+}
+.chat-bubble.received {
+  float: right;
+}
+.chat-bubble.received .message-body {
+  background-color: #5050ff;
+}
+.chat-bubble .message-time {
+  color: red;
+  font-size: 10px;
+  font-family: 'Arial';
+}
+.chat-bubble .message-body {
+  display: block;
+  padding: 3px;
+  padding-left: 8px;
+  color: white;
+  border-radius: 2px;
+  border: 1px solid black;
+}

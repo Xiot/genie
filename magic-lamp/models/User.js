@@ -6,21 +6,26 @@ var oid = mongoose.Schema.Types.ObjectId;
 // based on https://github.com/madhums/node-express-mongoose-demo/blob/master/app/models/user.js
 
 var userSchema = new mongoose.Schema({
-    firstName: { type: String, required: true },
-    lastName: { type: String, required: true },
-    username: { type: String, required: true },
+    firstName: { type: String, validate: [optionalOnDevice, 'First Name is required.'] },
+    lastName: { type: String, validate: [optionalOnDevice, 'Last Name is required.']  },
+    username: { type: String, validate: [optionalOnDevice, 'Username is required.']  },
     email: { type: String, required: false },
     
-    password_hash: { type: String, required: true },
+    password_hash: { type: String, required: false },
     password_salt: { type: String },
     
-    role: { type: String, enum: ['admin', 'org_admin', 'store_admin', 'employee', 'customer'] },
+    role: { 
+        type: String, 
+        enum: ['admin', 'org_admin', 'store_admin', 'employee', 'customer', 'device'], 
+        required: true 
+    },
     auth: {
         orgs: { type: [oid], ref: 'Organization' },
         stores: { type: [oid], ref: 'OrganizationLocation' }
     },
 
-    store: {type: oid, ref: 'OrganizationLocation'}
+    store: {type: oid, ref: 'OrganizationLocation'},
+    device: {type: String}
 });
 
 userSchema
@@ -31,6 +36,10 @@ userSchema
         this.password_hash = this.encryptPassword(password);
     })
     .get(function () { return this._password });
+
+userSchema.path('device').validate(function(value){
+    return this.role !== 'device' || value;
+});
 
 userSchema.options.toJSON = {
   transform: function(user) {
@@ -69,5 +78,9 @@ userSchema.methods = {
     }
 };
 
+
+function optionalOnDevice(value){
+   return this.role === 'device' || value; 
+}
 
 module.exports = mongoose.model('User', userSchema);
