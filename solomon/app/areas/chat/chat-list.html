@@ -1,8 +1,7 @@
 <h1>Chats</h1>
 <div>
     <div ng-repeat="c in vm.chats" class="chat-window">
-        <button ng-click="vm.join(c)">Join</button>
-        <button ng-click="vm.leave(c)">Leave</button>
+        
         <div class="message-pane">
             <div ng-repeat="m in c.messages" ng-class="{'chat-bubble': true, sent: m.sent, received: !m.sent}">
                 <span class="message-time">{{m.time | date: 'medium'}}</span>

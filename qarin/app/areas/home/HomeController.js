@@ -1,11 +1,11 @@
 ﻿angular.module('qarin')
     .controller('HomeController', HomeController);
 
-function HomeController($scope, $http, env, notificationSocket, storeService) {
+function HomeController($scope, $http, env, socket, storeService) {
 
     $scope.requestHelp = function () {
         //notificationSocket
-        notificationSocket.emit('help-requested', {store_id: storeService.current._id});
+        socket.emit('help-requested', {store_id: storeService.current._id});
     };
 
     $scope.searching = true;

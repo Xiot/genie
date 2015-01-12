@@ -39,7 +39,9 @@ module.exports = function(server, io, passport) {
 	});
 
 	server.get('/chat/:id', function(req, res, next) {
-		ChatLog.findByIdA(req.params.id)
+		
+try{
+		ChatLog.findById(req.params.id)
 			.populate('participants')
 			.execAsync()
 			.then(function(chat) {
@@ -53,8 +55,11 @@ module.exports = function(server, io, passport) {
 				next();
 
 			}).catch(function(ex) {
-				next(ex);
+				next(new Error(ex));
 			});
+		} catch(ex){
+			next(new Error(ex));
+		}
 	})
 
 	server.post('/chat/:id/messages', passport.authenticate(['bearer', 'device']), function(req, res, next) {
@@ -62,7 +67,7 @@ module.exports = function(server, io, passport) {
 		var message = {
 			message: req.body.message,
 			user: req.user.id,
-			timestamp: Date.now()
+			time: Date.now()
 		};
 
 		var room = chatService.getById(req.params.id);

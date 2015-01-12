@@ -1,6 +1,5 @@
 ﻿
-angular.module('qarin', [
-    'genie.common',
+angular.module('qarin', [    
     'symbiote.common',
     'qarin.partials',
     'ui.router',
@@ -8,7 +7,10 @@ angular.module('qarin', [
     ])
 
 
-.config(function ($stateProvider) {
+.config(function ($stateProvider, $httpProvider) {
+    
+$httpProvider.interceptors.push('deviceInterceptor');
+
     $stateProvider
         .state('root', {
             url: '',
@@ -36,12 +38,24 @@ angular.module('qarin', [
             templateUrl: 'app/areas/home/home.html',
             controller: 'HomeController'
         })
-        .state('chat', {
+        .state('chat-list', {
             url: '/chat',
+            parent: 'layout',
+            templateUrl: 'app/areas/chat/chatlist.html',
+            controller: 'ChatListController',
+            controllerAs: 'vm'
+        })
+        .state('chat', {
+            url: '/chat/:id',
             parent: 'layout',
             templateUrl: 'app/areas/chat/chat.html',
             controller: 'ChatController',
-            controllerAs: 'vm'
+            controllerAs: 'vm',
+            resolve: {
+                chatId: function($stateParams){
+                    return $stateParams.id;
+                }
+            }
         });
 });
 
@@ -53,4 +67,18 @@ angular.module('qarin')
         console.log(unfoundState.toParams); // {a:1, b:2}
         console.log(unfoundState.options); // {inherit:false} + default options
     })
+});
+
+angular.module('qarin')
+.factory('deviceInterceptor', function($q, storageService){
+    return {
+        request: function(config){
+
+            if(!config || !config.headers)
+                return config;
+
+            config.headers['x-device'] = storageService.get('device');
+            return config;
+        }
+    }
 });

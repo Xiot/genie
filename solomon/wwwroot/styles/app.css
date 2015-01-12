@@ -292,13 +292,13 @@ aside > .nav > li > a:focus {
   margin: 5px;
 }
 .chat-bubble.sent {
-  float: left;
+  float: right;
 }
 .chat-bubble.sent .message-body {
   background-color: green;
 }
 .chat-bubble.received {
-  float: right;
+  float: left;
 }
 .chat-bubble.received .message-body {
   background-color: #5050ff;

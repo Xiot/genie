@@ -126,10 +126,8 @@ gulp.task('default', function (cb) {
 
 gulp.task('watch', function () {
 
-    if (!env.sync)
-        return;
-
-    plug.livereload.listen();
+    if (env.sync)
+        plug.livereload.listen();
 
     gulp.watch(paths.src.js, ['compile:app:js']);
     gulp.watch(paths.src.less, ['compile:app:less']);

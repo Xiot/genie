@@ -42,12 +42,11 @@ function createNewChat() {
 function ChatRoom(id, io) {
 
 	this.id = null;
-	var roomId = 'chat-' + id;
-
+	
 	this.post = function(msg) {
 
-		return ChatLog.findByIdAndUpdateAsync(id
-				, {
+		debug('posting to ' + id);
+		return ChatLog.findByIdAndUpdateAsync(id, {
 				$push: {
 					messages: msg
 				},
@@ -60,15 +59,32 @@ function ChatRoom(id, io) {
 				if (affected === 0)
 					throw new Error('room not found');
 
-				debug('chat-message: ' + id);
-				io.to(roomId).emit('message', {
-					chat: id,
-					from: msg.user,
-					date: msg.timestamp,
-					message: msg.message
-				});
+				return ChatLog.findById(id, 'participants')
+					.execAsync()
+					.then(function(chat) {
+						
+						if (chat.participants.length === 0)
+							return false;
 
-				return true;
+						var group = io;
+						chat.participants.forEach(function(participantId) {
+							
+							if(participantId == msg.user)
+								return;
+
+							group = group.to(participantId);
+						});
+
+						debug('chat-message: ' + id);
+						group.emit('message', {
+							chat: id,
+							user: msg.user,
+							time: msg.time,
+							message: msg.message,
+						});
+
+						return true;
+					});
 			});
 	}
 }
@@ -87,7 +103,7 @@ function ChatService() {
 	this.getById = function(id) {
 
 		var room = _openRooms[id];
-		if(room)
+		if (room)
 			return room;
 
 		room = _openRooms[id] = new ChatRoom(id, _io);
@@ -96,9 +112,11 @@ function ChatService() {
 
 	function onConnection(socket) {
 
-		debug('chat connected')
+		debug('chat connected: \n  device: ' + socket.device + '\n  user: ' + socket.user.id);
 
 		socket.on('disconnect', onDisconnect);
+
+		socket.join(socket.user.id);
 
 		socket.on('join', function(opts) {
 			var id = opts.id;
@@ -114,6 +132,7 @@ function ChatService() {
 		socket.on('register', function(data) {
 			var userId = data.userId;
 			var storeId = data.storeId;
+			var deviceId = data.deviceId;
 
 			// leave rooms from other stores
 			var storeRooms = socket.rooms.splice();

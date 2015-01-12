@@ -13,6 +13,7 @@ restify.CORS.ALLOW_HEADERS.push('origin');
 restify.CORS.ALLOW_HEADERS.push('withcredentials');
 restify.CORS.ALLOW_HEADERS.push('x-requested-with');
 restify.CORS.ALLOW_HEADERS.push('authorization');
+restify.CORS.ALLOW_HEADERS.push('x-device');
 
 server.use(restify.CORS({
     credentials: true

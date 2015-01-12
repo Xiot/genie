@@ -1,9 +1,9 @@
 ﻿angular.module('qarin')
-.controller('NotificationsController', function ($scope, notificationSocket) {
+.controller('NotificationsController', function ($scope, socket) {
 
     $scope.current = {};
     //notificationSocket
-    notificationSocket.on('help', function (data) {
+    socket.on('help', function (data) {
         $scope.current = data;
     });
 });

@@ -18,8 +18,8 @@ function ChatListController(storeService, httpClient, eventService, chatService,
 		var chat = getChat(msg.chat);
 		chat.messages.push({
 			message: msg.message,
-			time: msg.date,
-			user: msg.from
+			time: msg.time,
+			user: msg.user
 		});
 	});
 

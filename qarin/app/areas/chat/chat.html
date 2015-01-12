@@ -1,9 +1,10 @@
 ﻿
 <form ng-submit="vm.send()">
-    <h1>{{vm.name}}</h1>
+    <h1>Chat</h1>
     <div style="height: 300px" id="chatLog">
-        <p ng-repeat="m in vm.messages">{{m.from}}: {{m.message}}</p>
+        <p ng-repeat="m in vm.chat.messages">{{m.user}}: {{m.message}}</p>
     </div>
+
     <input type="text" name="message" ng-model="vm.message" />
     <button type="submit">Send</button>
 </form>
