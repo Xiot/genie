@@ -7,7 +7,7 @@ function NotificationService($rootScope, socketBuilder){
 	var socket = socketBuilder('');
 
 	socket.on('message', function(data){
-		$rootScope
-	})
+	//	$rootScope
+	});
 
 }

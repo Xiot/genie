@@ -8,7 +8,7 @@ function GeoLocationService($q, $window, $rootScope) {
 
     return {
         getGps: _currentPosition,
-    }
+    };
     
     function _currentPosition() {
 
@@ -17,7 +17,7 @@ function GeoLocationService($q, $window, $rootScope) {
 
         var defer = $q.defer();
         $window.navigator.geolocation.getCurrentPosition(function (pos) {
-            $rootScope.$apply(function () { defer.resolve(pos); })
+            $rootScope.$apply(function () { defer.resolve(pos); });
         }, function (ex) {
 
             $rootScope.$apply(function () {

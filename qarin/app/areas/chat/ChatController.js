@@ -24,33 +24,5 @@
             .then(function(msg){
                 vm.chat.messages.push({message: message});
             });
-
-			// httpClient.post('/chat/' + chatId + '/messages', {
-			// 		message: vm.message
-			// 	})
-			// 	.then(function(res) {
-			// 		console.log(res);
-			// 		vm.message = '';
-			// 	});
 		}
-
-
-
-		// var me = this;
-
-		// socket.on('init', function (data) {
-		//     me.name = data.name;
-		// })
-
-		// chatSocket.on('chat', function (msg) {
-		//     me.messages.push(msg);
-		// })
-		// this.messages = [];
-
-		// this.name = "";
-		// this.message = "";
-		// this.send = function () {
-		//     chatSocket.emit('chat', this.message);
-		// }
-
 	});

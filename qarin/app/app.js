@@ -3,13 +3,21 @@ angular.module('qarin', [
     'symbiote.common',
     'qarin.partials',
     'ui.router',
-    'btford.socket-io'
+    'ngAnimate',
+    'btford.socket-io',
+
+    'qarin.interceptors',
+    'qarin.errors',
+    
+    'qarin.home',
+    'qarin.products'
+
     ])
 
 
-.config(function ($stateProvider, $httpProvider) {
+.config(function ($stateProvider, $httpProvider, $urlRouterProvider) {
     
-$httpProvider.interceptors.push('deviceInterceptor');
+    $urlRouterProvider.otherwise('/');
 
     $stateProvider
         .state('root', {
@@ -19,11 +27,12 @@ $httpProvider.interceptors.push('deviceInterceptor');
                 '': {
                     //controller: 'RootController',
                     templateUrl: 'app/areas/layout/layout.html'
-                },
-                notifications: {
-                    controller: 'NotificationsController',
-                    templateUrl: 'app/areas/notifications/notifications.html'
                 }
+                // ,
+                // notifications: {
+                //     controller: 'NotificationsController',
+                //     templateUrl: 'app/areas/notifications/notifications.html'
+                // }
             }
         })
         .state('layout', {
@@ -32,12 +41,7 @@ $httpProvider.interceptors.push('deviceInterceptor');
             abstract: true,
             template: '<ui-view></ui-view>'
         })
-        .state('home', {
-            url: '',
-            parent: 'layout',
-            templateUrl: 'app/areas/home/home.html',
-            controller: 'HomeController'
-        })
+        
         .state('chat-list', {
             url: '/chat',
             parent: 'layout',
@@ -60,25 +64,13 @@ $httpProvider.interceptors.push('deviceInterceptor');
 });
 
 angular.module('qarin')
-.run(function ($rootScope) {
+.run(function ($rootScope, $state) {
+
+    $rootScope.$state = $state;
 
     $rootScope.$on('$stateNotFound', function (event, unfoundState, fromState, fromParams) {
         console.log(unfoundState.to); // "lazy.state"
         console.log(unfoundState.toParams); // {a:1, b:2}
         console.log(unfoundState.options); // {inherit:false} + default options
-    })
-});
-
-angular.module('qarin')
-.factory('deviceInterceptor', function($q, storageService){
-    return {
-        request: function(config){
-
-            if(!config || !config.headers)
-                return config;
-
-            config.headers['x-device'] = storageService.get('device');
-            return config;
-        }
-    }
+    });
 });

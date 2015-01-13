@@ -1,21 +1,18 @@
-﻿angular.module('qarin')
+﻿angular.module('qarin.home')
     .controller('HomeController', HomeController);
 
 function HomeController($scope, $http, env, socket, storeService) {
 
-    $scope.requestHelp = function () {
-        //notificationSocket
+    var vm = angular.extend(this, {
+        store: storeService.current,
+        requestHelp: _requestHelp
+    });
+
+    function _requestHelp() {
         socket.emit('help-requested', {store_id: storeService.current._id});
     };
 
-    $scope.searching = true;
-    $scope.searchError = "";
-
-    storeService.getCurrentStore().then(function(store){
-        $scope.store = store;
-    }).catch(function (ex) {
-        $scope.searchError = ex;
-    }).finally(function () {
-        $scope.searching = false;
+    storeService.on('storeChanged', function(e, args){
+        vm.store = args.store;
     });
-};
+}

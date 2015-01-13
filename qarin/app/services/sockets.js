@@ -18,7 +18,7 @@
             });
 
             return mySocket;
-        }
+        };
 
         return builder;
 

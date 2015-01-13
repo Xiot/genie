@@ -68,9 +68,14 @@ gulp.task('compile:vendor', ['compile:vendor:js', 'compile:vendor:css', 'fonts']
 
 gulp.task('compile:app:js', function () {
     return gulp.src(paths.src.js)
+        .pipe(plug.jshint())
+        .pipe(plug.jshint.reporter('default'))
+
         .pipe(plug.sourcemaps.init())
 
         .pipe(plug.wrapJs('(function() {\r\n"use strict";\r\n%= body %\r\n})();', { newline: '\r\n' }))
+        .on('error', function(){})
+        
         .pipe(plug.ngAnnotate())
 
         .pipe(plug.angularFilesort())

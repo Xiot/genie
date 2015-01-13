@@ -4,6 +4,6 @@
 /* @ngInject */
 function _configureHttp(httpClientProvider, env) {
     httpClientProvider.baseUri = env.apiRoot;
-    httpClientProvider.authTokenName = "token";
-    httpClientProvider.authTokenType = "Bearer";
+    //httpClientProvider.authTokenName = "token";
+    //httpClientProvider.authTokenType = "Bearer";
 }
