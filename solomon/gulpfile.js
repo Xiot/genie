@@ -206,10 +206,8 @@ gulp.task('serve',  function (next) {
 
 gulp.task('watch', function () {
 
-    if (!env.sync)
-        return;
-
-    plug.livereload.listen();
+    if (env.sync)
+        plug.livereload.listen();
 
     gulp.watch(paths.src.js, ['compile:src:js']);
     gulp.watch(paths.src.less, ['compile:src:less']);

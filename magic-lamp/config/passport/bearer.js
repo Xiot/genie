@@ -29,7 +29,11 @@ function authenticate(encryptedToken, done) {
             return done(null, false, { message: 'Token expired.' });
         }
     
-        return done(null, token.user);
+        var user = token.user;
+        user.auth = user.auth || {};
+        user.auth.bearer = true;
+
+        return done(null, user);
 
     }).catch(function (ex) {
         return done(ex);

@@ -16,16 +16,21 @@ module.exports = authenticator;
 
 function authenticate(deviceId, done) {
 
-	//debug(deviceId);
+	debug(deviceId);
 
 	User.findOneAsync({
 			device: deviceId
 		})
 		.then(function(user) {
+			
+        	user.auth = user.auth || {};
+        	user.auth.device = true;
 
+        	debug('good: ', user);
 			done(null, user);
 
 		}).catch(function(ex) {
+			debug('bad:', ex);
 			done(new Error(ex));
 		});
 }

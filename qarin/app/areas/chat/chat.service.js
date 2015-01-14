@@ -15,7 +15,10 @@ function ChatFactory($rootScope, httpClient, socket) {
 	function sendMessage(id, message) {
 
 		var url = '/chat/' + id + '/messages';
-		return httpClient.post(url, {message: message},{});
+		return httpClient.post(url, {message: message})
+			.then(function(res){
+				return res.data;
+			});
 	}
 
 	function init(){

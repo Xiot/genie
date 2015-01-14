@@ -2,26 +2,34 @@ angular.module('qarin')
 	.controller('ChatListController', ChatListController);
 
 // @ngInject
-function ChatListController(httpClient, storeService) {
+function ChatListController(httpClient, storeService, $state) {
 
 	var vm = angular.extend(this, {
-		chats: null
+		chats: null,
+		create: _createNewChat
 	});
 
+	_init();
 
-	var opts = {
-		params: {
-			store: storeService.current.id
-		},
-		headers: {
-			'x-device': 'dev-1'
-		}
-	};
+	function _init() {
+		var opts = {
+			params: {
+				store: storeService.current.id
+			}
+		};
 
-	httpClient.get('/users/me/chats', opts)
-		.then(function(res) {
-			vm.chats = parse(res.data);
+		httpClient.get('/users/me/chats', opts)
+			.then(function(res) {
+				vm.chats = parse(res.data);
+			});
+	}
+
+	function _createNewChat(){
+		httpClient.post('/stores/' + storeService.current.id + '/chat')
+		.then(function(res){
+			$state.go('chat', {id: res.data._id});
 		});
+	}
 }
 
 function parse(data) {

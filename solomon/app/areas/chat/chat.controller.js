@@ -47,11 +47,13 @@ function ChatListController(storeService, httpClient, eventService, chatService,
 
 	function sendMessage(chat, message) {
 		return chatService.sendMessage(chat._id, message)
-			.then(function() {
-				// chat.messages.push({
-				// 	message: message,
-				// 	sent: true
-				// });
+			.then(function(msg) {
+				chat.messages.push({
+					message: msg.message,
+					time: msg.time,
+					user: msg.user,
+					sent: true
+				});
 			}).catch(function(ex) {
 				console.log(ex);
 			}).finally(function(){

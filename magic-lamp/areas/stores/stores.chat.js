@@ -12,11 +12,13 @@ module.exports = function(server, io, passport) {
 			store: req.params.store_id,
 		};
 
-		ChatLog.findAsync(query)
+		ChatLog.find(query)
+		.sort({lastMessageTime: -1})
+		.execAsync()
 			.then(function(results) {
 
 				var list = [];
-				
+
 				results.forEach(function(c) {
 					var obj = c.toObject();
 					obj.messages.forEach(function(m) {
@@ -33,24 +35,31 @@ module.exports = function(server, io, passport) {
 			});
 	});
 
-	server.post('/', passport.authenticate('bearer'), function(req, res, next) {
+	server.post('/',
+		function(req, res, next) {
+			if (!req.authenticated)
+				return next(new Error('unauthenticated'));
+			next();
+		},
+		function(req, res, next) {
 
-		try {
-			var newChat = new ChatLog();
-			newChat.store = req.params.store_id;
-			newChat.participants.push(req.user.id);
+			try {
+				var newChat = new ChatLog();
+				newChat.store = req.params.store_id;
+				newChat.product = req.body.product;
+				newChat.participants.push(req.user.id);
 
-			newChat.saveAsync()
-				.spread(function(s) {
-					res.send(s);
-					next();
-				}).catch(function(ex) {
-					next(new Error(ex));
-				});
-		} catch (ex) {
-			next(new Error(ex));
-		}
-	});
+				newChat.saveAsync()
+					.spread(function(s) {
+						res.send(s);
+						next();
+					}).catch(function(ex) {
+						next(new Error(ex));
+					});
+			} catch (ex) {
+				next(new Error(ex));
+			}
+		});
 
 	server.route('/:chat_id')
 		.get('/', function(req, res, next) {

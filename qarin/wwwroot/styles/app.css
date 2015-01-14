@@ -65,6 +65,116 @@
   margin: 10px auto;
   display: block;
 }
+.clearfix {
+  display: block;
+  zoom: 1;
+}
+.clearfix:after {
+  content: " ";
+  display: block;
+  font-size: 0;
+  height: 0;
+  clear: both;
+  visibility: hidden;
+}
+.chat-log-list-item {
+  border: 1px solid black;
+  margin: 3px;
+  background-color: #bbb;
+  color: white;
+  background-color: gray;
+  padding: 5px 10px;
+}
+.chat-log-list-item a {
+  text-decoration: none;
+  color: inherit;
+}
+.chat-log-list-item h5 {
+  font-size: 16px;
+  font-weight: 400;
+}
+.chat-log-list-item p {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  color: #ccc;
+}
+.add-bubble {
+  z-index: 1000;
+  border-radius: 30px;
+  background-color: blue;
+  width: 50px;
+  height: 50px;
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  vertical-align: center;
+  text-align: center;
+  padding-top: 8px;
+  color: white;
+  font-size: 26px;
+  cursor: pointer;
+  border: 0;
+  -webkit-box-shadow: 2px 2px 1px 0px rgba(0, 0, 0, 0.75);
+  -moz-box-shadow: 2px 2px 1px 0px rgba(0, 0, 0, 0.75);
+  box-shadow: 2px 2px 1px 0px rgba(0, 0, 0, 0.75);
+}
+#chat {
+  position: relative;
+  height: 540px;
+}
+.chat-window {
+  height: 100%;
+  position: relative;
+}
+.chat-window .message-pane {
+  overflow-y: scroll;
+  position: relative;
+  height: 500px;
+  display: block;
+  zoom: 1;
+}
+.chat-window .message-pane:after {
+  content: " ";
+  display: block;
+  font-size: 0;
+  height: 0;
+  clear: both;
+  visibility: hidden;
+}
+.chat-window .chat-controls {
+  position: absolute;
+  bottom: 1px;
+}
+.chat-bubble {
+  width: 300px;
+  margin: 5px;
+}
+.chat-bubble.sent {
+  float: right;
+}
+.chat-bubble.sent .message-body {
+  background-color: green;
+}
+.chat-bubble.received {
+  float: left;
+}
+.chat-bubble.received .message-body {
+  background-color: #5050ff;
+}
+.chat-bubble .message-time {
+  color: red;
+  font-size: 10px;
+  font-family: 'Arial';
+}
+.chat-bubble .message-body {
+  display: block;
+  padding: 3px;
+  padding-left: 8px;
+  color: white;
+  border-radius: 2px;
+  border: 1px solid black;
+}
 body,
 html {
   margin: 0;
@@ -76,5 +186,4 @@ html {
   margin: 0 auto;
   border: 1px solid black;
   position: relative;
-  background-color: #999;
 }

@@ -17,12 +17,17 @@
 		});
 
 		function sendMessage() {
-            var message = vm.message;
-            vm.message = '';
+			var message = vm.message;
+			vm.message = '';
 
-            chatService.sendMessage(chatId, message)
-            .then(function(msg){
-                vm.chat.messages.push({message: message});
-            });
+			chatService.sendMessage(chatId, message)
+				.then(function(msg) {
+					vm.chat.messages.push({
+						message: msg.message,
+						time: msg.time,
+						user: msg.user,
+						sent: true
+					});
+				});
 		}
 	});

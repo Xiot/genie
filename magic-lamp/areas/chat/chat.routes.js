@@ -51,7 +51,7 @@ try{
 					m.sent = m.user == req.user.id;
 				});
 
-				res.send(chat);
+				res.send(obj);
 				next();
 
 			}).catch(function(ex) {
@@ -74,7 +74,8 @@ try{
 
 		return room.post(message)
 		.then(function(){
-			res.send(204, 'OK');
+			res.send(message);
+			next();
 
 		}).catch(function(ex){
 			console.log(ex.message);

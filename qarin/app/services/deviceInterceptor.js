@@ -1,6 +1,7 @@
 
 angular.module('qarin.interceptors', [])
-	.factory('deviceInterceptor', DeviceInterceptor);
+	.factory('deviceInterceptor', DeviceInterceptor)
+    .config(addInterceptors);
 
 function DeviceInterceptor($q, storageService){
 	return {

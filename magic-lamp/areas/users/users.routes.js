@@ -75,7 +75,9 @@ module.exports = function (server, passport){
         }
 
         ChatLog.find(query)
+        //.slice('messages', -1)
         .populate('participants')
+        .sort({lastMessageTime: -1})
         .execAsync()
         .then(function(logs){
             res.send(logs);

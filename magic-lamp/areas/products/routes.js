@@ -19,17 +19,24 @@ module.exports = function(server, passport) {
 	.get('/', 'productsall', function(req, res, next) {
 
 		try {
-			debug('get-all');
+			debug('search: ' + req.query.search);
 
-			Product.find(function(err, p) {
-				if (!err) {
-					res.send(p);
+			var query = {};
+			if(req.store)
+				query.store = req.store.id;
+			
+			if (req.query.search)
+				query.$text = {
+					$search: req.query.search
+				};
+
+			Product.findAsync(query)
+				.then(function(products) {
+					res.send(products);
 					next();
-				} else {
-					console.log('err: ' + err);
-					next(new Error(err));
-				}
-			});
+				}).catch(function(ex) {
+					next(new Error(ex));
+				});
 
 		} catch (ex) {
 			next(new Error(ex));

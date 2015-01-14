@@ -48,7 +48,8 @@ module.exports = function (server, passport){
             req.authenticated = !!user;
             req.user = user;
 
-            //console.log(info);
+            if(user)
+                console.log('authenticated', user.auth);
 
             next();
         })(req, res,next);

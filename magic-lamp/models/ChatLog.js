@@ -13,7 +13,9 @@ var chatLogSchema = new Schema({
     startTime: {type: Date, default: Date.now},
     store: {type: id, ref: 'OrganizationLocation', route: 'store.get'},
     participants: [{type: id, ref: 'User'}],
-    messages: [messageSchema]
+    messages: [messageSchema],
+    lastMessageTime: {type: Date, default: Date.now},
+    product: {type: id, ref: 'Product'}
 });
 
 

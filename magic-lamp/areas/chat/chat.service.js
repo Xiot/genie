@@ -42,13 +42,16 @@ function createNewChat() {
 function ChatRoom(id, io) {
 
 	this.id = null;
-	
+
 	this.post = function(msg) {
 
 		debug('posting to ' + id);
 		return ChatLog.findByIdAndUpdateAsync(id, {
 				$push: {
 					messages: msg
+				},
+				$set: {
+					lastMessageTime: msg.time
 				},
 				$addToSet: {
 					participants: msg.user
@@ -62,14 +65,15 @@ function ChatRoom(id, io) {
 				return ChatLog.findById(id, 'participants')
 					.execAsync()
 					.then(function(chat) {
-						
+
 						if (chat.participants.length === 0)
-							return false;
+							return msg;
+
 
 						var group = io;
 						chat.participants.forEach(function(participantId) {
-							
-							if(participantId == msg.user)
+
+							if (participantId == msg.user)
 								return;
 
 							group = group.to(participantId);
@@ -83,7 +87,7 @@ function ChatRoom(id, io) {
 							message: msg.message,
 						});
 
-						return true;
+						return msg;
 					});
 			});
 	}

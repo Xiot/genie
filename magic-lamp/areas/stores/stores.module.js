@@ -37,8 +37,7 @@ module.exports.init = function(server, config) {
 	});
 
 	var storeRoute = route.route('/:store_id')
-		.param('store_id', storeMiddleware)
-		;
+		.param('store_id', storeMiddleware);
 
 
 
@@ -46,7 +45,30 @@ module.exports.init = function(server, config) {
 	require('./stores.tasks')(storeRoute, config.passport);
 
 	require('./stores.chat')(storeRoute.route('/chat'), config.io, config.passport);
-	
+
+	// TODO: Extract to new file
+	storeRoute.get('/products',
+		storeMiddleware,
+		function(req, res, next) {
+
+			debug('search: ' + req.query.search);
+
+			var query = {
+				store: req.store.id
+			};
+			if (req.query.search)
+				query.$text = {
+					$search: req.query.search
+				};
+
+			Product.findAsync(query)
+				.then(function(products) {
+					res.send(products);
+					next();
+				}).catch(function(ex) {
+					next(new Error(ex));
+				});
+		});
 
 	// server.get('/stores/:store_id/employees',
 	// 	storeMiddleware,
@@ -107,29 +129,6 @@ module.exports.init = function(server, config) {
 	// 			})
 	// 			.then(function(chats) {
 	// 				res.send(chats);
-	// 				next();
-	// 			}).catch(function(ex) {
-	// 				next(new Error(ex));
-	// 			});
-	// 	});
-
-	// server.get('/stores/:store_id/products',
-	// 	storeMiddleware,
-	// 	function(req, res, next) {
-
-	// 		debug('search: ' + req.query.search);
-
-	// 		var query = {
-	// 			store: req.store.id
-	// 		};
-	// 		if (req.query.search)
-	// 			query.$text = {
-	// 				$search: req.query.search
-	// 			};
-
-	// 		Product.findAsync(query)
-	// 			.then(function(products) {
-	// 				res.send(products);
 	// 				next();
 	// 			}).catch(function(ex) {
 	// 				next(new Error(ex));
