@@ -66,7 +66,7 @@ function ChatRoom(id, io) {
 					.execAsync()
 					.then(function(chat) {
 
-						if (chat.participants.length === 0)
+						if (chat.participants.length <= 1)
 							return msg;
 
 

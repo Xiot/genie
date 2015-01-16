@@ -6,4 +6,8 @@
     socket.on('help', function (data) {
         $scope.current = data;
     });
+
+    socket.on('chat-message', function(data){
+
+    });
 });

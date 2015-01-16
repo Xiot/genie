@@ -56,16 +56,19 @@ module.exports = function(server, passport) {
 
     .param('product_id', function(req, res, next, value){
          
+
          return Product.findByIdAsync(req.params.product_id)
          .then(function(p) {
 
-            if(p.store !== req.store.id)
-                return next(new errors.NotFound('no product'));
+            if(p.store != req.store.id) {
+                return next(new errors.NotFound('no product. wrong store'));
+            }
 
              req.product = p;
              next();
 
          }).catch(function(err) {
+         	console.log(err);
              next(new errors.NotFound('no product'));
          });    
     })

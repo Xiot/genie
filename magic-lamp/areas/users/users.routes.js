@@ -87,5 +87,7 @@ module.exports = function (server, passport){
         });
     });
 
+    load('~/areas/notifications/notifications.routes')(userRoute);
+
     //return router;
 }

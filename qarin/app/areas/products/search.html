@@ -10,8 +10,10 @@
     </div>
     <div>
         <div ng-repeat="p in vm.products" class="product-box">
-            <h5 class="product-name">{{p.name}}</h5>
-            <p class="product-description">{{p.description}}</p>
+        	<a ui-sref="product({productId: p._id})">
+            	<h5 class="product-name">{{p.name}}</h5>
+            	<p class="product-description">{{p.description}}</p>
+            </a>
         </div>
     </div>
 </form>

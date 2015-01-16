@@ -26,7 +26,7 @@ function authenticate(deviceId, done) {
         	user.auth = user.auth || {};
         	user.auth.device = true;
 
-        	debug('good: ', user);
+        	//debug('good: ', user);
 			done(null, user);
 
 		}).catch(function(ex) {

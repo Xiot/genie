@@ -1,8 +1,8 @@
 angular.module('qarin.products')
-.controller('ProductsController', ProductsController);
+.controller('SearchController', SearchController);
 
 // @ngInject
-function ProductsController(httpClient, storeService){
+function SearchController(httpClient, storeService){
 
 	var vm = angular.extend(this, {
 		products: [],

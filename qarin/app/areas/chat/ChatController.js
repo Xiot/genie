@@ -4,7 +4,8 @@
 		var vm = angular.extend(this, {
 			chat: null,
 			send: sendMessage,
-			message: ''
+			message: '',
+			product: null
 		});
 
 		httpClient.get('/chat/' + chatId)

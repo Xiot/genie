@@ -1,6 +1,10 @@
 <div class="top-bar" ng-controller="HeaderController as vm">
-<i class="pull-right glyphicon glyphicon-bell"></i>
-
+	<span class="pull-right">
+		<i class="glyphicon glyphicon-bell"></i>		
+		<span class="badge">			
+			{{vm.notifications.length}}
+		</span>
+	</span>
     <div class="brand">
         genie
     </div>    

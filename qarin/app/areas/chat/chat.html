@@ -1,5 +1,8 @@
 ﻿<form id='chat' ng-submit="vm.send()">
     <h1>Chat</h1>
+    <div class="product-box" ng-if="vm.chat.product">
+        {{vm.chat.product.name}}
+    </div>
     <div class="chat-window">
         <div class="message-pane">
             <div ng-repeat="m in vm.chat.messages" ng-class="{'chat-bubble': true, sent: m.sent, received: !m.sent}">

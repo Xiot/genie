@@ -42,7 +42,7 @@ module.exports = function(server, io, passport) {
 		
 try{
 		ChatLog.findById(req.params.id)
-			.populate('participants')
+			.populate('participants product')
 			.execAsync()
 			.then(function(chat) {
 
