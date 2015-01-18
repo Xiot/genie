@@ -3,26 +3,51 @@
 
 
 /* @ngInject */
-function StoreService(geoLocation, httpClient, $rootScope) {
+function StoreService(geoLocation, httpClient, $rootScope, storageService) {
 
     var _current = null;
     var availableEvents = ['storeChanged'];
 
-    var service = {        
+    var service = {
+        getById: _getById,
         getCurrentStore: _getCurrentStore,
         on: _registerListener
     };
 
     Object.defineProperty(service, 'current', {
-        get: function () { return _current; },
+        get: _get_current,
+        set: _set_current,
         enumerable: true
     });
 
-
-
     return service;
 
+    function _get_current(){
+        return _current;
+    }
+    function _set_current(value){
+        _current = value;
+        $rootScope.$emit('storeChanged', {store: _current});        
+    }
+
+    function _getById(id){
+        return httpClient.get('/stores/' + id)
+        .then(function(res){
+            return res.data;
+        });
+    }
+
     function _getCurrentStore() {
+
+        var storedStore = storageService.get('store');
+        if(storedStore){
+
+            return _getById(storedStore)
+            .then(function(store){
+                _current = store;
+                $rootScope.$emit('storeChanged', {store: _current});
+            });
+        }
 
         return geoLocation.getGps()
             .then(function (gps) {

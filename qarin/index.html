@@ -16,10 +16,16 @@
     <!-- inject:css -->
     <!-- endinject -->
 </head>
-<body ng-app="qarin">
+<body ng-app="qarin" qa-set-store-class>
 
     <pre class="pull-left" style="width: 300px; min-height:400px; height: 95vh; overflow-y: scroll; margin: 0;"
     >{{$state.current | json}}</pre>
+
+    <div class="pull-right vertical-button-container" style="width: 300px;" ng-controller="OutsideShellController as vm">
+        <button ng-click="vm.setStore('54bbe9e04c72702035848af9')" class="btn btn-lg btn-block">Starbucks - Parkway</button>
+        <button ng-click="vm.setStore('549238e2e3e4aca016fb2443')" class="btn btn-lg btn-block">Symbiote - Home</button>
+        <button ng-click="vm.setStoreUsingLocation()" class="btn btn-lg btn-block">Use Location</button>
+    </div>
 
     <div class="device-root">
         <div ng-include="'app/areas/layout/header.html'"></div>

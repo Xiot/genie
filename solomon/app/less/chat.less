@@ -1,10 +1,44 @@
 @import "mixins";
 
+.chat-log-list-item {
+    border: 1px solid black;
+    margin: 3px;
+    
+    color: white;
+    background-color: gray;
+    padding: 5px 10px;
+
+    cursor: pointer;
+
+    &.hasUnread {
+        background-color: #bbb;
+    }
+
+    &.selected {
+        border: 2px solid black;
+    }
+
+    a {
+        text-decoration: none;
+        color: inherit;
+    }
+    h5 {
+        font-size: 16px;
+        font-weight: 400;
+    }
+    p {
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        color: #ccc;
+    }
+}
+
 .chat-window {
     width: 400px;
     border: 1px solid black;
     min-height: 300px;    
-        
+
     .message-pane {
         overflow-y: scroll;
         position: relative;
@@ -12,7 +46,6 @@
 
         .clearfix;
     }
-
 }
 
 .chat-bubble {    

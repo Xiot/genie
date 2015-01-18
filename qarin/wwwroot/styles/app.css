@@ -176,9 +176,30 @@
   border: 1px solid black;
 }
 .product-box {
-  margin: 3px;
   border: 1px solid black;
   padding: 5px 10px;
+  position: relative;
+  display: inline-block;
+}
+.product-box .image-container {
+  padding: 0;
+}
+.product-box img {
+  max-width: 100%;
+  height: auto;
+}
+.search-results {
+  position: relative;
+  padding-right: 15px;
+  padding-left: 15px;
+  margin-right: auto;
+  margin-left: auto;
+}
+#starbucks .device-root {
+  background-color: #ddd;
+}
+#symbiote .device-root {
+  background-color: white;
 }
 body,
 html {

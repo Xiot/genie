@@ -4,7 +4,7 @@ var Task = mongoose.model('Task');
 
 module.exports = function(server, passport) {
 
-	server.route('/tasks')
+	var route = server.route('/tasks')
 
 	.get('/', function(req, res, next) {
 
@@ -26,13 +26,7 @@ module.exports = function(server, passport) {
 			var body = null;
 
 			try {
-				body = req.body;
-			} catch (ex) {
-				next(ex);
-			}
-
-			try {
-				var task = new Task(body);
+				var task = new Task(req.body);
 				task.store = req.store;
 				task.created_by = req.user;
 
@@ -48,4 +42,6 @@ module.exports = function(server, passport) {
 				throw ex;
 			}
 		});
+
+	var taskRoute = route.route('/:task_id')
 }

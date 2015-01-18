@@ -267,6 +267,34 @@ aside > .nav > li > a:focus {
 .sidebar-label {
   margin-left: 10px;
 }
+.chat-log-list-item {
+  border: 1px solid black;
+  margin: 3px;
+  color: white;
+  background-color: gray;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+.chat-log-list-item.hasUnread {
+  background-color: #bbb;
+}
+.chat-log-list-item.selected {
+  border: 2px solid black;
+}
+.chat-log-list-item a {
+  text-decoration: none;
+  color: inherit;
+}
+.chat-log-list-item h5 {
+  font-size: 16px;
+  font-weight: 400;
+}
+.chat-log-list-item p {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  color: #ccc;
+}
 .chat-window {
   width: 400px;
   border: 1px solid black;

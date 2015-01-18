@@ -12,20 +12,31 @@ module.exports = function(server, io, passport) {
 			store: req.params.store_id,
 		};
 
-		ChatLog.find(query)
-		.sort({lastMessageTime: -1})
-		.execAsync()
+		ChatLog.find(query, {
+				lastMessageTime: 1,
+				participants: 1,
+				closed: 1,
+				product: 1,
+				messages: {
+					$slice: -1
+				},
+				startTime: 1,
+				store: 1
+			})
+			.sort({
+				lastMessageTime: -1
+			})
+			.execAsync()
 			.then(function(results) {
 
-				var list = [];
-
-				results.forEach(function(c) {
-					var obj = c.toObject();
-					obj.messages.forEach(function(m) {
-						m.sent = m.user == req.user.id;
-					});
-					list.push(obj);
+				var list = results.map(function(c) {
+					var value = c.toObject();
+					value.lastMessage = value.messages[0];
+					delete value.messages;
+					return value;
 				});
+
+
 				res.send(list);
 
 				next();
@@ -44,18 +55,22 @@ module.exports = function(server, io, passport) {
 		function(req, res, next) {
 
 			try {
-				var newChat = new ChatLog();
-				newChat.store = req.params.store_id;
-				newChat.product = req.body.product;
-				newChat.participants.push(req.user.id);
+				var opts = {
+					store: req.params.store_id,
+					//product: req.body.product,
+					user: req.user.id
+				};
+				if(req.body && req.body.product)
+					opts.product = req.body.product;
 
-				newChat.saveAsync()
-					.spread(function(s) {
-						res.send(s);
+
+				chatService.create(opts)
+					.then(function(chat) {
+						res.send(chat);
 						next();
 					}).catch(function(ex) {
 						next(new Error(ex));
-					});
+					})
 			} catch (ex) {
 				next(new Error(ex));
 			}

@@ -37,7 +37,19 @@ module.exports.init = function(server, config) {
 	});
 
 	var storeRoute = route.route('/:store_id')
-		.param('store_id', storeMiddleware);
+		.param('store_id', storeMiddleware)
+		.get('/', 'stores-id', function(req, res, next){
+			
+			req.store.populateAsync('organization')
+			.then(function(s){
+
+				var obj = req.store.toObject();
+				//obj.style = ".device"
+
+				res.send(req.store);
+				next();	
+			});			
+		});
 
 
 

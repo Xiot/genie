@@ -1,5 +1,6 @@
 var mongoose = require('mongoose');
 var ChatLog = mongoose.model('ChatLog');
+var Promise = require('bluebird');
 
 var debug = require('debug')('magic-lamp-chat');
 
@@ -41,7 +42,8 @@ function createNewChat() {
 
 function ChatRoom(id, io) {
 
-	this.id = null;
+	this.id = id;
+	this._id = id;
 
 	this.post = function(msg) {
 
@@ -62,15 +64,17 @@ function ChatRoom(id, io) {
 				if (affected === 0)
 					throw new Error('room not found');
 
-				return ChatLog.findById(id, 'participants')
+				return ChatLog.findById(id, 'store participants')
 					.execAsync()
-					.then(function(chat) {
+					.then(function(chat) {					
 
-						if (chat.participants.length <= 1)
-							return msg;
-
+						// if (chat.participants.length <= 1)
+						// 	return msg;
 
 						var group = io;
+
+						group = group.to('solomon:' + chat.store.toString());
+
 						chat.participants.forEach(function(participantId) {
 
 							if (participantId == msg.user)
@@ -114,9 +118,44 @@ function ChatService() {
 		return room;
 	}
 
+	this.create = function(opts) {
+
+		try {
+			var newChat = new ChatLog();
+			newChat.store = opts.store; //req.params.store_id;
+			newChat.product = opts.product; 
+			newChat.participants.push(opts.user);
+
+			return newChat.saveAsync()
+				.spread(function(s) {
+
+					var room = new ChatRoom(s._id, _io);
+					_openRooms[s._id] = room;
+
+
+					_io.to('solomon:' + opts.store)
+					.emit('new-chat', {
+						chat: s._id,
+						user: opts.user,
+						time: s.startTime
+					});
+
+					return room;
+					
+				}).catch(function(ex) {
+					//next(new Error(ex));
+					return ex;
+				});
+
+		} catch (ex) {
+			//next(new Error(ex));
+			return Promise.reject(ex);
+		}
+	}
+
 	function onConnection(socket) {
 
-		debug('chat connected: \n  device: ' + socket.device + '\n  user: ' + socket.user.id);
+		debug('chat connected: \n  device: ' + socket.device + '\n  user: ' + socket.user.id + '\n  socket: ' + socket.id);
 
 		socket.on('disconnect', onDisconnect);
 
@@ -138,6 +177,8 @@ function ChatService() {
 			var storeId = data.storeId;
 			var deviceId = data.deviceId;
 
+			debug('registered: ' + socket.id + ' app: ' + data.app + ' store: ' + data.storeId);
+
 			// leave rooms from other stores
 			var storeRooms = socket.rooms.splice();
 			storeRooms.forEach(function(room) {
@@ -146,19 +187,13 @@ function ChatService() {
 			});
 
 			socket.join('store-' + storeId);
-			socket.join('user-' + userId);
+			
+			if(data.app === 'solomon') {
+				socket.join('solomon');
+				socket.join('solomon:' + storeId);
+			}
+
 		});
-
-		// socket.on('message', function(data) {
-		// 		var chatId = data.chatId;
-
-		// 		_io.to(chatId).emit('message', {
-		// 				from: socket.data.name,
-		// 				date: Date.now(),
-		// 				message: data.message
-		// 			}
-		// 		});
-		// }
 
 		function onDisconnect(socket) {
 			debug('disconnected');

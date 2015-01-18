@@ -105,7 +105,7 @@ serverMethods.forEach(function(method) {
 			path: def.route
 		}, handlers);
 
-		debug(httpMethod + ' ' + routeUrl);
+		//debug(httpMethod + ' ' + routeUrl);
 
 		return this;
 	};

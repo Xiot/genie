@@ -10,6 +10,7 @@ function StoreService(httpClient, eventService, $q) {
 	var service = {
 		getOrgs: getOrgs,
 		getStores: getStores,
+		on: _listen
 	};
 
 	Object.defineProperty(service, 'currentOrg', {
@@ -65,7 +66,14 @@ function StoreService(httpClient, eventService, $q) {
 		if (_currentStore === value)
 			return;
 
+		if(_currentStore && value && _currentStore.id == value.id)
+			return;
+
 		_currentStore = value;
 		eventService.raise('storeChanged', _currentStore);
+	}
+
+	function _listen(name, handler){
+		eventService.on(name, handler);
 	}
 }
