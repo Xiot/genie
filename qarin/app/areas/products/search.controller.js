@@ -2,16 +2,20 @@ angular.module('qarin.products')
 .controller('SearchController', SearchController);
 
 // @ngInject
-function SearchController(httpClient, storeService){
+function SearchController(httpClient, storeService, query, $state, $location){
 
 	var vm = angular.extend(this, {
 		products: [],
-		query: '',
+		query: query || '',
 		search: _search
 	});
 
+	_init();
 
-	function _search(){
+	function _init(){
+		 if(!vm.query)
+		 	return;
+		// 	_search();
 
 		var url = '/stores/' + storeService.current.id + '/products?search=' + vm.query;
 		httpClient.get(url)
@@ -20,17 +24,14 @@ function SearchController(httpClient, storeService){
 		});
 	}
 
-	function _init() {
-		var opts = {
-			params: {
-				store: storeService.current.id
-			}
-		};
+	function _search(){
 
-		httpClient.get('/users/me/chats', opts)
-			.then(function(res) {
-				vm.chats = parse(res.data);
-			});
+		// var originalUrl = $location.url();
+		// var url = $state.href('search', {query: vm.query});
+		// if(originalUrl !== url)
+		// 	$location.url(url);
+		//$location.push
+		$state.go('search', {query: vm.query}, {reload: true});
+		
 	}
-
 }

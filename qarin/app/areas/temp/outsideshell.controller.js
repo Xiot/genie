@@ -1,7 +1,7 @@
 angular.module('qarin')
 	.controller('OutsideShellController', OutsideShellController);
 
-function OutsideShellController(storeService, storageService) {
+function OutsideShellController(storeService, storageService, $state) {
 
 	var node = document.createElement('style');
 	document.body.appendChild(node);
@@ -12,13 +12,6 @@ function OutsideShellController(storeService, storageService) {
 	var vm = angular.extend(this, {
 		setStore: _setStore,
 		setStoreUsingLocation: _setStoreUsingLocation,
-
-		themeOne: function() {
-			node.innerHTML = ".device-root {background-color: white}";
-		},
-		themeTwo: function() {
-			node.innerHTML = ".device-root {background-color: green}";
-		}
 	});
 
 	function _setStore(id) {		
@@ -26,15 +19,21 @@ function OutsideShellController(storeService, storageService) {
 			.then(function(store) {
 				storeService.current = store;
 				storageService.set('store', id, true);
+
+				$state.go('home');
+
 				return store;
 			});
 	}
 
 	function _setStoreUsingLocation() {
 		
-		storeService.remove('store');
+		storageService.remove('store');
 		return storeService.getCurrentStore()
 			.then(function(store) {
+
+				$state.go('home');
+
 				return store;
 			});
 	}

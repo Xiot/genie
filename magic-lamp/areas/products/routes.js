@@ -91,7 +91,7 @@ module.exports = function(server, passport) {
 					.spread(function(w) {
 
 						var obj = w.toObject();
-						obj.imageUrl = '/images/' + file._id;
+						obj.imageUrl = 'http://localhost:3000/images/' + file._id;
 
 						res.send(obj);
 						next();
@@ -130,7 +130,7 @@ module.exports = function(server, passport) {
 
 		var obj = req.product.toObject();
 		if (obj.image)
-			obj.imageUrl = "/images/" + obj.image;
+			obj.imageUrl = "http://localhost:3000/images/" + obj.image;
 
 		res.send(obj);
 		next();

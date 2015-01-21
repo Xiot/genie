@@ -4,10 +4,15 @@ angular.module('qarin.products')
 // @ngInject
 function registerRoutes($stateProvider){
 	$stateProvider.state('search', {
-		url: '/search',
+		url: '/search?query',
 		controller: 'SearchController',
 		controllerAs: 'vm',
-		templateUrl: 'app/areas/products/search.html'
+		templateUrl: 'app/areas/products/search.html',
+		resolve: {
+			query: function($stateParams){
+				return $stateParams.query;
+			}
+		}
 	})
 	.state('product', {
 		url: '/product/:productId',

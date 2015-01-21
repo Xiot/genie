@@ -176,15 +176,22 @@
   border: 1px solid black;
 }
 .product-box {
-  border: 1px solid black;
-  padding: 5px 10px;
-  position: relative;
-  display: inline-block;
+  margin-top: 6px;
+  margin-bottom: 6px;
+  border: 1px solid gray;
+  cursor: pointer;
 }
-.product-box .image-container {
+.product-box:hover {
+  background-color: #666;
+}
+.product-box a {
+  color: black;
+  text-decoration: none;
+}
+.image-container {
   padding: 0;
 }
-.product-box img {
+.image-container img {
   max-width: 100%;
   height: auto;
 }
@@ -212,4 +219,15 @@ html {
   margin: 0 auto;
   border: 1px solid black;
   position: relative;
+}
+.debug-hover {
+  position: absolute;
+}
+.debug-hover.left {
+  left: 0;
+  top: 0;
+}
+.debug-hover.right {
+  right: 0;
+  top: 0;
 }
