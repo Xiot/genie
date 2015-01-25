@@ -72,7 +72,7 @@ serverMethods.forEach(function(method) {
 
 	RouteBuilder.prototype[method] = function(route, name, handlers) {
 
-		var args = extractRouteArgs([].slice.call(arguments,0));
+		var args = extractRouteArgs([].slice.call(arguments, 0));
 		route = args.route;
 		name = args.name;
 		handlers = args.handlers;
@@ -105,7 +105,10 @@ serverMethods.forEach(function(method) {
 			path: def.route
 		}, handlers);
 
-		//debug(httpMethod + ' ' + routeUrl);
+		// debug(httpMethod + ' ' + routeUrl + ' [' + handlers.length + ']');
+
+		// if(method === 'patch')
+		// 	debug('', handlers[0], handlers[1], handlers[2]);
 
 		return this;
 	};
@@ -252,7 +255,7 @@ function extractRouteArgs(args) {
 
 	if (Array.isArray(args[handlerIndex])) {
 		handlers = args[handlerIndex]
-	} else {		
+	} else {
 		handlers = args.slice(handlerIndex);
 	}
 
@@ -266,6 +269,7 @@ function extractRouteArgs(args) {
 function paramHandler(name, handler) {
 	return function(req, res, next) {
 
+		// debug('param: ' + name + ' value: ' + req.params);
 		if (req.params && req.params[name]) {
 			handler(req, res, next, req.params[name]);
 		} else {

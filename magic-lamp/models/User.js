@@ -7,8 +7,8 @@ var oid = mongoose.Schema.Types.ObjectId;
 
 var userSchema = new mongoose.Schema({
     firstName: { type: String, validate: [optionalOnDevice, 'First Name is required.'] },
-    lastName: { type: String, validate: [optionalOnDevice, 'Last Name is required.']  },
-    username: { type: String, validate: [optionalOnDevice, 'Username is required.']  },
+    lastName: { type: String, validate: [optionalOnDevice, 'Last Name is required.'], required: true  },
+    username: { type: String, required: [optionalOnDevice, '{PATH} is required.']  },
     email: { type: String, required: false },
     
     password_hash: { type: String, required: false },
@@ -25,7 +25,9 @@ var userSchema = new mongoose.Schema({
     },
 
     store: {type: oid, ref: 'OrganizationLocation'},
-    device: {type: String}
+    device: {type: String},
+    position: String,
+    active: {type: Boolean, default: true}
 });
 
 userSchema
@@ -80,7 +82,9 @@ userSchema.methods = {
 
 
 function optionalOnDevice(value){
-   return this.role === 'device' || value; 
+
+    var isValid = (this.role === 'device') || value; 
+    return isValid;
 }
 
 module.exports = mongoose.model('User', userSchema);

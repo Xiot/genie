@@ -1,20 +1,12 @@
 var grid = require('gridfs-stream');
 var Promise = require('bluebird');
-//var ObjectID = mongoose.mongo.BSONPure.ObjectID
 var debug = require('debug')('magic-lamp-gridfs');
-
-Promise.promisifyAll(grid);
 
 function MongooseFiles(mongoose) {
 
-	//Promise.promisifyAll(grid);
-
 	var gfs = grid(mongoose.connection.db, mongoose.mongo);
-	//Promise.promisifyAll(gfs);
-	//Promise.promisify(gfs.files.find);
 
 	this.getInfo = function(id){
-		//return gfs.files.findAsync({_id: id});
 
 		if(typeof id === 'string')
 			id = new mongoose.Types.ObjectId(id);
