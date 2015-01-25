@@ -1,22 +1,29 @@
 ﻿angular.module('qarin')
-    .factory('socketBuilder', function (socketFactory, env) {
+    .factory('socketBuilder', function (socketFactory, env, storageService) {
 
         var builder = function (namespace) {
-            var myIoSocket = io.connect(env.apiRoot + namespace);
+
+            var uri = env.apiRoot;
+            if(namespace)
+                uri += namespace;
+
+            var deviceId = storageService.get('device');
+
+            var myIoSocket = io.connect(uri, {
+                query: 'device=' + deviceId
+            });
 
             var mySocket = socketFactory({
                 ioSocket: myIoSocket
             });
 
             return mySocket;
-        }
+        };
 
         return builder;
 
     })
-    .factory('chatSocket', function (socketBuilder) {
-        return socketBuilder('/chat');        
-    })
-.factory('notificationSocket', function (socketBuilder) {
-    return socketBuilder('/notifications');   
-});
+    .factory('socket', function(socketBuilder) {
+        return socketBuilder();
+    });
+    

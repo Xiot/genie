@@ -1,0 +1,35 @@
+<h1>Chats</h1>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-xs-3">
+            <div ng-repeat="chat in vm.chats" ng-class="{'chat-log-list-item': true, hasUnread: chat.hasUnread, selected: vm.isSelected(chat)}">
+                <div ng-click="vm.selectChat(chat._id)">
+                    <h5>{{chat.lastMessageTime}}</h5>
+                    <p>
+                        {{chat.lastMessage.message}}
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xs-9">
+            <div class="chat-window">
+                <div class="message-pane">
+                    <div ng-repeat="m in vm.currentChat.messages" ng-class="{'chat-bubble': true, sent: m.sent, received: !m.sent}">
+                        <span class="message-time">{{m.time | date: 'medium'}}</span>
+                        <div class="message-body">{{m.message}}</div>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <input type="text" ng-model="vm.currentChat.currentMessage" class="form-control">
+                    <span class="input-group-btn">
+                        <button ng-click="vm.sendMessage(vm.currentChat, vm.currentChat.currentMessage);" class="btn btn-default">
+                            <i class="glyphicon glyphicon-send"></i>
+                        </button>
+                    </span>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

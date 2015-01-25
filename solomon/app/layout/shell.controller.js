@@ -4,7 +4,7 @@
 /* @ngInject */
 function ShellController(sectionManager) {
 
-    var vm = this;
-    vm.sections = sectionManager.getModules();
+    //var vm = this;
+    
 
 }

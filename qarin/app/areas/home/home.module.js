@@ -1,0 +1,1 @@
+angular.module('qarin.home', ['ui.router']);

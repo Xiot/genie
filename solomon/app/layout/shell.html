@@ -1,22 +1,16 @@
 ﻿<div ng-controller="ShellController as vm">
-    <div class="top-bar">
-        Header
-    </div>
-    <div>
-        <div class="side-bar">
-            sidebar
-            <ul>
-                <li ng-repeat="item in vm.sections">
-                    {{item.name}}
-                </li>
-            </ul>
-            <a ui-sref="dashboard">Dashboard</a>
-        </div>
+
+    <div ng-include="'app/layout/header.html'"></div>
+
+    <div class="float-container">
+        <div class="side-bar" ng-include="'app/areas/aside/aside.html'"></div>
+
         <div ui-view class="content">
             {{vm.message}}
         </div>
     </div>
-    <div>
+
+  <!--   <div class="debug-panel">
         <pre>{{$state.current | json}}</pre>
-    </div>
+    </div> -->
 </div>

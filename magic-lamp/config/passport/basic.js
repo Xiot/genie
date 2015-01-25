@@ -8,7 +8,7 @@ var debug = require('debug')('magic-lamp-auth');
 
 function authenticate(username, password, done) {
     
-    debug('basic: ' + username);
+    debug('basic: ' + username + ':' + password);
 
     User.findOneAsync({ username: username })
     .then(function (user) {

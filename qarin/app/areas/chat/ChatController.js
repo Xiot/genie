@@ -1,22 +1,34 @@
-﻿
-angular.module('qarin')
-.controller('ChatController', function (chatSocket) {
+﻿angular.module('qarin')
+	.controller('ChatController', function(socket, storeService, chatId, httpClient, $rootScope, chatService) {
 
-    var me = this;
+		var vm = angular.extend(this, {
+			chat: null,
+			send: sendMessage,
+			message: '',
+			product: null
+		});
 
-    chatSocket.on('init', function (data) {
-        me.name = data.name;
-    })
+		httpClient.get('/chat/' + chatId)
+			.then(function(res) {
+				vm.chat = res.data;
+			});
 
-    chatSocket.on('chat', function (msg) {
-        me.messages.push(msg);
-    })
-    this.messages = [];
+		$rootScope.$on('chat-message', function(e, msg) {
+			vm.chat.messages.push(msg);
+		});
 
-    this.name = "";
-    this.message = "";
-    this.send = function () {
-        chatSocket.emit('chat', this.message);
-    }
+		function sendMessage() {
+			var message = vm.message;
+			vm.message = '';
 
-});
+			chatService.sendMessage(chatId, message)
+				.then(function(msg) {
+					vm.chat.messages.push({
+						message: msg.message,
+						time: msg.time,
+						user: msg.user,
+						sent: true
+					});
+				});
+		}
+	});

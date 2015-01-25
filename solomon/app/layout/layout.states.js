@@ -1,24 +1,106 @@
 ﻿angular.module('app.layout')
-    .config(intializeStates);
+	.config(initializeStates)
+	.run(ensureAuthenticated);
+
+/* @ngInject */
+function ensureAuthenticated($rootScope, $state, securityService, $timeout) {
+	$rootScope.showSplash = true;
+
+	$rootScope.$on('$stateChangeStart', function(e, toState, toParams, fromState, fromParams) {
+
+		if (toState.name === 'login') {
+			return;
+		}
+
+		var user = securityService.currentUser();
+		if (user) {
+			return;
+		}
+		e.preventDefault();
+
+		securityService.requestCurrentUser()
+			.then(function(u) {
+
+				var targetState = u ? toState : 'login';
+
+				$state.go(targetState);
+			}).catch(function(ex) {
+				$state.go('login');
+			});
+	});
+
+	var waitingForView = false;
+	$rootScope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams) {
+		
+		if(!$rootScope.showSplash)
+			return;
+
+		waitingForView = true;
+	});
+
+	$rootScope.$on('$viewContentLoaded', function(e) {
 
 
-function initializeStates($stateProvider) {
-    $stateProvider
-        .state('root', {
-            url: '',
-            template: '<div ui-view></div>'
-        })
-        .state('login', {
-            url: '',
-            controller: 'LoginController',
-            templateUrl: 'app/areas/login/login.html'
-        })
-        .state('app-root', {
-            url: '',
-            controller: 'ShellController',
-            templateUrl: 'app/layout/shell.html',
-            resolve: {
-                user: function()
-            }
-        });
+		if (waitingForView && $rootScope.showSplash) {
+			waitingForView = false;
+
+			console.log('give time to render');
+			$timeout(function() {
+				console.log('showSplash = false');
+				$rootScope.showSplash = false;
+			}, 10);
+
+		}
+
+	});
+}
+
+/* @ngInject */
+function initializeStates($stateProvider, $urlRouterProvider) {
+
+	$urlRouterProvider.otherwise('/');
+
+
+	$stateProvider
+		.state('root', {
+			url: '',
+			abstract: true,
+			template: '<div ui-view></div>',
+			controller: function($scope, $rootScope) {
+
+				if ($rootScope.showSplash === undefined)
+					$rootScope.showSplash = true;
+			},
+			resolve: {
+				// @ngInject
+				user: function(securityService) {
+					return securityService.requestCurrentUser();
+				}
+			},
+			onEnter: /* @ngInject */ function($state, user) {
+				// if(user)
+				//     return $state.go('dashboard');
+
+				// $state.go('login');
+			}
+		})
+		.state('login', {
+			// url: '',
+			controller: 'LoginController',
+			controllerAs: "vm",
+			templateUrl: 'app/areas/login/login.html'
+		})
+		.state('app-root', {
+			//url: '',
+			parent: 'root',
+			abstract: true,
+			controller: 'ShellController',
+			templateUrl: 'app/layout/shell.html',
+			resolve: {
+				//user: function()
+			},
+			onEnter: function() {
+				console.log('ShellController.onEnter');
+			}
+		});
 }

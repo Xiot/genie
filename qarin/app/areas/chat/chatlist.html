@@ -1,0 +1,12 @@
+<h1>Chats</h1>
+<div>
+    <div ng-repeat="chat in vm.chats" class="chat-log-list-item">
+        <a ui-sref="chat({id: chat._id})">
+            <h5>{{chat.users}}</h5>
+            <p>
+                {{chat.lastMessage.message}}
+            </p>
+        </a>
+    </div>
+    <div class="add-bubble" ng-click="vm.create()">+</div>
+</div>

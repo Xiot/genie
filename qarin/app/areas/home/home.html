@@ -1,28 +1,18 @@
-﻿
-<div ng-if="searching">
-    Determining Current Store
-</div>
-<div ng-if="!searching">
-    <div ng-if="searchError">
-        <span class="danger">{{searchError}}</span>
+﻿<div>
+    <h1>{{vm.store.organization.name}}</h1>
+
+    <div>
+        {{vm.store.name}}
     </div>
-    <div ng-if="!searchError">
-        <h1>
-            {{store.organization.name}}
-        </h1>
-        <div>
-            {{store.name}}
-        </div>
 
-        <div>
-            <button class="btn btn-lg" ui-sref="chat">Chat</button>
-            <button class="btn btn-lg" ng-click="requestHelp()">Request Help</button>
-            <button class="btn btn-lg">Find</button>
-        </div>
+    <div class="vertical-button-container">
+    <button class="btn btn-lg btn-default btn-block" ui-sref="search">Self Help</button>
 
+        <button class="btn btn-lg btn-default btn-block" ui-sref="chat-list">Chat</button>
+        <button class="btn btn-lg btn-default btn-block" ng-click="vm.requestHelp()">Call an associate</button>
+        
     </div>
 </div>
-
 <!--<h2>Home</h2>
 
 <button class="btn btn-lg" ui-sref="chat">Chat</button>

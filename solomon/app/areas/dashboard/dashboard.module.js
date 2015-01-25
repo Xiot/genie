@@ -28,14 +28,15 @@ function getStates() {
     return [
         {
             name: 'dashboard',
-            url: '',
+            url: '/',
             controller: 'DashboardController',
             controllerAs: 'vm',
             templateUrl: 'app/areas/dashboard/dashboard.html',
             settings: {
                 module: true,
-                order: 1
+                order: 1,
+                icon: ['glyphicon', 'glyphicon-stats']
             }
         }
-    ]
+    ];
 }

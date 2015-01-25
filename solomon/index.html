@@ -9,9 +9,9 @@
     <style>
         /* This helps the ng-show/ng-hide animations start at the right place. */
         /* Since Angular has this but needs to load, this gives us the class early. */
-        .ng-hide {
+        /*.ng-hide {
             display: none !important;
-        }
+        }*/
     </style>
 
     <!-- inject:css -->
@@ -20,11 +20,12 @@
 </head>
 <body>
     <div>
-        <div ng-include="'app/layout/shell.html'"></div>
-        <div id="splash-page" ng-show="false">
+        <!-- <div ng-include="'app/layout/shell.html'"></div> -->
+        <div ui-view></div>
+        <div id="splash-page" ng-show="showSplash" class="ng-hide-animate">
             <div class="page-splash">
                 <div class="page-splash-message">
-                    hottowelDemo
+                    genie
                 </div>
                 <div class="progress">
                 <progressbar class="progress-striped active" value="1" max="1"></progressbar>

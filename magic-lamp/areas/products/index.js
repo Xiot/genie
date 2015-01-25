@@ -2,11 +2,11 @@
 var routeConfig = require('./routes');
 
 module.exports = {
-    init: function (app, config){
+    init: function (server, config){
         
-        var routes = routeConfig(config.passport);
+        //routeConfig(server, config.passport);
 
-        app.use('/products', routes);
+        //app.use('/products', routes);
 
     }
 }

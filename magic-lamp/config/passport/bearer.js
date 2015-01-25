@@ -10,8 +10,11 @@ module.exports = new BearerStrategy(authenticate);
 
 function authenticate(encryptedToken, done) {
     
+    //debug('bearer');
     var jtoken = jwt.decode(encryptedToken);
-        
+    
+//debug('token: '+ jtoken.token_id);
+
     Token.findById(jtoken.token_id)
     .populate('user')
     .execAsync()
@@ -26,7 +29,11 @@ function authenticate(encryptedToken, done) {
             return done(null, false, { message: 'Token expired.' });
         }
     
-        return done(null, token.user);
+        var user = token.user;
+        user.auth = user.auth || {};
+        user.auth.bearer = true;
+
+        return done(null, user);
 
     }).catch(function (ex) {
         return done(ex);

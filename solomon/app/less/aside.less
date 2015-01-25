@@ -1,0 +1,46 @@
+@import "colors";
+
+aside {
+    float: left;
+    width: 200px;
+
+	color: white;
+	background-color: @dk;
+
+    &:before {
+        content: "";
+        position: absolute;
+        width: inherit;
+        top: 0;
+        bottom: 0;
+        z-index: -1;
+        background-color: inherit;
+        border: inherit;
+    }
+
+    .nav {
+    	font-size: 14px;
+    }
+
+    & > .nav > li > a {
+    	color: white;
+
+    	&:hover, &:focus {
+    		background-color: rgb(60,60,60);
+    		color:red;
+    	}
+    }
+
+    // ul.nav {
+    // 	padding:10px !important;
+    // }
+}
+
+.side-bar {
+	//display:inline-block;
+//	width: 200px;
+}
+
+.sidebar-label {
+    margin-left: 10px;
+}

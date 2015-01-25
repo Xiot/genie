@@ -6,6 +6,6 @@ function appRun(sectionManager) {
 
     sectionManager.register([
 
-    ])
+    ]);
 
 }

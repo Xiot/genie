@@ -1,1 +1,1 @@
-﻿angular.module('app.layout', ['ui.bootstrap']); 
+﻿angular.module('app.layout', ['ui.bootstrap', 'ui.router']); 

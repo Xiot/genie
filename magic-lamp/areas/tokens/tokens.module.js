@@ -1,15 +1,29 @@
 ﻿var mongoose = require('mongoose');
-var router = require('express').Router();
+//var router = require('express').Router();
 var Token = mongoose.model('Token');
 
 var jwt = require('jsonwebtoken');
 var moment = require('moment');
 
-module.exports.init = function (app, config){
+module.exports.init = function (server, config){
     
     var basicAuth = config.passport.authenticate('basic');
+    var bearerAuth = config.passport.authenticate('bearer');
 
-    router.post('/', basicAuth, function (req, res, next) {
+    server.get('/tokens/current', bearerAuth, function(req, res, next){
+
+        if(!req.user)
+            return next(401, 'Unauthorized');
+
+        setTimeout(function(){
+            res.send(req.user);
+            next();
+        }, 1000)
+
+        
+    });
+
+    server.post('/tokens', basicAuth, function (req, res, next) {
                 
         var token = new Token({
             user: req.user,
@@ -30,8 +44,9 @@ module.exports.init = function (app, config){
             
             var signedToken = jwt.sign(btoken, "djinn", { expiresInMinutes: 14 * 24 * 60 });
             res.send({
-                auth_token: signedToken
+                auth_token: signedToken                
             });            
+            next();
 
             //res.send(t);
         }).catch(function (ex) {
@@ -39,5 +54,5 @@ module.exports.init = function (app, config){
         })
     });
 
-    app.use('/tokens', router); 
+    //server.use('/tokens', router); 
 }

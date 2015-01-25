@@ -1,0 +1,7 @@
+<h2>employees</h2>
+<div>
+    <div ng-repeat="emp in vm.employees">
+        <span>{{emp.firstName}} {{emp.lastName}}</span>
+    </div>
+    <pre>{{vm.employees | json}}</pre>
+</div>
