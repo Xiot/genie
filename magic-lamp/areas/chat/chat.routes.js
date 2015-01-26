@@ -38,10 +38,10 @@ module.exports = function(server, io, passport) {
 			});
 	});
 
-	server.get('/chat/:id', function(req, res, next) {
+	server.get('/chat/:chat_id', function(req, res, next) {
 		
 try{
-		ChatLog.findById(req.params.id)
+		ChatLog.findById(req.params.chat_id)
 			.populate('participants product')
 			.execAsync()
 			.then(function(chat) {
@@ -62,7 +62,7 @@ try{
 		}
 	})
 
-	server.post('/chat/:id/messages', passport.authenticate(['bearer', 'device']), function(req, res, next) {
+	server.post('/chat/:chat_id/messages', function(req, res, next) {
 
 		var message = {
 			message: req.body.message,
@@ -70,7 +70,7 @@ try{
 			time: Date.now()
 		};
 
-		var room = chatService.getById(req.params.id);
+		var room = chatService.getById(req.params.chat_id);
 
 		return room.post(message)
 		.then(function(){

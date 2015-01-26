@@ -11,7 +11,8 @@ function StoreService(geoLocation, httpClient, $rootScope, storageService) {
     var service = {
         getById: _getById,
         getCurrentStore: _getCurrentStore,
-        on: _registerListener
+        on: _registerListener,
+        requestHelp: requestHelp
     };
 
     Object.defineProperty(service, 'current', {
@@ -21,6 +22,18 @@ function StoreService(geoLocation, httpClient, $rootScope, storageService) {
     });
 
     return service;
+
+    function requestHelp(){
+        var request = {
+            type: 'request'
+        };
+
+        var url = '/stores/' + _current.id + '/tasks';
+        return httpClient.post(url, request)
+        .then(function(res){
+            return res.data;
+        });
+    }
 
     function _get_current(){
         return _current;

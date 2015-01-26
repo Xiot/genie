@@ -30,8 +30,9 @@ function authenticate(encryptedToken, done) {
         }
     
         var user = token.user;
-        user.auth = user.auth || {};
-        user.auth.bearer = true;
+        user.authType = 'bearer';
+        //user.auth = user.auth || {};
+        //user.auth.bearer = true;
 
         return done(null, user);
 

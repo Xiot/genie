@@ -1,0 +1,7 @@
+{
+  "env": {
+    "DEBUG": "magic-lamp*",
+    "PORT": "3000",
+    "ETC": "etc"
+  }
+}

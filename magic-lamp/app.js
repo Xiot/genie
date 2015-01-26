@@ -1,11 +1,16 @@
-﻿
+﻿var fs = require('fs');
+
 // https://github.com/focusaurus/express_code_structure
+
+fs.readdirSync(__dirname + '/models').forEach(function (file) {
+    if (~file.indexOf('.js')) require(__dirname + '/models/' + file);
+});
 
 var connections = require('./config/connections.js');
 var passport = require('passport');
 var socketio = require('./config/socket');
 
-var fs = require('fs');
+
 
 //var app = connections.app;
 //var server = connections.server;
@@ -19,9 +24,7 @@ var io = socketio(server);
 //    return server;
 //};
 
-fs.readdirSync(__dirname + '/models').forEach(function (file) {
-    if (~file.indexOf('.js')) require(__dirname + '/models/' + file);
-});
+
 
 require('./config/passport.js')(server, passport);
 //require('./config/express.js')(app, passport);

@@ -39,6 +39,15 @@ userSchema
     })
     .get(function () { return this._password });
 
+userSchema
+    .virtual('authType')
+    .get(function(){
+        return this._authtype;
+    })
+    .set(function(value){
+        this._authtype = value;
+    });
+
 userSchema.path('device').validate(function(value){
     return this.role !== 'device' || value;
 });

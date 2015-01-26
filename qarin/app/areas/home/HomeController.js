@@ -8,8 +8,8 @@ function HomeController($scope, $http, env, socket, storeService) {
         requestHelp: _requestHelp
     });
 
-    function _requestHelp() {
-        socket.emit('help-requested', {store_id: storeService.current._id});
+    function _requestHelp() { 
+        return storeService.requestHelp();
     };
 
     storeService.on('storeChanged', function(e, args){

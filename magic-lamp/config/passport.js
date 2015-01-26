@@ -48,8 +48,8 @@ module.exports = function (server, passport){
             req.authenticated = !!user;
             req.user = user;
 
-            if(user)
-                console.log('authenticated', user.auth);
+            // if(user)
+            //     console.log('authenticated', user.toObject({virtuals: true}));
 
             next();
         })(req, res,next);

@@ -1,6 +1,6 @@
-
 var mongoose = require('mongoose');
 var Task = mongoose.model('Task');
+var wrap = load("~/core/routes/promiseRouter");
 
 module.exports = function(server, passport) {
 
@@ -20,28 +20,20 @@ module.exports = function(server, passport) {
 	})
 
 	.post('/',
-		passport.authenticate('bearer'),
-		function(req, res, next) {
+		//passport.authenticate('bearer'),
+		wrap(function(req) {
 
 			var body = null;
 
-			try {
-				var task = new Task(req.body);
-				task.store = req.store;
-				task.created_by = req.user;
+			var task = new Task(req.body);
+			task.store = req.store;
+			task.created_by = req.user;
 
-				task.saveAsync()
-					.spread(function(ret) {
-						res.send(ret);
-						next();
-
-					}).catch(function(ex) {
-						next(ex);
-					});
-			} catch (ex) {
-				throw ex;
-			}
-		});
+			return task.saveAsync()
+				.spread(function(ret) {
+					return ret;
+				});
+		}));
 
 	var taskRoute = route.route('/:task_id')
 }

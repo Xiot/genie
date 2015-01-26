@@ -5,6 +5,8 @@ var mongoose = require('mongoose');
 
 var router = load('~/core/routes');
 
+var metrics = load('~/core/metrics');
+
 var server = restify.createServer({
 	formatters: {
 		'application/json': formatJSON
@@ -36,7 +38,7 @@ var log = function(text) {
 // 	next();
 // });
 
-
+server.use(metrics.startCapture());
 
 server.use(logger('dev'));
 server.use(restify.acceptParser(server.acceptable));
@@ -50,8 +52,8 @@ server.use(restify.bodyParser({
 }));
 server.use(restify.conditionalRequest());
 
-server.opts('/', function(req, res, next) {
-	next();
+server.on('after', function(req, res, route, err){
+	metrics.endCapture(req, res, route, err);
 });
 
 router(server);

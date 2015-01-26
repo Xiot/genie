@@ -23,8 +23,8 @@ function authenticate(deviceId, done) {
 		})
 		.then(function(user) {
 			
-        	user.auth = user.auth || {};
-        	user.auth.device = true;
+        	user.authType = 'device';
+        	// user.auth.device = true;
 
         	//debug('good: ', user);
 			done(null, user);
