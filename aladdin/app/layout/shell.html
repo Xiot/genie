@@ -1,0 +1,16 @@
+﻿<div ng-controller="ShellController as vm">
+
+    <div ng-include="'app/layout/header.html'"></div>
+
+    <div class="float-container">
+        <div class="side-bar" ng-include="'app/areas/aside/aside.html'"></div>
+
+        <div ui-view class="content">
+            {{vm.message}}
+        </div>
+    </div>
+
+  <!--   <div class="debug-panel">
+        <pre>{{$state.current | json}}</pre>
+    </div> -->
+</div>

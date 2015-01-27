@@ -1,0 +1,26 @@
+<div class="top-bar" ng-controller="HeaderController as vm">
+
+    <div class="brand">
+        aladdin
+    </div>
+    <div class="pull-left">
+        <span>{{vm.store.organization.name}}</span>
+        <span>{{vm.store.name}}</span>
+    </div>
+    <!-- <div class="selections pull-left">
+    	<select ng-model="vm.org" 
+    		ng-options="item.name for item in vm.orgs track by item._id">
+    		</select>
+    	<select ng-model="vm.store" 
+    		ng-options="item.name for item in vm.stores track by item.id">
+    		</select>
+    		{{vm.org.name}} -> {{vm.store.name}}
+    </div> -->
+
+    <div class="pull-right">
+        <a class="avatar">
+            <span>{{vm.user.username}}</span>
+            <i class="fa fa-user"></i>
+        </a>
+    </div>
+</div>

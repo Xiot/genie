@@ -1,0 +1,36 @@
+<div id="login">
+<div class="login-box">
+    <div class="login-header">
+        <h1>aladdin</h1>
+    </div>
+
+    <div class="ribbon ribbon-fold-left ribbon-fold-right">
+        <h2>login</h2>
+    </div>
+
+    <form name="form" class="form-validation">
+        <div class="text-danger wrapper text-center" ng-show="vm.message">
+            {{vm.message}}
+        </div>
+        <div class="list-group list-group-sm">
+            <div class="list-group-item">
+                <input type="text" placeholder="Username" class="form-control no-border" ng-model="vm.login.username" required>
+            </div>
+            <div class="list-group-item">
+                <input type="password" placeholder="Password" class="form-control no-border" ng-model="vm.login.password" required>
+            </div>
+            <div class="list-group-item">
+                <input type="checkbox" ng-model="vm.login.rememberMe">Remember me?
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-lg btn-primary" ng-click="vm.login()" ng-disabled='form.$invalid'>
+            Log in
+            <i class="fa fa-lock"></i>
+        </button>
+        <div class="text-center m-t m-b">
+            <a ui-sref="access.forgotpwd">Forgot password?</a>
+        </div>
+    </form>
+    </div>
+</div>

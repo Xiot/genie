@@ -1,0 +1,1 @@
+﻿angular.module('aladdin.layout', ['ui.bootstrap', 'ui.router']); 

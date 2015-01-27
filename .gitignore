@@ -4,6 +4,7 @@
 # Web package frameworks
 node_modules/
 bower_components/
+wwwroot/
 
 #temp folders
 .tmp/
