@@ -1,92 +1,102 @@
 ﻿angular.module('qarin')
-    .factory('storeService', StoreService);
+	.factory('storeService', StoreService);
 
 
 /* @ngInject */
 function StoreService(geoLocation, httpClient, $rootScope, storageService) {
 
-    var _current = null;
-    var availableEvents = ['storeChanged'];
+	var _current = null;
+	var availableEvents = ['storeChanged'];
 
-    var service = {
-        getById: _getById,
-        getCurrentStore: _getCurrentStore,
-        on: _registerListener,
-        requestHelp: requestHelp
-    };
+	var service = {
+		getById: _getById,
+		getCurrentStore: _getCurrentStore,
+		on: _registerListener,
+		requestHelp: requestHelp
+	};
 
-    Object.defineProperty(service, 'current', {
-        get: _get_current,
-        set: _set_current,
-        enumerable: true
-    });
+	Object.defineProperty(service, 'current', {
+		get: _get_current,
+		set: _set_current,
+		enumerable: true
+	});
 
-    return service;
+	return service;
 
-    function requestHelp(){
-        var request = {
-            type: 'request'
-        };
+	function requestHelp() {
+		var request = {
+			type: 'request',
+			//customer: storageService.get('device'),
+		};
 
-        var url = '/stores/' + _current.id + '/tasks';
-        return httpClient.post(url, request)
-        .then(function(res){
-            return res.data;
-        });
-    }
+		var url = '/stores/' + _current.id + '/tasks';
+		return httpClient.post(url, request)
+			.then(function(res) {
+				return res.data;
+			});
+	}
 
-    function _get_current(){
-        return _current;
-    }
-    function _set_current(value){
-        _current = value;
-        $rootScope.$emit('storeChanged', {store: _current});        
-    }
+	function _get_current() {
+		return _current;
+	}
 
-    function _getById(id){
-        return httpClient.get('/stores/' + id)
-        .then(function(res){
-            return res.data;
-        });
-    }
+	function _set_current(value) {
+		_current = value;
+		$rootScope.$emit('storeChanged', {
+			store: _current
+		});
+	}
 
-    function _getCurrentStore() {
+	function _getById(id) {
+		return httpClient.get('/stores/' + id)
+			.then(function(res) {
+				return res.data;
+			});
+	}
 
-        var storedStore = storageService.get('store');
-        if(storedStore){
+	function _getCurrentStore() {
 
-            return _getById(storedStore)
-            .then(function(store){
-                _current = store;
-                $rootScope.$emit('storeChanged', {store: _current});
-            });
-        }
+		var storedStore = storageService.get('store');
+		if (storedStore) {
 
-        return geoLocation.getGps()
-            .then(function (gps) {
+			return _getById(storedStore)
+				.then(function(store) {
+					_current = store;
+					$rootScope.$emit('storeChanged', {
+						store: _current
+					});
+				});
+		}
 
-                var params = {
-                    lat: gps.coords.latitude,
-                    lng: gps.coords.longitude
-                };
+		return geoLocation.getGps()
+			.then(function(gps) {
 
-                return httpClient.get('/locations', { params: params })
-                    .then(function (response) {
-                        if (response.data.length >= 1) {
-                            _current = response.data[0];
+				var params = {
+					lat: gps.coords.latitude,
+					lng: gps.coords.longitude
+				};
 
-                            $rootScope.$emit('storeChanged', {store: _current});
-                        }
-                        return _current;
-                    });
-            });
-    }
+				return httpClient.get('/locations', {
+						params: params
+					})
+					.then(function(response) {
+						if (response.data.length >= 1) {
+							_current = response.data[0];
 
-    function _registerListener(name, handler){
+							$rootScope.$emit('storeChanged', {
+								store: _current
+							});
+						}
+						return _current;
+					});
+			});
+	}
 
-        if(availableEvents.indexOf(name) === -1)
-            throw new Error('The event \'' + name +'\' is not available on storeService.');
+	function _registerListener(name, handler) {
 
-        $rootScope.$on(name, handler);
-    }
+		if (availableEvents.indexOf(name) === -1)
+			throw new Error('The event \'' + name + '\' is not available on storeService.');
+
+		$rootScope.$on(name, handler);
+	}
 }

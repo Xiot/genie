@@ -44,6 +44,9 @@ var wrap = function(handler) {
 					//next();
 					next(ex);
 				});
+			} else if(isError(ret)){
+				next(ret);
+
 			} else {
 
 				if(ret === undefined){
@@ -70,6 +73,10 @@ var wrap = function(handler) {
 			return;
 		}
 	}
+}
+
+function isError(ex){
+	return ex instanceof Error;
 }
 
 function ensureError(ex) {

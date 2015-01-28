@@ -20,8 +20,9 @@ function StoreService(httpClient, eventService, $q, securityService) {
 
 	return service;
 
-	function getTasks(){
-		var url = '/stores/' + service.currentStore.id + '/tasks';
+	function getTasks(options){
+		var url = '/stores/' + service.currentStore.id + '/tasks/open';	
+
 		return httpClient.get(url)
 		.then(function(res){
 			return res.data;

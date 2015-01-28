@@ -10,7 +10,15 @@ var schema = new mongoose.Schema({
     created_at: { type: Date, default: Date.now },
     complete: { type: Boolean },
     created_loc: { type: [Number] },
-    assigned_to: { type: id, ref: 'User' }
+    assigned_to: { type: id, ref: 'User' },
+    customer: {type: id, ref: 'User'},
+    product: {type: id, ref: 'Product'}
 });
+
+schema.pre('save', function(next){
+	this.increment();
+	next();
+});
+
 
 module.exports = mongoose.model('Task', schema);

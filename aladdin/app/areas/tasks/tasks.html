@@ -1,7 +1,18 @@
 <h2>Tasks</h2>
 
-<ul>
-<li ng-repeat="task in vm.tasks">
-	<span>{{task.type}}</span>
-</li>
-</ul>
+<div class="row">
+    <ul class="task-list col-md-6">
+        <li ng-repeat="task in vm.tasks" ng-class="['task', task.type, task.selected ? 'selected' : '', task.mine ? 'mine' : '']" ng-click="vm.select(task)">
+            <span>{{task.displayTitle}}</span>
+            <div>{{task.created_at | fromNow}}</div>
+        </li>
+    </ul>
+
+    <div class="task-details col-md-6">
+    	<h3>{{vm.selected.displayTitle}}</h3>
+    	<div class="button-bar">
+    		<button class="btn btn-primary" ng-click="vm.accept()" ng-if="!vm.selected.mine">Accept</button>
+    		<button class="btn btn-primary" ng-click="vm.complete()" ng-if="vm.selected.mine">Complete</button>
+    	</div>
+    </div>
+</div>

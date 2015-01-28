@@ -129,17 +129,17 @@ gulp.task('default', function (cb) {
     run('clean', 'compile:app:index', cb);
 });
 
-gulp.task('watch', function () {
-
-    if (env.sync)
-        plug.livereload.listen();
+gulp.task('watch', function () {   
 
     gulp.watch(paths.src.js, ['compile:app:js']);
     gulp.watch(paths.src.less, ['compile:app:less']);
     gulp.watch(paths.src.templates, ['compile:app:html']);
     gulp.watch(paths.src.index, ['compile:app:index']);
     
-    gulp.watch('wwwroot/**').on('change', plug.livereload.changed);
+    if (env.sync) {
+        plug.livereload.listen();
+        gulp.watch('wwwroot/**').on('change', plug.livereload.changed);
+    }    
 });
 
 gulp.task('serve', function () {
