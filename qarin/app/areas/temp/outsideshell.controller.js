@@ -7,7 +7,7 @@ function OutsideShellController(storeService, storageService, $state) {
 	document.body.appendChild(node);
 	window.addStyleString = function(str) {
 		node.innerHTML = str;
-	}
+	};
 
 	var vm = angular.extend(this, {
 		setStore: _setStore,

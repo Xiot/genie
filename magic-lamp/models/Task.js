@@ -2,23 +2,37 @@
 var id = mongoose.Schema.Types.ObjectId;
 
 var schema = new mongoose.Schema({
-    type: { type: String, enum: ['request', 'task'], default: 'task' },
-    store: {type: id, ref: 'OrganizationLocation'},
+    
     title: { type: String },
     details: { type: String },
+    type: { type: String, enum: ['request', 'task'], default: 'task' },
+
     created_by: { type: id, ref: 'User' },
     created_at: { type: Date, default: Date.now },
-    complete: { type: Boolean },
+    
     created_loc: { type: [Number] },
+    
     assigned_to: { type: id, ref: 'User' },
+    assigned_at: {type: Date},
+
+	store: {type: id, ref: 'OrganizationLocation'},
     customer: {type: id, ref: 'User'},
-    product: {type: id, ref: 'Product'}
+    product: {type: id, ref: 'Product'},
+    chat: {type: id, ref: 'ChatLog'},
+    
+    complete: { type: Boolean, default: false }
 });
 
 schema.pre('save', function(next){
 	this.increment();
+
+	if(this.isModified('assigned_to') && !this.assigned_at)
+		this.assigned_at = Date.now();
+
 	next();
 });
 
+schema.virtual('isRequest')
+	.get(function(){ return this.type === 'request'});
 
 module.exports = mongoose.model('Task', schema);

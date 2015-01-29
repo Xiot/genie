@@ -20,7 +20,9 @@ function ensureAuthenticated($rootScope, $state, securityService, $timeout, stor
 
 		securityService.requestCurrentUser()
 			.then(function(u) {
-
+				if(!u)
+					return $state.go('login');
+				
 				// Ensure that the store is available
 				return storeService.setStoreById(u.store)
 					.then(function() {

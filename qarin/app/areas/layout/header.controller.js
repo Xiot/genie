@@ -16,7 +16,7 @@ function HeaderController(storeService, socket, $state) {
 			go: function(){
 				$state.go('chat({id: data.chat})');
 			}
-		}
+		};
 		vm.notifications.unshift(notification);
 
 	});

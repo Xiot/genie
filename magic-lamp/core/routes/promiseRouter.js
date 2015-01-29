@@ -29,7 +29,11 @@ var wrap = function(handler) {
 
 					// check if value is a response object
 					// if then then write it out to the actual response
-					//console.log('success');
+					
+					// Promisified Mongoose saveAsync returns an array with [value, recordsAffected]
+					// if we get this, then just return the value;
+					if(Array.isArray(value) && value.length == 2 && typeof value[1] === 'number')
+						value = value[0];
 
 					res.send(value);
 					next();
@@ -51,7 +55,7 @@ var wrap = function(handler) {
 
 				if(ret === undefined){
 					if(!takesNext){
-						throw new Error('The handler for route \'' + req.route + '\' did not return a value and did not accept the `next` argument.');
+						return next(new Error('The handler for route \'' + req.route.method + ' ' + req.route.path + '\' did not return a value and did not accept the `next` argument.'));
 					}
 					next();
 

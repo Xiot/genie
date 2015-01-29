@@ -6,7 +6,7 @@ function setStoreClass(storeService){
 
 	return {
 		link: _linkFn
-	}
+	};
 
 	function _linkFn(scope, element, attrs){
 

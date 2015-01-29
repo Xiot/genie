@@ -10,8 +10,9 @@ angular.module('qarin', [
     'qarin.errors',
     
     'qarin.home',
-    'qarin.products'
-
+    'qarin.products',
+    'qarin.tickets',
+    'qarin.chat'
     ])
 
 
@@ -41,26 +42,7 @@ angular.module('qarin', [
             abstract: true,
             template: '<ui-view></ui-view>'
         })
-        
-        .state('chat-list', {
-            url: '/chat',
-            parent: 'layout',
-            templateUrl: 'app/areas/chat/chatlist.html',
-            controller: 'ChatListController',
-            controllerAs: 'vm'
-        })
-        .state('chat', {
-            url: '/chat/:id',
-            parent: 'layout',
-            templateUrl: 'app/areas/chat/chat.html',
-            controller: 'ChatController',
-            controllerAs: 'vm',
-            resolve: {
-                chatId: function($stateParams){
-                    return $stateParams.id;
-                }
-            }
-        });
+        ;
 });
 
 angular.module('qarin')
@@ -72,5 +54,10 @@ angular.module('qarin')
         console.log(unfoundState.to); // "lazy.state"
         console.log(unfoundState.toParams); // {a:1, b:2}
         console.log(unfoundState.options); // {inherit:false} + default options
+    });
+
+    $rootScope.$on('$stateChangeError', function(event, toState, toParams, fromState, fromParams, error){
+        console.log('unable to transition to state ' + toState.name);
+        console.log(error);
     });
 });

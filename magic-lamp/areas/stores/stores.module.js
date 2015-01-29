@@ -54,7 +54,7 @@ module.exports.init = function(server, config) {
 
 
 	productRoutes(storeRoute, config.passport);
-	require('./stores.tasks')(storeRoute, config.passport);
+	require('./stores.tasks')(storeRoute, config.passport, config.io);
 
 	require('./stores.chat')(storeRoute.route('/chat'), config.io, config.passport);
 

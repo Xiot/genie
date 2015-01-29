@@ -82,6 +82,8 @@ function securityService(storageService, $state, httpClient, $q) {
             .then(function(res) {
                 token = res.data.auth_token;
 
+                storageService.set('auth-token', token, false);
+
                 return _requestCurrentUser(token);
             }).then(function(user) {
                 storageService.set("auth-token", token, !!persist);

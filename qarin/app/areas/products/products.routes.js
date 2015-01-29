@@ -1,5 +1,5 @@
 angular.module('qarin.products')
-	.config(registerRoutes)
+	.config(registerRoutes);
 
 // @ngInject
 function registerRoutes($stateProvider){

@@ -14,14 +14,15 @@ function TaskService(httpClient, storeService, securityService){
 	return service;
 
 	function acceptTask(task){
-		var op = [
-			{op: 'test', path: "/__v", value: task.__v + 9},
-			{op: "replace", path: "/assigned_to", value:user._id}			
-		];
+		// var op = [
+		// 	{op: 'test', path: "/__v", value: task.__v},
+		// 	{op: "replace", path: "/assigned_to", value:user._id}			
+		// ];
 
-		var url = join('stores', store.id, 'tasks', task._id);
+		var url = join('stores', store.id, 'tasks', task._id, 'assignee');
+		var data = {employee: user._id};
 
-		return httpClient.patch(url, op)
+		return httpClient.put(url, data)
 		.then(function(res){
 			return res.data;
 		});
@@ -42,10 +43,6 @@ function TaskService(httpClient, storeService, securityService){
 
 	function join(){
 		var args = [].slice.call(arguments);
-
-		return '/' + args.join('/');
-		// return args.map(function(item){
-
-		// })
+		return '/' + args.join('/');		
 	}
 }

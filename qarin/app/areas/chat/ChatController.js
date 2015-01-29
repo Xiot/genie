@@ -1,17 +1,17 @@
-﻿angular.module('qarin')
-	.controller('ChatController', function(socket, storeService, chatId, httpClient, $rootScope, chatService) {
+﻿angular.module('qarin.chat')
+	.controller('ChatController', function(socket, storeService, chat, httpClient, $rootScope, chatService) {
 
 		var vm = angular.extend(this, {
-			chat: null,
+			chat: chat,
 			send: sendMessage,
 			message: '',
 			product: null
 		});
 
-		httpClient.get('/chat/' + chatId)
-			.then(function(res) {
-				vm.chat = res.data;
-			});
+		// httpClient.get('/chat/' + chatId)
+		// 	.then(function(res) {
+		// 		vm.chat = res.data;
+		// 	});
 
 		$rootScope.$on('chat-message', function(e, msg) {
 			vm.chat.messages.push(msg);
@@ -21,7 +21,7 @@
 			var message = vm.message;
 			vm.message = '';
 
-			chatService.sendMessage(chatId, message)
+			chatService.sendMessage(chat._id, message)
 				.then(function(msg) {
 					vm.chat.messages.push({
 						message: msg.message,

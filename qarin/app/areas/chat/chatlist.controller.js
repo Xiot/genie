@@ -1,4 +1,4 @@
-angular.module('qarin')
+angular.module('qarin.chat')
 	.controller('ChatListController', ChatListController);
 
 // @ngInject
@@ -18,17 +18,22 @@ function ChatListController(httpClient, storeService, $state, chatService) {
 			}
 		};
 
-		httpClient.get('/users/me/chats', opts)
-			.then(function(res) {
-				vm.chats = parse(res.data);
-			});
+		chatService.getMyChats()
+		.then(function(chats){
+			vm.chats = chats;
+		})
+
+		// httpClient.get('/users/me/chats', opts)
+		// 	.then(function(res) {
+		// 		vm.chats = parse(res.data);
+		// 	});
 	}
 
 	function _createNewChat(){
 
 		chatService.create()
 		.then(function(chat){
-			$state.go('chat', {id: chat._id});
+			$state.go('chat', {chatId: chat._id});
 		});
 
 		// httpClient.post('/stores/' + storeService.current.id + '/chat')
@@ -36,32 +41,4 @@ function ChatListController(httpClient, storeService, $state, chatService) {
 		// 	$state.go('chat', {id: res.data._id});
 		// });
 	}
-}
-
-function parse(data) {
-
-	return data.map(function(x) {
-		return new Chat(x);
-	});
-}
-
-function Chat(data) {
-
-	// copy raw properties
-	angular.extend(this, data);
-
-	var myDeviceId = 'dev-1';
-	var others = [];
-
-	data.participants.forEach(function(x) {
-		if (x.device === myDeviceId)
-			return;
-
-		others.push(x.firstName);
-	});
-
-	this.users = others.join(', ');
-
-	this.lastMessage = data.messages.slice(-1)[0];
-
 }

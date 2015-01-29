@@ -17,7 +17,7 @@ var chatLogSchema = new Schema({
     participants: [{type: id, ref: 'User'}],
         
     closed: {type: Boolean, default: false},
-
+    
 	product: {type: id, ref: 'Product'},
     messages: [messageSchema]
 });
