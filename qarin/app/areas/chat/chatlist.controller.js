@@ -20,7 +20,12 @@ function ChatListController(httpClient, storeService, $state, chatService) {
 
 		chatService.getMyChats()
 		.then(function(chats){
-			vm.chats = chats;
+			var activeChats = [];
+			chats.forEach(function(c){
+				if(c.lastMessage)
+					activeChats.push(c);
+			})
+			vm.chats = activeChats;
 		})
 
 		// httpClient.get('/users/me/chats', opts)

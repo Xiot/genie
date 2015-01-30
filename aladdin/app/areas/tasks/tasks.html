@@ -2,17 +2,37 @@
 
 <div class="row">
     <ul class="task-list col-md-6">
-        <li ng-repeat="task in vm.tasks" ng-class="['task', task.type, task.selected ? 'selected' : '', task.mine ? 'mine' : '']" ng-click="vm.select(task)">
+        <li ng-repeat="task in vm.tasks" ng-class="['task', task.type, task.selected ? 'selected' : '', isMe(task.assigned_to) ? 'mine' : '']" ng-click="vm.select(task)">
             <span>{{task.displayTitle}}</span>
             <div>{{task.created_at | fromNow}}</div>
         </li>
     </ul>
 
     <div class="task-details col-md-6">
-    	<h3>{{vm.selected.displayTitle}}</h3>
-    	<div class="button-bar">
-    		<button class="btn btn-primary" ng-click="vm.accept()" ng-if="!vm.selected.mine">Accept</button>
-    		<button class="btn btn-primary" ng-click="vm.complete()" ng-if="vm.selected.mine">Complete</button>
-    	</div>
+        <h3>{{vm.selected.displayTitle}}</h3>
+        <div class="button-bar">
+            <button class="btn btn-primary" ng-click="vm.accept()" ng-if="!isMe(vm.selected.assigned_to)">Accept</button>
+            <button class="btn btn-primary" ng-click="vm.complete()" ng-if="isMe(vm.selected.assigned_to)">Complete</button>
+        </div>
+        <form id='chat' ng-submit="vm.sendMessage(vm.selected, vm.message)">
+            <div class="chat-window">
+                <div class="message-pane">
+                    <div ng-repeat="m in vm.chat.messages" ng-class="{'chat-bubble': true, sent: m.sent, received: !m.sent}">
+                        <span class="message-time">{{m.time | date: 'medium'}}</span>
+                        <div class="message-body">{{m.message}}</div>
+                    </div>
+                </div>
+
+                <div class="chat-controls input-group">
+                    <input type="text" ng-model="vm.message" class="form-control">
+                    <span class="input-group-btn">
+                        <button type="submit" class="btn btn-default">
+                            <i class="glyphicon glyphicon-send"></i>
+                        </button>
+                    </span>
+                </div>
+
+            </div>
+        </form>
     </div>
 </div>

@@ -77,6 +77,9 @@
   clear: both;
   visibility: hidden;
 }
+.chat-log-list {
+  overflow: scroll;
+}
 .chat-log-list-item {
   border: 1px solid black;
   margin: 3px;

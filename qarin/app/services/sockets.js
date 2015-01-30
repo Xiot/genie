@@ -1,5 +1,5 @@
 ﻿angular.module('qarin')
-    .factory('socketBuilder', function (socketFactory, env, storageService) {
+    .factory('socketBuilder', function (socketFactory, env, storageService, storeService) {
 
         var builder = function (namespace) {
 
@@ -7,17 +7,34 @@
             if(namespace)
                 uri += namespace;
 
-            var deviceId = storageService.get('device');
+            var deviceId = storageService.get('device-id');
 
             var myIoSocket = io.connect(uri, {
                 query: 'device=' + deviceId
             });
 
-            var mySocket = socketFactory({
+            var socket = socketFactory({
                 ioSocket: myIoSocket
             });
 
-            return mySocket;
+            socket.io = myIoSocket;
+
+            function register() {
+                
+                //var user = securityService.currentUser();
+                socket.emit('register', {
+                    storeId: storeService.current && storeService.current.id,
+                    //userId: user && user._id,
+                    deviceId: deviceId,
+                    app: 'qarin'
+                });
+            }
+
+            socket.on('connect', register);
+            
+            storeService.on('storeChanged', register);
+            
+            return socket;
         };
 
         return builder;

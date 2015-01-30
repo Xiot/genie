@@ -40,7 +40,7 @@ angular.module('qarin', [
             url: '',
             parent: 'root',
             abstract: true,
-            template: '<ui-view></ui-view>'
+            template: '<div ui-view></div>'
         })
         ;
 });

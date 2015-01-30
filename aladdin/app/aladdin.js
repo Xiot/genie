@@ -3,6 +3,7 @@ angular.module('aladdin',[
 	'ui.bootstrap',
 	'symbiote.common',
 
+	'aladdin.globals',
 	'aladdin.layout',
 	'aladdin.config',
 	'aladdin.data',

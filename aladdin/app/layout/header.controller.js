@@ -10,19 +10,6 @@ function HeaderController(securityService, storeService, eventService, util) {
 		store: storeService.currentStore
 	});
 
-	// Object.defineProperty(vm, 'org', {
-	// 	get: function(){return storeService.currentOrg;},
-	// 	set: function(value){storeService.currentOrg = value;}
-	// });
-
-	// Object.defineProperty(vm, 'store', {
-	// 	get: function(){return storeService.currentStore;},
-	// 	set: function(value){storeService.currentStore = value;}
-	// });
-
-	//util.addProperty(vm, 'org');
-	//util.addProperty(vm, 'store');
-
 	init();
 
 	function init() {

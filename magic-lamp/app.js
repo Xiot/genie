@@ -10,21 +10,10 @@ var connections = require('./config/connections.js');
 var passport = require('passport');
 var socketio = require('./config/socket');
 
-
-
-//var app = connections.app;
-//var server = connections.server;
-
 var server = require('./config/restify');
 var io = socketio(server);
 
-//app.run = function (port, callback) {
-        
-//    server.listen(port, callback);
-//    return server;
-//};
-
-
+//var notification = new require('./core/communication/notification.service')(io);
 
 require('./config/passport.js')(server, passport);
 //require('./config/express.js')(app, passport);

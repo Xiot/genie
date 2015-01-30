@@ -1,7 +1,7 @@
 <h1>Chats</h1>
-<div>
+<div class="chat-log-list">
     <div ng-repeat="chat in vm.chats" class="chat-log-list-item">
-        <a ui-sref="chat({id: chat._id})">
+        <a ui-sref="chat({chatId: chat._id})">
             <h5>{{chat.users}}</h5>
             <p>
                 {{chat.lastMessage.message}}

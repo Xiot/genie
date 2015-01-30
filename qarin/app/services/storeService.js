@@ -97,6 +97,6 @@ function StoreService(geoLocation, httpClient, $rootScope, storageService) {
 		if (availableEvents.indexOf(name) === -1)
 			throw new Error('The event \'' + name + '\' is not available on storeService.');
 
-		$rootScope.$on(name, handler);
+		return $rootScope.$on(name, handler);
 	}
 }

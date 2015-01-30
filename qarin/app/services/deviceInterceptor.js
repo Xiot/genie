@@ -10,7 +10,7 @@ function DeviceInterceptor($q, storageService){
             if(!config || !config.headers)
                 return config;
 
-            config.headers['x-device'] = storageService.get('device');
+            config.headers['x-device'] = storageService.get('device-id');
             return config;
         }
     };

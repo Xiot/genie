@@ -1,7 +1,7 @@
 angular.module('qarin')
 	.controller('TicketController', TicketController);
 
-function TicketController(ticket, ticketService, $state, socket) {
+function TicketController($scope, ticket, ticketService, $state) {
 
 	var vm = angular.extend(this, {
 		ticket: ticket,
@@ -12,7 +12,13 @@ function TicketController(ticket, ticketService, $state, socket) {
 		return $state.go('chat', {chatId: ticket.chat});
 	}
 
-	socket.on('task:assigned', function(data){
+	var unbind = ticketService.on('task:assigned', function(data){
 		console.log('task:assigned', data);
 	});
+
+	$scope.$on('$destroy', function(){
+		console.log('ticket.controller - destroy');
+		unbind();
+	});
+
 }

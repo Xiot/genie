@@ -39,6 +39,7 @@ module.exports = function(server, io, passport) {
 
     process.on('uncaughtException', function(err) {
         debug('process.uncaught', err);
+        debug(err.stack || err.stackTrace);
         handleProcessError(err);
     });
 

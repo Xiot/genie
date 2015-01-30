@@ -1,13 +1,14 @@
 angular.module('qarin.tickets')
 	.factory('ticketService', TicketService);
 
-function TicketService(storeService, httpClient, util){
+function TicketService(storeService, httpClient, util, socket){
 
 	var store = storeService.current;
 
 	var service = {
 		create: createTicket,
-		get: getTicket
+		get: getTicket,
+		on: addHandler
 	};
 
 	init();
@@ -41,4 +42,11 @@ function TicketService(storeService, httpClient, util){
 		});
 	}
 
+	function addHandler(message, handler){
+		socket.on(message, handler);
+		
+		return function() {
+			socket.removeListener(message, handler);
+		}
+	}
 }

@@ -1,29 +1,49 @@
 angular.module('aladdin.socket')
-    .factory('socketBuilder', function (socketFactory, env, storageService) {
+	.factory('socketBuilder', function(socketFactory, env, storageService, securityService, storeService) {
 
-        var builder = function (namespace) {
+		var builder = function(namespace) {
 
-            namespace = namespace || '';
+			namespace = namespace || '';
 
-            var device = storageService.get('device-id');
+			var device = storageService.get('device-id');
 
-            // if this is undefined then generate a new device key
-            // should be seperated into a different service.
+			// if this is undefined then generate a new device key
+			// should be seperated into a different service.
 
-            var myIoSocket = io.connect(env.apiRoot + namespace, {
-                query: 'device=' + device
-            });
+			var myIoSocket = io.connect(env.apiRoot + namespace, {
+				query: 'device=' + device
+			});
 
-            var mySocket = socketFactory({
-                ioSocket: myIoSocket
-            });
+			var socket = socketFactory({
+				ioSocket: myIoSocket
+			});
 
-            return mySocket;
-        };
+            socket.io = myIoSocket;
 
-        return builder;
+			function register() {
+				
+				var user = securityService.currentUser();
+				socket.emit('register', {
+					storeId: storeService.currentStore && storeService.currentStore.id,
+					userId: user && user._id,
+                    deviceId: device,
+                    app: 'aladdin'
+				});
+			}
 
-    })
-    .factory('socket', function(socketBuilder){
-        return socketBuilder();
-    });
+            socket.on('connect', register);
+            
+            storeService.on('storeChanged', register);
+            securityService.on('userChanged', register);
+
+			return socket;
+		};
+
+		return builder;
+
+	})
+	.factory('socket', function(socketBuilder) {
+		var socket = socketBuilder();
+		return socket;
+
+	});

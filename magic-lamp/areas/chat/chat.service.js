@@ -47,7 +47,7 @@ function ChatRoom(id, io) {
 
 	this.post = function(msg) {
 
-		debug('posting to ' + id);
+		debug('posting to ' + id + ' [' + msg.user + ']');
 		return ChatLog.findByIdAndUpdateAsync(id, {
 				$push: {
 					messages: msg
@@ -60,6 +60,7 @@ function ChatRoom(id, io) {
 				}
 			})
 			.spread(function(affected) {
+				console.log('saved message');
 
 				if (affected === 0)
 					throw new Error('room not found');
@@ -81,10 +82,11 @@ function ChatRoom(id, io) {
 								return;
 
 							group = group.to(participantId);
+							console.log('    ' + participantId);
 						});
 
 						debug('chat-message: ' + id);
-						group.emit('message', {
+						group.emit('chat:message', {
 							chat: id,
 							user: msg.user,
 							time: msg.time,
@@ -105,7 +107,7 @@ function ChatService() {
 
 	this.init = function(io) {
 		_io = io;
-		_io.on('connection', onConnection);
+		//_io.on('connection', onConnection);
 	}
 
 	this.getById = function(id) {
@@ -152,7 +154,7 @@ function ChatService() {
 			return Promise.reject(ex);
 		}
 	}
-
+/*
 	function onConnection(socket) {
 
 		debug('chat connected: \n  device: ' + socket.device + '\n  user: ' + socket.user.id + '\n  socket: ' + socket.id);
@@ -188,16 +190,16 @@ function ChatService() {
 
 			socket.join('store-' + storeId);
 			
-			if(data.app === 'solomon') {
-				socket.join('solomon');
-				socket.join('solomon:' + storeId);
-			}
 
+			if(data.app){
+				socket.join(data.app);
+				sockat.join(data.app + ':' + storeId);
+			}
 		});
 
 		function onDisconnect(socket) {
 			debug('disconnected');
 		}
 
-	}
+	}*/
 };

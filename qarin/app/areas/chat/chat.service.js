@@ -42,14 +42,14 @@ function ChatFactory($rootScope, httpClient, socket, storeService) {
 	}
 
 	function init() {
-		socket.on('message', function(data) {
+		socket.on('chat:message', function(data) {
 			console.log(data);
 			$rootScope.$emit('chat-message', data);
 		});
 	}
 
 	function getMyChats() {
-		return httpClient.get('/users/me/chats', opts)
+		return httpClient.get('/users/me/chats')
 			.then(function(res) {
 				return parse(res.data);
 			});

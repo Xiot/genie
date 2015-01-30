@@ -34,7 +34,7 @@ module.exports = function(server, passport, io) {
 				query.assigned_to = {
 					$in: [req.params.employee, null]
 				}
-			}			
+			}
 
 			return Task.find(query)
 				.sort({
@@ -43,7 +43,7 @@ module.exports = function(server, passport, io) {
 				.execAsync();
 		}))
 		.post('/',
-			wrap(function(req) {		
+			wrap(function(req) {
 
 				var task = new Task(req.body);
 				task.store = req.store;
@@ -63,15 +63,21 @@ module.exports = function(server, passport, io) {
 					.spread(function(savedChat) {
 
 						task.chat = savedChat;
-						return task.saveAsync();						
+						return task.saveAsync();
+					}).spread(function(newTask) {
+
+						io.to('aladdin:' + req.store.id)
+							.emit('ticket:created', newTask);
+
+						return newTask;
 					});
 			}));
 
 	var taskRoute = route.route('/:task_id')
 		.param('task_id', function(req, res, next, value) {
-				
+
 			Task.findByIdAsync(req.params.task_id)
-				.then(function(task) {		
+				.then(function(task) {
 
 					if (!task)
 						return next(new restify.NotFoundError());
@@ -85,7 +91,7 @@ module.exports = function(server, passport, io) {
 
 	.get('/', wrap(function(req) {
 
-		if(!req.task)
+		if (!req.task)
 			return new restify.NotFoundError();
 
 		return req.task;
@@ -100,23 +106,23 @@ module.exports = function(server, passport, io) {
 			return new restify.PreconditionFailedError();
 		}
 
-		if(task.isModified('assigned_to'))
+		if (task.isModified('assigned_to'))
 			return new restify.BadRequestError('To assign the task use PUT ' + req.url + '/assignee');
 
 		return task.saveAsync();
 	}))
 
-	.put('/assignee', wrap(function(req){
+	.put('/assignee', wrap(function(req) {
 
 		var employee = req.body.employee;
 		var task = req.task;
 
-		if(req.assigned_to)
+		if (req.assigned_to)
 			return new restify.PreconditionFailedError('The task was already assigned');
 
 		task.assigned_to = employee;
 
-		
+
 		// send notification to user
 		// this should only have minimum info
 		console.log('io.to: ' + task.customer);
