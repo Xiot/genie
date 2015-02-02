@@ -14,10 +14,27 @@ function TaskService(httpClient, storeService, securityService, socket, eventSer
 		postMessage: postMessage,
 		getChat: getChat,
 
+		getById: getById,
 		on: addHandler
-	}
+	};
+
+	init();
 
 	return service;
+
+	function init(){
+		socket.on('chat:message', function(data){
+			eventService.raise('chat:message', data);
+		});
+	}
+
+	function getById(id){
+		var url = join('stores', store.id, 'tasks', id);
+		return httpClient.get(url)
+		.then(function(res){
+			return new Task(res.data);
+		});
+	}
 
 	function acceptTask(task) {
 
@@ -28,12 +45,17 @@ function TaskService(httpClient, storeService, securityService, socket, eventSer
 
 		return httpClient.put(url, data)
 			.then(function(res) {
-				return res.data;
+				return new Task(res.data);
 			});
 	}
 
 	function completeTask(task) {
-
+		var url = join('stores', store.id, 'tasks', task._id);
+		var patch = [{op: 'replace', path:'/complete', value: true}];
+		return httpClient.patch(url, patch)
+		.then(function(res){
+			return new Task(res.data);
+		});
 	}
 
 	function getAvailableTasks() {

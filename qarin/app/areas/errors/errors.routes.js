@@ -5,7 +5,7 @@ function configureRoutes($stateProvider){
 	$stateProvider.state('error', {
 		url: '/error',
 		parent: 'root',
-		controller: 'ErrorsController',
+		controller: 'ErrorController',
 		controllerAs: 'vm',
 		templateUrl: 'app/areas/errors/error.html'
 	});

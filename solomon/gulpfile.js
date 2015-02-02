@@ -1,6 +1,5 @@
 ﻿var gulp = require('gulp');
 var plug = require('gulp-load-plugins')();
-var wrap = require('gulp-wrap');
 var wiredep = require('wiredep');
 var es = require('event-stream');
 

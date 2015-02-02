@@ -1,0 +1,88 @@
+<header class="task-header">
+
+    <h2>Task - {{vm.task.displayTitle}}</h2>
+    <!-- <span class="pull-right">{{vm.task.created_at | fromNow}}</span> -->
+    <div class="pull-right" ng-if="!vm.task.complete && !vm.task.assigned_to">
+        Since Created
+        <timer class="pull-right" start-time="vm.task.created_at"></timer>
+    </div>
+    <div class="pull-right" ng-if="!vm.task.complete && vm.task.assigned_to">
+        Since Assigned
+        <timer class="pull-right" start-time="vm.task.assigned_at"></timer>
+    </div>
+    <div class="pull-right" ng-if="vm.task.complete">
+        <span>Complete</span>
+    </div>
+    <div class="button-bar">
+        <button class="btn btn-primary" ng-click="vm.accept()" ng-if="!isMe(vm.task.assigned_to)">Accept</button>
+        <button class="btn btn-primary" ng-click="vm.complete()" ng-if="isMe(vm.task.assigned_to)">Complete</button>
+    </div>
+
+</header>
+
+<div class="horizontal-scroll">
+
+    <div class="task-details">
+        <section ng-init="scrollSync = true">
+            <h2>Chat</h2>
+            <span>{{scrollSync}}</span>
+            <!-- <h2>Task - {{vm.task.displayTitle}}</h2> -->
+            <!-- <div class="button-bar">
+        <button class="btn btn-primary" ng-click="vm.accept()" ng-if="!isMe(vm.task.assigned_to)">Accept</button>
+        <button class="btn btn-primary" ng-click="vm.complete()" ng-if="isMe(vm.task.assigned_to)">Complete</button>
+    </div> -->
+            <form name="chat" class="chat-form" ng-submit="vm.sendMessage()">
+                <div class="chat-window">
+                    <div class="message-pane" scroll-glue>
+                        <div ng-repeat="m in vm.chat.messages" ng-class="{'chat-bubble': true, sent: m.sent, received: !m.sent}">
+                            <span class="message-time">{{m.time | date: 'medium'}}</span>
+                            <div class="message-body">{{m.message}}</div>
+                        </div>
+                    </div>
+
+                    <div class="chat-controls input-group">
+                        <input type="text" ng-model="vm.message" class="form-control">
+                        <span class="input-group-btn">
+                            <button type="submit" class="btn btn-default">
+                                <i class="glyphicon glyphicon-send"></i>
+                            </button>
+                        </span>
+                    </div>
+
+                </div>
+            </form>
+        </section>
+    </div>
+
+    <div class="product-detail" ng-if="vm.product">
+        <section>
+            <div>
+                <h2>product</h2>
+                <h2>{{vm.product.name}}</h2>
+                <img ng-src="{{vm.product.imageUrl}}">
+                <p>{{vm.product.description}}</p>
+            </div>
+        </section>
+
+    </div>
+    <!-- 
+    <div class="product-detail" ng-if="vm.product">
+        <section>
+            <h2>product</h2>
+            <h2>{{vm.product.name}}</h2>
+            <img ng-src="{{vm.product.imageUrl}}">
+            <p>{{vm.product.description}}</p>
+        </section>
+
+    </div>
+
+    <div class="product-detail" ng-if="vm.product">
+        <section>
+            <h2>product</h2>
+            <h2>{{vm.product.name}}</h2>
+            <img ng-src="{{vm.product.imageUrl}}">
+            <p>{{vm.product.description}}</p>
+        </section>
+
+    </div> -->
+</div>

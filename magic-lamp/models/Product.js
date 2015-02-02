@@ -7,7 +7,8 @@ var productSchema = new Schema({
     name: { type: String, required: true },
     description: { type: String, required: false },
     store: {type: id, ref: 'OrganizationLocation'},
-    image: {type: id}
+    image: {type: id},
+    department: {type: id, ref: 'Department'}
 });
 
 productSchema.index({name: 'text', description: 'text'});

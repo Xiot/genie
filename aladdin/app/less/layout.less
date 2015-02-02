@@ -1,4 +1,6 @@
-﻿html, body {
+﻿@import "mixins";
+
+html, body {
     margin: 0;
     padding: 0;
 }
@@ -18,4 +20,30 @@ body {
 
 .debug-panel {
     margin-left: 200px;
+}
+
+.horizontal-scroll {
+    .clearfix;
+
+	overflow-x: auto;
+    overflow-y: hidden;
+    white-space: nowrap;
+    
+    position: relative;
+    display: table;
+
+	& > div {		
+        display: table-cell;		
+
+        margin-right: 15px;
+        //border: 1px solid red;
+
+        & > section {            
+            //border: 1px solid blue;
+
+            min-width: 400px;
+            height: 600px;
+
+        }
+	}
 }

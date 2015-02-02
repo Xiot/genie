@@ -20,5 +20,6 @@ function addGlobals($rootScope, securityService) {
 		var id = user.id || user._id;
 		return currentUserId === id;
 
-	}
+	};
 }
+

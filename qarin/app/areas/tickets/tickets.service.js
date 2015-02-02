@@ -29,6 +29,10 @@ function TicketService(storeService, httpClient, util, socket){
 			type: 'request'			
 		};
 
+		if(product){
+			request.product= product.id || product._id || product;
+		}
+
 		var url = util.join('stores', store.id, 'tasks');
 		return httpClient.post(url, request)
 			.then(function(res) {

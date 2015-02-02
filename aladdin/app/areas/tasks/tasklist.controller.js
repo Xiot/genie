@@ -6,12 +6,12 @@ function TaskListController($scope, taskService, securityService) {
 
 	var vm = angular.extend(this, {
 		tasks: null,
-		selected: null,
-		select: selectTask,
-		accept: acceptTask,
-		complete: completeTask,
-		chat: null,
-		sendMessage: sendChatMessage
+		//selected: null,
+		//select: selectTask,
+		//accept: acceptTask,
+		//complete: completeTask,
+		//chat: null,
+		//sendMessage: sendChatMessage
 	});
 
 	init();
@@ -20,10 +20,13 @@ function TaskListController($scope, taskService, securityService) {
 		taskService.getAvailable()
 			.then(function(tasks) {
 
-				vm.tasks = tasks;
+				vm.tasks = tasks.map(function(t){
+					t.mine = $scope.isMe(t.assigned_to);
+					return t;
+				});
 
-				if (vm.tasks.length > 0)
-					vm.select(vm.tasks[0]);
+				// if (vm.tasks.length > 0)
+				// 	vm.select(vm.tasks[0]);
 			});
 
 		var unbindCreated = taskService.on('ticket:created', function(ticket){

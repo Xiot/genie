@@ -1,3 +1,10 @@
 {
-	"registry": "http://devtop:5656"
+	"registry": {
+		"search": [
+			"http://devtop:5656",
+			"https://bower.herokuapp.com"
+		],
+		"register": "http://devtop:5656",
+		"publish": "http://devtop:5656"
+	}
 }

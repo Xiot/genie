@@ -94,9 +94,9 @@ gulp.task('compile:app:js', function() {
 	.pipe(plug.wrapJs('(function() {\r\n"use strict";\r\n%= body %\r\n})();', {
 			newline: '\r\n'
 		}))
-		.on('error', function() {})
+		//.on('error', function() {})
 
-	.pipe(plug.ngAnnotate())
+	.pipe(plug.ngAnnotate({gulpWarnings:true}))
 
 	.pipe(plug.angularFilesort())
 		.pipe(plug.concat('app.js'))
@@ -108,6 +108,9 @@ gulp.task('compile:app:js', function() {
 gulp.task('compile:app:less', function() {
 	return gulp.src(paths.src.lessRoot)
 		.pipe(plug.less())
+		.on('error', function(ex){
+			console.log(ex);
+		})
 		.pipe(gulp.dest(paths.output.css));
 });
 

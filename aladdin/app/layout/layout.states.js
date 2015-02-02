@@ -27,7 +27,7 @@ function ensureAuthenticated($rootScope, $state, securityService, $timeout, stor
 				return storeService.setStoreById(u.store)
 					.then(function() {
 						var targetState = u ? toState : 'login';
-						$state.go(targetState);
+						$state.go(targetState, toParams);
 					});
 
 			}).catch(function(ex) {

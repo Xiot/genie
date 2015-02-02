@@ -23,12 +23,15 @@ angular.module('aladdin.socket')
 			function register() {
 				
 				var user = securityService.currentUser();
-				socket.emit('register', {
+
+				var details = {
 					storeId: storeService.currentStore && storeService.currentStore.id,
 					userId: user && user._id,
                     deviceId: device,
                     app: 'aladdin'
-				});
+				};
+				console.log('register', details);
+				socket.emit('register', details);
 			}
 
             socket.on('connect', register);
@@ -46,4 +49,7 @@ angular.module('aladdin.socket')
 		var socket = socketBuilder();
 		return socket;
 
+	})
+	.run(function(socket){
+		// Initialize Connection
 	});

@@ -58,16 +58,18 @@ function ChatRoom(id, io) {
 				$addToSet: {
 					participants: msg.user
 				}
+			}, {
+				select: 'store participants'
 			})
-			.spread(function(affected) {
-				console.log('saved message');
+			.then(function(chat) {
+				// debug('saved message: ', affected);
 
-				if (affected === 0)
-					throw new Error('room not found');
+				// if (affected === 0)
+				// 	throw new Error('room not found');
 
-				return ChatLog.findById(id, 'store participants')
-					.execAsync()
-					.then(function(chat) {					
+				// return ChatLog.findById(id, 'store participants')
+				// 	.execAsync()
+				// 	.then(function(chat) {					
 
 						// if (chat.participants.length <= 1)
 						// 	return msg;
@@ -94,7 +96,7 @@ function ChatRoom(id, io) {
 						});
 
 						return msg;
-					});
+					//});
 			});
 	}
 }

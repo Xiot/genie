@@ -1,6 +1,7 @@
 angular.module('aladdin',[
 	'ui.router',
 	'ui.bootstrap',
+	'luegg.directives',
 	'symbiote.common',
 
 	'aladdin.globals',
@@ -14,6 +15,8 @@ angular.module('aladdin',[
 
 	'aladdin.dashboard',
 	'aladdin.tasks',
+	'aladdin.products',
 
 	'aladdin.partials'
 	]);
+

@@ -1,5 +1,5 @@
 ﻿angular.module('qarin')
-    .factory('socketBuilder', function (socketFactory, env, storageService, storeService) {
+    .factory('socketBuilder', function (socketFactory, env, storeService, deviceManager) {
 
         var builder = function (namespace) {
 
@@ -7,7 +7,7 @@
             if(namespace)
                 uri += namespace;
 
-            var deviceId = storageService.get('device-id');
+            var deviceId = deviceManager.get();
 
             var myIoSocket = io.connect(uri, {
                 query: 'device=' + deviceId

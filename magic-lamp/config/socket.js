@@ -1,6 +1,6 @@
 ﻿var socketio = require('socket.io');
 var debug = require('debug')('magic-lamp-socket');
-
+var Promise = require('bluebird');
 
 module.exports = function(server) {
 
@@ -37,13 +37,9 @@ function onConnection(socket) {
 			.then(function(user) {
 
 				data.userId = user.id;
-				
+
 				//debug('registered: ' + socket.id + ' app: ' + data.app + ' store: ' + data.storeId);
-				debug('registered: ' 
-					+ '\n    device: ' + data.deviceId 
-					+ '\n    user:   ' + data.userId 
-					+ '\n    socket: ' + socket.id 
-					+ '\n    store:  ' + data.storeId);
+				debug('registered: ' + '\n    device: ' + data.deviceId + '\n    user:   ' + data.userId + '\n    socket: ' + socket.id + '\n    store:  ' + data.storeId);
 
 				if (socket.info && socket.info.userId)
 					socket.leave(socket.info.userId);
@@ -66,7 +62,7 @@ function onConnection(socket) {
 
 				socket.info = data;
 				socket.user = user;
-			}).catch(function(ex){
+			}).catch(function(ex) {
 				debug('Registration Failed: ', ex);
 				// TODO: Should send response back to client
 			});
@@ -79,14 +75,18 @@ function onConnection(socket) {
 	function findUser(data) {
 		User = User || require('mongoose').model('User');
 
-		var query = buildUserQuery(data);
-		return User.findOneAsync(query)
-			.then(function(user) {
-				if (!user)
-					throw new Error('No user was found');
-				return user;
-			});
+		try {
+			var query = buildUserQuery(data);
 
+			return User.findOneAsync(query)
+				.then(function(user) {
+					if (!user)
+						throw new Error('No user was found');
+					return user;
+				});
+		} catch (ex) {
+			return Promise.reject(ex);
+		}
 	}
 
 	function buildUserQuery(data) {
@@ -97,7 +97,7 @@ function onConnection(socket) {
 
 		if (data.userId)
 			return {
-				id: data.userId
+				_id: data.userId
 			};
 
 		throw new Error('Unable to create User query. Require either `data.deviceId` or `device.userId`');

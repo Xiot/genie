@@ -11,11 +11,13 @@ module.exports = function(server, passport, io) {
 
 	var route = server.route('/tasks')
 
-	.get('/', function(req, res, next) {
+	.get('', function(req, res, next) {
 
-			Task.findAsync({
+			Task.find({
 					store: req.store.id
 				})
+				.populate('product.department')
+				.execAsync()
 				.then(function(tasks) {
 					res.send(tasks);
 
@@ -37,9 +39,10 @@ module.exports = function(server, passport, io) {
 			}
 
 			return Task.find(query)
+				.populate('product product.department')
 				.sort({
 					created_at: -1
-				})
+				})				
 				.execAsync();
 		}))
 		.post('/',
