@@ -20,6 +20,7 @@ var schema = new mongoose.Schema({
     product: {type: id, ref: 'Product'},
     chat: {type: id, ref: 'ChatLog'},
     
+    status: {type: String, enum: ['unassigned', 'assigned', 'engaged', 'complete'], default: 'unassigned'},
     complete: { type: Boolean, default: false }
 });
 

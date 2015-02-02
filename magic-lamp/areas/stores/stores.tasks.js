@@ -5,7 +5,7 @@ var Chat = mongoose.model('ChatLog');
 
 var wrap = load("~/core/routes/promiseRouter");
 var patch = require('fast-json-patch');
-
+var Promise = require('bluebird');
 
 module.exports = function(server, passport, io) {
 
@@ -44,6 +44,24 @@ module.exports = function(server, passport, io) {
 					created_at: -1
 				})				
 				.execAsync();
+		}))
+		.get('/stats', wrap(function(req){
+			// http://lostechies.com/derickbailey/2013/10/28/group-by-count-with-mongodb-and-mongoosejs/
+			return new Promise(function(resolve, reject){
+				Task.aggregate()
+				.match({store: req.store._id})
+				.group({_id: '$status', count: {$sum: 1}})
+				.project('count')
+				.exec(function(err, ret){
+					
+					console.log('err',err);
+					console.log('ret', ret);
+					if(err)
+						return reject(err);
+					return resolve(ret);
+				});
+			});
+			
 		}))
 		.post('/',
 			wrap(function(req) {
