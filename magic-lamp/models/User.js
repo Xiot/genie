@@ -25,6 +25,8 @@ var userSchema = new mongoose.Schema({
     },
 
     store: {type: oid, ref: 'OrganizationLocation'},
+    departments: [{type: oid, ref: 'Department'}],
+    
     device: {type: String},
     position: String,
     active: {type: Boolean, default: true}

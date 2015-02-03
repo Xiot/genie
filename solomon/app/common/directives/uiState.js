@@ -7,7 +7,7 @@ function uiState($state) {
 	return {
 		restrict: 'A',
 		link: link,
-		require: '?^uiSrefActive'
+		require: '?uiSrefActive'
 	};
  
 	function link(scope, element, attrs, uiSrefActive) {
@@ -22,5 +22,10 @@ function uiState($state) {
 
 		attrs.$set('href', url);
 
+		var s = $state.get(name);
+
+		if(!uiSrefActive)
+			return;
+		uiSrefActive.$$setStateInfo(s, {});
 	}
 }

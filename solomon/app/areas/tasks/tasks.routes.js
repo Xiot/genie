@@ -11,14 +11,15 @@ function appRun(sectionManager) {
 function getStates() {
 	return [{
 		name: 'tasks',
-		url: '/tasks',
+		url: '/tickets',
 		controller: 'TaskListController',
 		controllerAs: 'vm',
 		templateUrl: 'app/areas/tasks/tasklist.html',
 		settings: {
 			module: true,
 			order: 3,
-			icon: ['glyphicon','glyphicon-tags']
+			icon: ['glyphicon','glyphicon-tags'],
+			displayName: 'tickets'
 		}
 	}];
 }

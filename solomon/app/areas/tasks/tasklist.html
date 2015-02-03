@@ -1,6 +1,18 @@
 <h2>Tasks</h2>
 <div>
-    <div ng-repeat="task in vm.tasks" class="task-badge {{task.type}}" ng-class="{complete: task.complete}">
-        <span>{{task.title}}</span>
+	<div ng-repeat="stat in vm.stats" ng-class="['task', stat.status]">
+		<span class="stat-value-lg">{{stat.count}}</span>
+		<span class="stat-label">{{stat.status}}</span>
+	</div>
+</div>
+<div>
+	<h2>Open</h2>
+    <div ng-repeat="task in vm.tasks" ng-class="['task', task.type, task.status]">
+         <a ui-sref='task-details({taskId: task._id})'>
+                <div>{{task.displayTitle}}</div>
+                <div>{{task.product.department.name}}</div>
+                <div>{{task.product.name}}</div>
+                <div>{{task.created_at | fromNow}}</div>
+            </a>
     </div>
 </div>

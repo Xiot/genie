@@ -2,7 +2,7 @@ angular.module('app.data')
 	.factory('storeService', StoreService);
 
 /* @ngInject */
-function StoreService(httpClient, eventService, $q) {
+function StoreService(httpClient, eventService, $q, storageService) {
 
 	var _currentStore;
 	var _currentOrg;
@@ -29,6 +29,12 @@ function StoreService(httpClient, eventService, $q) {
 	function getOrgs() {
 		return httpClient.get('/organizations')
 			.then(function(res) {
+				
+				var orgId = storageService.get('org');
+				if(orgId) {
+					service.currentOrg = _.find(res.data, {_id: orgId});
+				}
+
 				return res.data;
 			});
 	}
@@ -40,6 +46,11 @@ function StoreService(httpClient, eventService, $q) {
 
 		return httpClient.get('/organizations/' + org._id + '/stores')
 			.then(function(res) {
+				
+				var storeId = storageService.get('store');
+				if(storeId)
+					service.currentStore = _.find(res.data, {id: storeId});
+
 				return res.data;
 			});
 	}
@@ -54,6 +65,7 @@ function StoreService(httpClient, eventService, $q) {
 			return;
 
 		_currentOrg = value;
+		storageService.set('org', _currentOrg._id);
 		eventService.raise('orgChanged', _currentOrg);
 	}
 
@@ -70,6 +82,10 @@ function StoreService(httpClient, eventService, $q) {
 			return;
 
 		_currentStore = value;
+
+		var id = _currentStore && _currentStore.id;
+		storageService.set('store', id);
+		
 		eventService.raise('storeChanged', _currentStore);
 	}
 

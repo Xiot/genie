@@ -3,9 +3,9 @@
     <ul class="nav">
         <li ng-repeat="item in vm.sections">
             <!-- <a ng-href="{{item.url}}"> {{item.name}}</a> -->
-            <a ui-state="item.name" ui-state-active="active">
+            <a ui-state="item.name" ui-sref-active="active">
                 <i ng-class="item.settings.icon"></i>
-                <span class="sidebar-label">{{item.name}}</span>
+                <span class="sidebar-label">{{item.settings.displayName || item.name}}</span>
             </a>
         </li>
     </ul>

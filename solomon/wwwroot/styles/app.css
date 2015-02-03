@@ -264,6 +264,9 @@ aside > .nav > li > a:focus {
   background-color: #3c3c3c;
   color: red;
 }
+.active {
+  background-color: green !important;
+}
 .sidebar-label {
   margin-left: 10px;
 }
@@ -343,4 +346,60 @@ aside > .nav > li > a:focus {
   color: white;
   border-radius: 2px;
   border: 1px solid black;
+}
+.task-list {
+  padding: 0;
+}
+.task {
+  width: 150px;
+  height: 80px;
+  display: inline-block;
+  border: 1px solid black;
+  border-left-width: 10px;
+  padding: 3px;
+  padding-left: 6px;
+  list-style: none;
+  margin: 5px;
+  vertical-align: top;
+}
+.task a {
+  color: black;
+}
+.task a:hover,
+.task a:focus {
+  text-decoration: none;
+}
+.task.request {
+  border-color: red;
+}
+.task.ticket {
+  border-color: green;
+}
+.task.mine {
+  font-weight: bold;
+}
+.task.selected {
+  background-color: gray;
+}
+.task.unassigned {
+  border-color: blue;
+}
+.task.assigned {
+  border-color: orange;
+}
+.task.engaged {
+  border-color: yellow;
+}
+.task.complete {
+  border-color: green;
+}
+.stat-value-lg {
+  font-size: 36px;
+  text-align: center;
+  font-weight: bold;
+  display: block;
+}
+.stat-label {
+  text-align: center;
+  display: block;
 }

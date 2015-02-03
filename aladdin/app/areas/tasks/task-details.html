@@ -23,14 +23,9 @@
 <div class="horizontal-scroll">
 
     <div class="task-details">
-        <section ng-init="scrollSync = true">
-            <h2>Chat</h2>
-            <span>{{scrollSync}}</span>
-            <!-- <h2>Task - {{vm.task.displayTitle}}</h2> -->
-            <!-- <div class="button-bar">
-        <button class="btn btn-primary" ng-click="vm.accept()" ng-if="!isMe(vm.task.assigned_to)">Accept</button>
-        <button class="btn btn-primary" ng-click="vm.complete()" ng-if="isMe(vm.task.assigned_to)">Complete</button>
-    </div> -->
+        <section >
+            <!-- <h2>Chat</h2> -->
+                        
             <form name="chat" class="chat-form" ng-submit="vm.sendMessage()">
                 <div class="chat-window">
                     <div class="message-pane" scroll-glue>
@@ -57,7 +52,7 @@
     <div class="product-detail" ng-if="vm.product">
         <section>
             <div>
-                <h2>product</h2>
+                <!-- <h2>product</h2> -->
                 <h2>{{vm.product.name}}</h2>
                 <img ng-src="{{vm.product.imageUrl}}">
                 <p>{{vm.product.description}}</p>

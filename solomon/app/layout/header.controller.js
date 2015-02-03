@@ -37,8 +37,11 @@ function HeaderController(securityService, storeService, eventService, util) {
 		storeService.getOrgs()
 		.then(function(orgs){
 			vm.orgs = orgs;
-			storeService.currentOrg = vm.orgs[0];
-			refreshStores(vm.orgs[0]);
+			
+			if(!storeService.currentOrg)
+				storeService.currentOrg = vm.orgs[0];
+
+			refreshStores(storeService.currentOrg);
 		});
 
 		eventService.on('orgChanged', function(e, org){
@@ -53,7 +56,9 @@ function HeaderController(securityService, storeService, eventService, util) {
 		return storeService.getStores(org)
 			.then(function(stores){
 				vm.stores = stores;
-				storeService.currentStore = vm.stores[0];
+
+				if(!storeService.currentStore)
+					storeService.currentStore = vm.stores[0];
 			});
 	}
 

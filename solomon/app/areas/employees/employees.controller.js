@@ -10,7 +10,7 @@ function EmployeesController(storeService, eventService, httpClient) {
 
 	eventService.on('storeChanged', onStoreChanged);
 
-	// refreshEmployees(storeService.currentStore);
+	refreshEmployees(storeService.currentStore);
 
 	function onStoreChanged(e, store) {
 		refreshEmployees(store);
@@ -22,7 +22,7 @@ function EmployeesController(storeService, eventService, httpClient) {
 			return;
 		}
 
-		httpClient.get('/stores/' + store.id + '/employees')
+		httpClient.get('/stores/' + store.id + '/employees', {cache: false})
 			.then(function(res) {
 				vm.employees = res.data;
 			});

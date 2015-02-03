@@ -30,20 +30,17 @@ body {
     white-space: nowrap;
     
     position: relative;
-    display: table;
-
+    width: 100%;
+    
 	& > div {		
-        display: table-cell;		
+        vertical-align: top;
+        display: inline-block;
 
         margin-right: 15px;
-        //border: 1px solid red;
-
-        & > section {            
-            //border: 1px solid blue;
-
+    
+        & > section {
             min-width: 400px;
             height: 600px;
-
         }
 	}
 }
