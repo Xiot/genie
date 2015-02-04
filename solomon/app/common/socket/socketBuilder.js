@@ -1,5 +1,5 @@
 angular.module('app.socket')
-    .factory('socketBuilder', function (socketFactory, env, storageService) {
+    .factory('socketBuilder', function (socketFactory, env, storageService, storeService, securityService) {
 
         var builder = function (namespace) {
 
@@ -14,11 +14,34 @@ angular.module('app.socket')
                 query: 'device=' + device
             });
 
-            var mySocket = socketFactory({
+            var socket = socketFactory({
                 ioSocket: myIoSocket
             });
 
-            return mySocket;
+
+            function register() {
+
+                var user = securityService.currentUser();
+
+                var details = {
+                    storeId: storeService.currentStore && storeService.currentStore.id,
+                    userId: user && user._id,
+                    deviceId: device,
+                    app: 'solomon'
+                };
+
+                if (details.storeId && (details.userId || details.deviceId)) {
+                    console.log('register', details);
+                    socket.emit('register', details);
+                }
+            }
+
+            socket.on('connect', register);
+
+            storeService.on('storeChanged', register);
+            securityService.on('userChanged', register);
+
+            return socket;
         }
 
         return builder;

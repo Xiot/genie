@@ -26,6 +26,11 @@ function timerDirective($interval) {
 
 		update();
 
+		scope.$watch('startTime', function(){
+			startMoment = moment(scope.startTime);
+			update();
+		});
+
 		function update(){
 			console.log('update');
 			

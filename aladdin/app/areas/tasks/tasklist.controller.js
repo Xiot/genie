@@ -69,19 +69,4 @@ function TaskListController($scope, taskService, securityService) {
 		});
 	}
 
-	function acceptTask(task) {
-
-		task = task || vm.selected;
-
-		return taskService.accept(task)
-			.then(function(retVal) {
-
-				angular.extend(task, retVal);
-				task.mine = true;
-			});
-	}
-
-	function completeTask(task) {
-
-	}
 }

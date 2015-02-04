@@ -45,16 +45,16 @@ function ChatFactory($rootScope, httpClient, socket, $q, storeService) {
 
 	function init() {
 
-		socket.on('connect', function(a, b) {
+		// socket.on('connect', function(a, b) {
 			
-			var id = storeService.currentStore && storeService.currentStore.id;
-			if(id)
-				_register(id);
-		});
+		// 	var id = storeService.currentStore && storeService.currentStore.id;
+		// 	if(id)
+		// 		_register(id);
+		// });
 
-		storeService.on('storeChanged', function(e, store) {
-			_register(store.id);
-		});
+		// storeService.on('storeChanged', function(e, store) {
+		// 	_register(store.id);
+		// });
 
 		socket.on('message', function(data) {
 			console.log(data);
@@ -67,11 +67,11 @@ function ChatFactory($rootScope, httpClient, socket, $q, storeService) {
 		});
 	}
 
-	function _register(storeId) {
-		console.log('register: ' + storeId);
-		socket.emit('register', {
-			app: 'solomon',
-			storeId: storeId
-		});
-	}
+	// function _register(storeId) {
+	// 	console.log('register: ' + storeId);
+	// 	socket.emit('register', {
+	// 		app: 'solomon',
+	// 		storeId: storeId
+	// 	});
+	// }
 }

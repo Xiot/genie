@@ -2,7 +2,14 @@
 
     <h2>Task - {{vm.task.displayTitle}}</h2>
     <!-- <span class="pull-right">{{vm.task.created_at | fromNow}}</span> -->
-    <div class="pull-right" ng-if="!vm.task.complete && !vm.task.assigned_to">
+
+    <div class="pull-right" >
+        {{vm.task.status}}        
+    </div>
+
+    <timer class="pull-right" ng-if="!vm.task.complete" start-time="vm.task.timeSince"></timer>
+
+    <!-- <div class="pull-right" ng-if="!vm.task.complete && !vm.task.assigned_to">
         Since Created
         <timer class="pull-right" start-time="vm.task.created_at"></timer>
     </div>
@@ -12,10 +19,11 @@
     </div>
     <div class="pull-right" ng-if="vm.task.complete">
         <span>Complete</span>
-    </div>
+    </div> -->
     <div class="button-bar">
-        <button class="btn btn-primary" ng-click="vm.accept()" ng-if="!isMe(vm.task.assigned_to)">Accept</button>
-        <button class="btn btn-primary" ng-click="vm.complete()" ng-if="isMe(vm.task.assigned_to)">Complete</button>
+        <button class="btn btn-primary" ng-click="vm.accept()" ng-if="vm.task.status == 'unassigned'">Accept</button>
+        <button class="btn btn-primary" ng-click="vm.engage()" ng-if="vm.task.status == 'assigned'">Engage</button>
+        <button class="btn btn-primary" ng-click="vm.complete()" ng-if="vm.task.status == 'engaged'">Complete</button>
     </div>
 
 </header>

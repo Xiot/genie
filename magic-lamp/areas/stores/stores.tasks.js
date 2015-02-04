@@ -46,8 +46,7 @@ module.exports = function(server, passport, io) {
 					.then(function(employee) {
 						req.employee = employee;
 						return null;
-					})
-
+					});
 			}),
 			wrap(function(req) {
 
@@ -137,10 +136,15 @@ module.exports = function(server, passport, io) {
 
 						task.chat = savedChat;
 						return task.saveAsync();
+
 					}).spread(function(newTask) {
 
-						io.to('aladdin:' + req.store.id)
-							.emit('ticket:created', newTask);
+						var channel = io.to('aladdin:' + req.store.id);
+
+						if (newTask.department)
+							channel = channel.to('department:' + newTask.department);
+
+						channel.emit('ticket:created', newTask);
 
 						return newTask;
 					});
@@ -183,30 +187,54 @@ module.exports = function(server, passport, io) {
 				return new restify.BadRequestError('To assign the task use PUT ' + req.url + '/assignee');
 
 			return task.saveAsync();
-		}))
-		.put('/status', wrap(function(req) {
-			return null;
-		}))
-		.put('/assignee', wrap(function(req) {
+	}))
 
-			var employee = req.body.employee;
-			var task = req.task;
+	.put('/status', wrap(function(req) {
+		
+		var task = req.task;
 
-			if (req.assigned_to)
-				return new restify.PreconditionFailedError('The task was already assigned');
+		var employee = req.body.employee || req.user.id;
+		var status = req.body.status;
 
+		if(!status)
+			return new restify.BadRequestError('status is required.');
+
+		var now = Date.now();
+		var oldStatus = task.status;
+		
+		task.status = status;
+
+		if(status === 'assigned'){
 			task.assigned_to = employee;
-			task.status = 'assigned';
+		} else if(status === 'complete'){
+			task.complete = true;
+		}
 
-			// send notification to user
-			// this should only have minimum info
-			console.log('io.to: ' + task.customer);
-			io.to(task.customer).emit('task:assigned', {
-				employee: employee,
-				task: task
-			});
 
-			return task.saveAsync();
 
-		}));
+		return task.saveAsync();
+	}))
+
+	.put('/assignee', wrap(function(req) {
+
+		var employee = req.body.employee;
+		var task = req.task;
+
+		if (req.assigned_to)
+			return new restify.PreconditionFailedError('The task was already assigned');
+
+		task.assigned_to = employee;
+		task.status = 'assigned';
+
+		// send notification to user
+		// this should only have minimum info
+		console.log('io.to: ' + task.customer);
+		io.to(task.customer).emit('task:assigned', {
+			employee: employee,
+			task: task
+		});
+
+		return task.saveAsync();
+
+	}));
 }

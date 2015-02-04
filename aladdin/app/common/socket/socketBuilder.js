@@ -18,26 +18,29 @@ angular.module('aladdin.socket')
 				ioSocket: myIoSocket
 			});
 
-            socket.io = myIoSocket;
+			socket.io = myIoSocket;
 
 			function register() {
-				
+
 				var user = securityService.currentUser();
 
 				var details = {
 					storeId: storeService.currentStore && storeService.currentStore.id,
 					userId: user && user._id,
-                    deviceId: device,
-                    app: 'aladdin'
+					deviceId: device,
+					app: 'aladdin'
 				};
-				console.log('register', details);
-				socket.emit('register', details);
+
+				if (details.storeId && (details.userId || details.deviceId)) {
+					console.log('register', details);
+					socket.emit('register', details);
+				}
 			}
 
-            socket.on('connect', register);
-            
-            storeService.on('storeChanged', register);
-            securityService.on('userChanged', register);
+			socket.on('connect', register);
+
+			storeService.on('storeChanged', register);
+			securityService.on('userChanged', register);
 
 			return socket;
 		};
@@ -50,6 +53,6 @@ angular.module('aladdin.socket')
 		return socket;
 
 	})
-	.run(function(socket){
+	.run(function(socket) {
 		// Initialize Connection
 	});

@@ -14,7 +14,8 @@
 		// 	});
 
 		$rootScope.$on('chat-message', function(e, msg) {
-			vm.chat.messages.push(msg);
+			if(msg.chat === vm.chat._id)
+				vm.chat.messages.push(msg);
 		});
 
 		function sendMessage() {

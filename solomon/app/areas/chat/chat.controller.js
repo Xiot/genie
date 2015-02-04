@@ -12,6 +12,9 @@ function ChatListController(storeService, httpClient, eventService, chatService,
 		isSelected: _isChatSelected
 	});
 
+	if(storeService.currentStore)
+		onStoreChanged(null, storeService.currentStore);
+
 	eventService.on('storeChanged', onStoreChanged);
 
 	$rootScope.$on('chat-message', function(e, msg) {

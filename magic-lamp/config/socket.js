@@ -1,6 +1,7 @@
 ﻿var socketio = require('socket.io');
 var debug = require('debug')('magic-lamp-socket');
 var Promise = require('bluebird');
+var _ = require('lodash');
 
 module.exports = function(server) {
 
@@ -18,8 +19,7 @@ function onConnection(socket) {
 	//debug('connected: \n  device: ' + socket.device + '\n  socket: ' + socket.id);
 
 	socket.on('disconnect', onDisconnect);
-	//
-
+	
 	socket.on('join', function(opts) {
 		var id = opts.id;
 		debug('chat-join: ', opts);
@@ -31,7 +31,17 @@ function onConnection(socket) {
 		socket.leave('chat-' + opts.id);
 	});
 
+	socket.leaveAllRooms = function(){
+
+		this.rooms.forEach(function(room){
+			if(room != socket.id)
+				socket.leave(room);
+		});
+	}
+
 	socket.on('register', function(data) {
+
+		socket.leaveAllRooms();
 
 		findUser(data)
 			.then(function(user) {
@@ -39,29 +49,28 @@ function onConnection(socket) {
 				data.userId = user.id;
 
 				//debug('registered: ' + socket.id + ' app: ' + data.app + ' store: ' + data.storeId);
-				debug('registered: ' + '\n    device: ' + data.deviceId + '\n    user:   ' + data.userId + '\n    socket: ' + socket.id + '\n    store:  ' + data.storeId);
-
-				if (socket.info && socket.info.userId)
-					socket.leave(socket.info.userId);
+				debug('registered: ' 
+					+ '\n    device: ' + data.deviceId 
+					+ '\n    user:   ' + data.userId 
+					+ '\n    socket: ' + socket.id 
+					+ '\n    store:  ' + data.storeId 
+					+ '\n    app:    ' + data.app);			
 
 				socket.join(data.userId);
-
-				// leave rooms from other stores
-				var storeRooms = socket.rooms.splice();
-				storeRooms.forEach(function(room) {
-					if (room.startsWith('store-'))
-						socket.leave(room);
-				});
-
-				socket.join('store-' + data.storeId);
+				socket.join('store:' + data.storeId);
 
 				if (data.app) {
 					socket.join(data.app);
 					socket.join(data.app + ':' + data.storeId);
 				}
 
+				user.departments.forEach(function (dept) {
+					socket.join('department:' + dept.id);
+				});
+				
 				socket.info = data;
 				socket.user = user;
+
 			}).catch(function(ex) {
 				debug('Registration Failed: ', ex);
 				// TODO: Should send response back to client
@@ -100,7 +109,7 @@ function onConnection(socket) {
 				_id: data.userId
 			};
 
-		throw new Error('Unable to create User query. Require either `data.deviceId` or `device.userId`');
+		throw new Error('[' + data.app +  '] Unable to create User query. Require either `data.deviceId` or `device.userId`');
 	}
 }
 
