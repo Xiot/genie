@@ -47,7 +47,7 @@ function TaskService(httpClient, storeService, securityService, socket, eventSer
 		return httpClient.put(url, body)
 			.then(function(res) {
 				return new Task(res.data);
-			})
+			});
 	}
 
 	function acceptTask(task) {
