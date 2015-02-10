@@ -26,10 +26,12 @@ var userSchema = new mongoose.Schema({
 
     store: {type: oid, ref: 'OrganizationLocation'},
     departments: [{type: oid, ref: 'Department'}],
-    
+
     device: {type: String},
     position: String,
-    active: {type: Boolean, default: true}
+    active: {type: Boolean, default: true},
+
+    status: {type: String, enum: ['available', 'busy', 'offline', 'break'], default: 'offline'}
 });
 
 userSchema
@@ -48,6 +50,18 @@ userSchema
     })
     .set(function(value){
         this._authtype = value;
+    });
+
+userSchema
+    .virtual('isCustomer')
+    .get(function(){
+        return this.role === 'customer' || this.role === 'device';
+    });
+
+userSchema
+    .virtual('isEmployee')
+    .get(function(){
+        return !this.isCustomer;
     });
 
 userSchema.path('device').validate(function(value){

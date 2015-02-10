@@ -8,7 +8,7 @@ function ChatFactory($rootScope, httpClient, socket, $q, storeService) {
 		sendMessage: sendMessage,
 		getById: _getById,
 		getAllForStore: _getAllForStore
-	}
+	};
 
 	init();
 

@@ -15,6 +15,9 @@ var io = socketio(server);
 
 //var notification = new require('./core/communication/notification.service')(io);
 
+require('./core/services/employee.service').init(io);
+require('./core/services/ticket.service').init(io);
+
 require('./config/passport.js')(server, passport);
 //require('./config/express.js')(app, passport);
 require('./config/routes.js')(server, io, passport);

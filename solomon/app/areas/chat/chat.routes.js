@@ -7,16 +7,17 @@ function configureRoutes(sectionManager){
 }
 
 function getStates(){
-	return [{
-		name: 'chat-list',
-		url: '/chats',
-		controller: 'ChatListController',
-		controllerAs: 'vm',
-		templateUrl: 'app/areas/chat/chat-list.html',
-		settings: {
-			module: true,
-			order: 4,
-			icon: ['glyphicon', 'glyphicon-cloud']
-		}
-	}];
+	return [];
+	// return [{
+	// 	name: 'chat-list',
+	// 	url: '/chats',
+	// 	controller: 'ChatListController',
+	// 	controllerAs: 'vm',
+	// 	templateUrl: 'app/areas/chat/chat-list.html',
+	// 	settings: {
+	// 		module: true,
+	// 		order: 4,
+	// 		icon: ['glyphicon', 'glyphicon-cloud']
+	// 	}
+	// }];
 }

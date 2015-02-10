@@ -64,6 +64,9 @@ function onConnection(socket) {
 					socket.join(data.app + ':' + data.storeId);
 				}
 
+				if(user.isEmployee)
+					socket.join('store:' + data.storeId + ':employee');
+
 				user.departments.forEach(function (dept) {
 					socket.join('department:' + dept.id);
 				});

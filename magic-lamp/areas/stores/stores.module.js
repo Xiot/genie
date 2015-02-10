@@ -58,7 +58,7 @@ module.exports.init = function(server, config) {
 
 	require('./stores.chat')(storeRoute.route('/chat'), config.io, config.passport);
 
-	require('./stores.employees')(storeRoute.route('/employees'));
+	require('./stores.employees')(storeRoute.route('/employees'), config.io);
 
 	// TODO: Extract to new file
 	// storeRoute.get('/products',

@@ -42,7 +42,7 @@ angular.module('app.socket')
             securityService.on('userChanged', register);
 
             return socket;
-        }
+        };
 
         return builder;
 

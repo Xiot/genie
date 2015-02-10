@@ -8,6 +8,8 @@ function ensureAuthenticated($rootScope, $state, securityService, $timeout, stor
 
 	$rootScope.$on('$stateChangeStart', function(e, toState, toParams, fromState, fromParams) {
 
+		console.log('stateChangeStart: ' + toState.name, toParams);
+
 		if (toState.name === 'login') {
 			return;
 		}

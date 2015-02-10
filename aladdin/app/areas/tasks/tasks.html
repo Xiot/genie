@@ -6,7 +6,7 @@
         <li ng-repeat="task in vm.tasks | filter: {mine: true}" ng-class="['task', task.type, task.selected ? 'selected' : '', isMe(task.assigned_to) ? 'mine' : '']">
             <a ui-sref='task-details({taskId: task._id})'>
                 <div>{{task.displayTitle}}</div>
-                <div>{{task.product.department.name}}</div>
+                <div>{{task.department.name}}</div>
                 <div>{{task.product.name}}</div>
                 <div>{{task.created_at | fromNow}}</div>
             </a>
@@ -20,7 +20,7 @@
         <li ng-repeat="task in vm.tasks | filter: {mine: false}" ng-class="['task', task.type, task.selected ? 'selected' : '', isMe(task.assigned_to) ? 'mine' : '']">
             <a ui-sref='task-details({taskId: task._id})'>
                 <div>{{task.displayTitle}}</div>
-                <div>{{task.product.department.name}}</div>
+                <div>{{task.department.name}}</div>
                 <div>{{task.product.name}}</div>
                 <div>{{task.created_at | fromNow}}</div>
             </a>

@@ -10,7 +10,8 @@ function StoreService(httpClient, eventService, $q, storageService) {
 	var service = {
 		getOrgs: getOrgs,
 		getStores: getStores,
-		on: _listen
+		on: _listen,
+		setStoreById: setStoreById
 	};
 
 	Object.defineProperty(service, 'currentOrg', {
@@ -55,6 +56,23 @@ function StoreService(httpClient, eventService, $q, storageService) {
 			});
 	}
 
+
+	function setStoreById(id) {
+		return getStoreById(id)
+			.then(function(store) {
+				service.currentStore = store;
+				service.currentOrg = store.organization;
+				return store;
+			});
+	}
+
+	function getStoreById(id) {
+		return httpClient.get('/stores/' + id)
+			.then(function(res) {
+				return res.data;
+			});
+	}
+
 	function get_currentOrg() {
 		return _currentOrg;
 	}
@@ -86,6 +104,7 @@ function StoreService(httpClient, eventService, $q, storageService) {
 		var id = _currentStore && _currentStore.id;
 		storageService.set('store', id);
 		
+		console.log('storeChanged', _currentStore);
 		eventService.raise('storeChanged', _currentStore);
 	}
 

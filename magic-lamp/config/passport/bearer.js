@@ -31,6 +31,7 @@ function authenticate(encryptedToken, done) {
     
         var user = token.user;
         user.authType = 'bearer';
+        
         //user.auth = user.auth || {};
         //user.auth.bearer = true;
 

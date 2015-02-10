@@ -3,8 +3,9 @@ var wrap = load("~/core/routes/promiseRouter");
 var User = mongoose.model('User');
 var patch = require('fast-json-patch');
 var restify = require('restify');
+var employeeService = load('~/core/services/employee.service');
 
-module.exports = function(server) {
+module.exports = function(server, io) {
 
 	server.get('/', wrap(function(req) {
 
@@ -36,6 +37,9 @@ module.exports = function(server) {
 			});
 	}));
 
+	server.get('available', wrap(function(req) {
+
+	}))
 
 	server.route('/:user_id')
 		.param('user_id', function(req, res, next, value) {
@@ -60,6 +64,25 @@ module.exports = function(server) {
 		.get('/', wrap(function(req) {
 			return req.employee;
 		}))
+		.put('/status', function(req) {
+
+			return employeeService
+				.setStatus(req.employee, req.body.status);
+
+			// var employee = req.employee;
+
+			// employee.status = req.body.status;
+
+			// return employee.saveAsync()
+			// 	.spread(function(emp) {
+			// 		io.to('store:' + employee.store + ':employee')
+			// 			.emit('employee:status', {
+			// 				employee: employee
+			// 			});
+			// 		return emp;
+			// 	});
+
+		})
 		.patch('/', wrap(function(req) {
 
 			if (!req.body)

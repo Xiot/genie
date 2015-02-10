@@ -10,6 +10,8 @@ var wrap = load("~/core/routes/promiseRouter");
 var patch = require('fast-json-patch');
 var Promise = require('bluebird');
 
+var ticketService = load('~/core/services/ticket.service');
+
 module.exports = function(server, passport, io) {
 
 	var route = server.route('/tasks')
@@ -19,7 +21,8 @@ module.exports = function(server, passport, io) {
 			Task.find({
 					store: req.store.id
 				})
-				.populate('product', 'product.department')
+				.populate('product')
+				.populate('department')
 				.sort({
 					created_at: -1
 				})
@@ -71,6 +74,7 @@ module.exports = function(server, passport, io) {
 
 				return Task.find(query)
 					.populate('product')
+					.populate('department')
 					.sort({
 						created_at: -1
 					})
@@ -131,13 +135,24 @@ module.exports = function(server, passport, io) {
 				});
 				chat.participants.push(req.user);
 
+
 				return chat.saveAsync()
 					.spread(function(savedChat) {
 
 						task.chat = savedChat;
-						return task.saveAsync();
 
-					}).spread(function(newTask) {
+						if(task.product && !task.department){
+							return Product.findByIdAsync(task.product)
+							.then(function(product){
+								task.department = product.department;
+								return task;
+							});
+						}
+						return task;						
+					}).then(function(newTask){
+						return newTask.saveAsync();
+					})
+					.spread(function(newTask) {
 
 						var channel = io.to('aladdin:' + req.store.id);
 
@@ -206,35 +221,55 @@ module.exports = function(server, passport, io) {
 
 		if(status === 'assigned'){
 			task.assigned_to = employee;
+
 		} else if(status === 'complete'){
 			task.complete = true;
+
 		}
 
-
-
-		return task.saveAsync();
+		// TODO: Create a user service that will set the current status, and send the notification
+		return task.saveAsync()
+		.spread(function(task){
+			return task;
+		});
 	}))
 
 	.put('/assignee', wrap(function(req) {
 
-		var employee = req.body.employee;
+		var employeeId = req.body.employee;
 		var task = req.task;
 
-		if (req.assigned_to)
+		if (task.assigned_to)
 			return new restify.PreconditionFailedError('The task was already assigned');
 
-		task.assigned_to = employee;
-		task.status = 'assigned';
+		return ticketService
+			.assignTicket(employeeId, task)
 
-		// send notification to user
-		// this should only have minimum info
-		console.log('io.to: ' + task.customer);
-		io.to(task.customer).emit('task:assigned', {
-			employee: employee,
-			task: task
-		});
+		// task.assigned_to = employee;
+		// task.status = 'assigned';
 
-		return task.saveAsync();
+		// // send notification to user
+		// // this should only have minimum info
+		// console.log('io.to: ' + task.customer);
+		// io.to(task.customer).emit('task:assigned', {
+		// 	employee: employee,
+		// 	task: task
+		// });
 
+		// var employeeTask = Promise.resolve();
+
+		// if(employee.status === 'available'){
+		// 	employee.status == 'busy';
+		// 	employeeTask = employee.saveAsync()
+		// 		.then(function(e){
+		// 			io.to('store:' + employee.store + ':employee')
+		// 			.emit('employee:status', {employee: employee});
+		// 		});
+		// }
+
+		// return employeeTask
+		// .then(function(){
+		// 	return task.saveAsync();	
+		// });
 	}));
 }

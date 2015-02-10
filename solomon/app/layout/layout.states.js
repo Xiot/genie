@@ -3,10 +3,12 @@
 	.run(ensureAuthenticated);
 
 /* @ngInject */
-function ensureAuthenticated($rootScope, $state, securityService, $timeout) {
+function ensureAuthenticated($rootScope, $state, securityService, $timeout, storeService) {
 	$rootScope.showSplash = true;
 
 	$rootScope.$on('$stateChangeStart', function(e, toState, toParams, fromState, fromParams) {
+
+		console.log('stateChangeStart: ' + toState.name, toParams);
 
 		if (toState.name === 'login') {
 			return;
@@ -18,20 +20,32 @@ function ensureAuthenticated($rootScope, $state, securityService, $timeout) {
 		}
 		e.preventDefault();
 
-		securityService.requestCurrentUser()
+		return securityService.requestCurrentUser()
 			.then(function(u) {
+
+				if(!u)
+					return $state.go('login');
 
 				var targetState = u ? toState : 'login';
 
-				$state.go(targetState);
+				// Ensure that the store is available
+				return storeService.setStoreById(u.store)
+					.then(function() {
+						var targetState = u ? toState : 'login';
+						$state.go(targetState, toParams);
+					});
+
+				//return $state.go(targetState, toParams);
 			}).catch(function(ex) {
-				$state.go('login');
+				return $state.go('login');
 			});
 	});
 
 	var waitingForView = false;
 	$rootScope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams) {
 		
+		console.log('stateChangeSuccess: ' + toState.name);
+
 		if(!$rootScope.showSplash)
 			return;
 
@@ -39,7 +53,6 @@ function ensureAuthenticated($rootScope, $state, securityService, $timeout) {
 	});
 
 	$rootScope.$on('$viewContentLoaded', function(e) {
-
 
 		if (waitingForView && $rootScope.showSplash) {
 			waitingForView = false;
