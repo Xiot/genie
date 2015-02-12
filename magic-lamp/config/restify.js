@@ -13,6 +13,8 @@ var server = restify.createServer({
 	}
 });
 
+var errorLog = require('debug')('magic-lamp-error');
+
 restify.CORS.ALLOW_HEADERS.push('accept');
 restify.CORS.ALLOW_HEADERS.push('sid');
 restify.CORS.ALLOW_HEADERS.push('lang');
@@ -65,7 +67,8 @@ function formatJSON(req, res, body) {
 		// snoop for RestError or HttpError, but don't rely on
 		// instanceof
 
-		console.log('error', body);
+		errorLog('error', body);
+		errorLog(body.stack);
 
 		if (body instanceof mongoose.Error.ValidationError) {
 			res.statusCode = 400;

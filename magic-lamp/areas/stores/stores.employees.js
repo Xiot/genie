@@ -44,11 +44,18 @@ module.exports = function(server, io) {
 	server.route('/:user_id')
 		.param('user_id', function(req, res, next, value) {
 
-			User.findOneAsync({
-					store: req.store.id,
-					username: value,
-					role: 'employee'
-				})
+			var query = {
+				store: req.store.id,
+				role: 'employee'
+			};
+
+			if(mongoose.Types.ObjectId.isValid(value)){
+				query._id = value;
+			} else {
+				query.username = value;
+			}
+
+			User.findOneAsync(query)
 				.then(function(user) {
 
 					if (!user)

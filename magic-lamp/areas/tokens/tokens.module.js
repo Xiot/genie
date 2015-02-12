@@ -1,6 +1,7 @@
 ﻿var mongoose = require('mongoose');
 //var router = require('express').Router();
 var Token = mongoose.model('Token');
+var Task = mongoose.model('Task');
 
 var jwt = require('jsonwebtoken');
 var moment = require('moment');
@@ -61,7 +62,7 @@ module.exports.init = function(server, config) {
             })
             .then(function(token) {
                 res.send({
-                    auth_token: signedToken
+                    auth_token: token
                 });
                 next();
             })

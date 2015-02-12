@@ -1,26 +1,77 @@
-<div class="top-bar" ng-controller="HeaderController as vm">
+<div class="navbar navbar-inverse">
+    <div class="navbar-header">
+        <div class="navbar-brand brand">
+            aladdin
+        </div>
+    </div>
 
-    <div class="brand">
+    <div class="top-bar" ng-controller="HeaderController as vm">
+
+        <!--  <div class="navbar-brand brand">
         aladdin
-    </div>
-    <div class="pull-left">
-        <span>{{vm.store.organization.name}}</span>
-        <span>{{vm.store.name}}</span>
-    </div>
-    <!-- <div class="selections pull-left">
-    	<select ng-model="vm.org" 
-    		ng-options="item.name for item in vm.orgs track by item._id">
-    		</select>
-    	<select ng-model="vm.store" 
-    		ng-options="item.name for item in vm.stores track by item.id">
-    		</select>
-    		{{vm.org.name}} -> {{vm.store.name}}
+    </div> -->
+        <div class="pull-left">
+            <span>{{vm.store.organization.name}}</span>
+            <span>{{vm.store.name}}</span>
+        </div>
+        <!-- <div class="selections pull-left">
+        <select ng-model="vm.org" 
+            ng-options="item.name for item in vm.orgs track by item._id">
+            </select>
+        <select ng-model="vm.store" 
+            ng-options="item.name for item in vm.stores track by item.id">
+            </select>
+            {{vm.org.name}} -> {{vm.store.name}}
     </div> -->
 
-    <div class="pull-right">
+        <!--  <div class="pull-right">
         <a class="avatar">
             <span>{{vm.user.username}}</span>
             <i class="fa fa-user"></i>
         </a>
+    </div> -->
+        <ul class="nav navbar-nav pull-right">
+            <li class="dropdown" dropdown>
+                <a class="dropdown-toggle" dropdown-toggle>
+                    Status: {{vm.status}}
+                </a>
+                <ul class="dropdown-menu" role="menu">
+                    <li ng-if="vm.status !== 'available'">
+                        <a ng-click="vm.setStatus('available')">Available</a>
+                    </li>
+                    <li ng-if="vm.status == 'available'">
+                        <a ng-click="vm.setStatus('busy')">Busy</a>
+                    </li>
+                    <li ng-if="vm.status !== 'break'">
+                        <a ng-click="vm.setStatus('break')">On Break</a>
+                    </li>
+                </ul>
+            </li>
+
+            <li class="navbar-collapse collapse box-shadow">
+                <ul class="nav navbar-nav navbar-right">
+                    <li class="dropdown" dropdown>
+
+                        <a class="dropdown-toggle" dropdown-toggle>
+                            <span class="thumb-sm avatar pull-right">
+                                <i class="fa fa-user"></i>
+                            </span>
+                            <span>{{vm.user.username}}</span>
+                            <i class="caret"></i>
+                        </a>
+                        <ul class="dropdown-menu" role="menu">
+                            <li ng-if="vm.user">
+                                <a ng-click="vm.logout()">LogOut</a>
+                            </li>
+                            <li ng-if="!vm.user">
+                                <a ui-sref="Login">Login</a>
+                            </li>
+                        </ul>
+
+                    </li>
+                </ul>
+            </li>
+
+        </ul>
     </div>
 </div>

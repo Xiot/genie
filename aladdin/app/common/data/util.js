@@ -5,7 +5,8 @@ function UtilService(eventService) {
 
 	var service = {
 		addProperty: addProperty,
-		uuid: generateUUID
+		uuid: generateUUID,
+		join: combineUrlSegments
 	};
 
 	return service;
@@ -50,5 +51,11 @@ function UtilService(eventService) {
 			return (c == 'x' ? r : (r & 0x3 | 0x8)).toString(16);
 		});
 		return uuid;
+	}
+
+
+	function combineUrlSegments() {
+		var args = [].slice.call(arguments);
+		return '/' + args.join('/');
 	}
 }

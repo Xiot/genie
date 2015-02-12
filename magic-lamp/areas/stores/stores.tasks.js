@@ -11,6 +11,7 @@ var patch = require('fast-json-patch');
 var Promise = require('bluebird');
 
 var ticketService = load('~/core/services/ticket.service');
+var employeeService = load('~/core/services/employee.service');
 
 module.exports = function(server, passport, io) {
 
@@ -141,15 +142,15 @@ module.exports = function(server, passport, io) {
 
 						task.chat = savedChat;
 
-						if(task.product && !task.department){
+						if (task.product && !task.department) {
 							return Product.findByIdAsync(task.product)
-							.then(function(product){
-								task.department = product.department;
-								return task;
-							});
+								.then(function(product) {
+									task.department = product.department;
+									return task;
+								});
 						}
-						return task;						
-					}).then(function(newTask){
+						return task;
+					}).then(function(newTask) {
 						return newTask.saveAsync();
 					})
 					.spread(function(newTask) {
@@ -191,47 +192,61 @@ module.exports = function(server, passport, io) {
 
 	.patch('/', wrap(function(req) {
 
-			var task = req.task;
-			var retVal = patch.apply(task, req.body);
+		var task = req.task;
+		var retVal = patch.apply(task, req.body);
 
-			if (!retVal) {
-				return new restify.PreconditionFailedError();
-			}
+		if (!retVal) {
+			return new restify.PreconditionFailedError();
+		}
 
-			if (task.isModified('assigned_to'))
-				return new restify.BadRequestError('To assign the task use PUT ' + req.url + '/assignee');
+		if (task.isModified('assigned_to'))
+			return new restify.BadRequestError('To assign the task use PUT ' + req.url + '/assignee');
 
-			return task.saveAsync();
+		return task.saveAsync();
 	}))
 
 	.put('/status', wrap(function(req) {
-		
+
 		var task = req.task;
 
 		var employee = req.body.employee || req.user.id;
 		var status = req.body.status;
 
-		if(!status)
+		if (!status)
 			return new restify.BadRequestError('status is required.');
 
 		var now = Date.now();
 		var oldStatus = task.status;
-		
+
 		task.status = status;
 
-		if(status === 'assigned'){
+		if (status === 'assigned') {
 			task.assigned_to = employee;
 
-		} else if(status === 'complete'){
+		} else if (status === 'complete') {
 			task.complete = true;
 
 		}
 
 		// TODO: Create a user service that will set the current status, and send the notification
+		var savedTask = null;
 		return task.saveAsync()
-		.spread(function(task){
-			return task;
-		});
+			.spread(function(task) {
+				savedTask = task;
+
+				if(status === 'assigned'){
+					return employeeService.setStatus(employee, 'busy').then(function(){
+						return savedTask;
+					});
+				} else if(status === 'complete'){
+					return employeeService.setStatus(employee, 'available')
+					.then(function(){
+						return savedTask;
+					})
+				}
+
+				return savedTask;
+			});
 	}))
 
 	.put('/assignee', wrap(function(req) {
