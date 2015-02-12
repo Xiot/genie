@@ -68,7 +68,7 @@ gulp.task('compile:vendor:css', function() {
 
 gulp.task('fonts', function() {
 
-	var fontTypes = ['.eot', '.svg', '.ttf', '.woff', 'woff2'];
+	var fontTypes = ['.eot', '.svg', '.ttf', '.woff', '.woff2'];
 	var fonts = [];
 
 	fontTypes.forEach(function(ext) {

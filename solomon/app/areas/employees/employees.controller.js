@@ -24,7 +24,7 @@ function EmployeesController(storeService, eventService, httpClient, socket, $sc
 
 	$scope.$on('$destroy', function(){
 		unlisten();
-	})
+	});
 
 	refreshEmployees(storeService.currentStore);
 
@@ -47,7 +47,7 @@ function EmployeesController(storeService, eventService, httpClient, socket, $sc
 		var sorted = _.sortBy(asArray, function(item) {
 			var index = _.indexOf(statusOrder, item.status);
 			if (index == -1)
-				index == 100;
+				index = 100;
 			return index;
 		});
 		return sorted;

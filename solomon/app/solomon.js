@@ -21,8 +21,8 @@ angular.module('solomon')
 .config(config);
 
 /* @ngInject */
-function config(httpClientProvider, $httpProvider){
-	httpClientProvider.baseUri = "http://localhost:3000";
+function config(httpClientProvider, $httpProvider, env){
+	httpClientProvider.baseUri = env.apiRoot; //"http://localhost:3000";
 
         $httpProvider.defaults.useXDomain = true;
     $httpProvider.defaults.withCredentials = true;
