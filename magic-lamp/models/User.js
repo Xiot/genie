@@ -6,9 +6,11 @@ var oid = mongoose.Schema.Types.ObjectId;
 // based on https://github.com/madhums/node-express-mongoose-demo/blob/master/app/models/user.js
 
 var userSchema = new mongoose.Schema({
-    firstName: { type: String, validate: [optionalOnDevice, 'First Name is required.'] },
-    lastName: { type: String, validate: [optionalOnDevice, 'Last Name is required.'], required: true  },
-    username: { type: String, required: [optionalOnDevice, '{PATH} is required.']  },
+    firstName: { type: String, validate: [oodv('firstName'), 'First Name is required.'], default: null },
+    lastName: { type: String, validate: [oodv('lastName'), 'Last Name is required.'], default: null},
+    //username: { type: String, required: [ood('username'), '"{PATH}" is required for non-device accounts.'], default: null  },
+    username: { type: String, validate: [oodv('username'), '"{PATH}" is required for non-device accounts.'], default: null  },
+
     email: { type: String, required: false },
     
     password_hash: { type: String, required: false },
@@ -68,6 +70,16 @@ userSchema.path('device').validate(function(value){
     return this.role !== 'device' || value;
 });
 
+userSchema.pre('save', function(next){
+    if(this.role === 'device'){
+        console.log('clearing');
+        this.username = undefined;
+        this.firstName = undefined;
+        this.lastName = undefined;        
+    }
+    next();
+})
+
 userSchema.options.toJSON = {
   transform: function(user) {
     
@@ -105,11 +117,22 @@ userSchema.methods = {
     }
 };
 
-
-function optionalOnDevice(value){
-
-    var isValid = (this.role === 'device') || value; 
-    return isValid;
+function ood(name){
+    
+    return function isFieldRequired(value){    
+        var required = this.role !== 'device';
+        // var required = (this.role === 'device') || value; 
+        //console.log('ood.' + name + ': role: ' + this.role + ' required: ' + required);
+        // return isValid;
+        return required;
+    }
+}
+function oodv(name){
+    return function optionalOnDevice(value){    
+        var isValid = (this.role === 'device') || !!value; 
+        //console.log('oodv.' + name + ': role: ' + this.role + ' valid: ' + isValid);
+        return isValid;
+    }
 }
 
 module.exports = mongoose.model('User', userSchema);

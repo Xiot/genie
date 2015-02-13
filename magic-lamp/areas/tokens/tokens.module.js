@@ -5,6 +5,8 @@ var Task = mongoose.model('Task');
 
 var jwt = require('jsonwebtoken');
 var moment = require('moment');
+var employeeService = load('~/core/services/employee.service');
+var Promise = require('bluebird');
 
 module.exports.init = function(server, config) {
 
@@ -16,12 +18,12 @@ module.exports.init = function(server, config) {
         if (!req.user)
             return next(401, 'Unauthorized');
 
-        setTimeout(function() {
-            res.send(req.user);
-            next();
-        }, 1000)
-
-
+        res.send(req.user);
+        next();
+        // setTimeout(function() {
+        //     res.send(req.user);
+        //     next();
+        // }, 1000)
     });
 
     server.post('/tokens', basicAuth, function(req, res, next) {
@@ -71,23 +73,58 @@ module.exports.init = function(server, config) {
             })
     });
 
-    server.del('/tokens/:tokenId', function(req, res, next) {
+    server.del('/tokens/current', function(req, res, next) {
 
-        Token.getByIdAsync(req.params.tokenId)
+        //req.auth_token
+
+        //Token.findByIdAsync(req.params.tokenId)
+        getTokenAsync(req)
             .then(function(token) {
                 return token.removeAsync();
             })
             .then(function() {
-                req.user.status = 'offline';
-                return req.user.saveAsync();
+                return employeeService.setStatus(req.user, 'offline');
+                // req.user.status = 'offline';
+                // return req.user.saveAsync();
             })
             .then(function(user) {
+                res.send(204,"logged out");
                 next();
             })
             .catch(function(ex) {
                 next(new Error(ex));
             });
     });
+
+    server.del('/tokens/:tokenId', function(req, res, next) {
+
+        //req.auth_token
+
+        //Token.findByIdAsync(req.params.tokenId)
+        getTokenAsync(req)
+            .then(function(token) {
+                return token.removeAsync();
+            })
+            .then(function() {
+                return employeeService.setStatus(req.user, 'offline');
+                // req.user.status = 'offline';
+                // return req.user.saveAsync();
+            })
+            .then(function(user) {
+                res.send(204,"logged out");
+                next();
+            })
+            .catch(function(ex) {
+                next(new Error(ex));
+            });
+    });
+
+    function getTokenAsync(req){
+        //if(req.params.tokenId === 'current')
+            return Promise.resolve(req.auth_token);
+
+        //return Token.findByIdAsync(req.params.tokenId);
+    }
 
     function setUserDefaultStatusAsync(user) {
 
@@ -97,11 +134,11 @@ module.exports.init = function(server, config) {
                 .then(function(tasks) {
                     if (!tasks || tasks.length === 0)
                         return 'available'
+
                     return 'busy'
                 })
-                .then(function(status) {
-                    user.status = status;
-                    return user.saveAsync();
+                .then(function(status) {                    
+                    return employeeService.setStatus(user, status);                    
                 });
         }
         //server.use('/tokens', router); 

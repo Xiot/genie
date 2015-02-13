@@ -19,7 +19,7 @@ function onConnection(socket) {
 	//debug('connected: \n  device: ' + socket.device + '\n  socket: ' + socket.id);
 
 	socket.on('disconnect', onDisconnect);
-	
+
 	socket.on('join', function(opts) {
 		var id = opts.id;
 		debug('chat-join: ', opts);
@@ -31,10 +31,10 @@ function onConnection(socket) {
 		socket.leave('chat-' + opts.id);
 	});
 
-	socket.leaveAllRooms = function(){
+	socket.leaveAllRooms = function() {
 
-		this.rooms.forEach(function(room){
-			if(room != socket.id)
+		this.rooms.forEach(function(room) {
+			if (room != socket.id)
 				socket.leave(room);
 		});
 	}
@@ -58,13 +58,15 @@ function onConnection(socket) {
 					socket.join(data.app + ':' + data.storeId);
 				}
 
-				if(user.isEmployee)
+				if (user.isEmployee) {
 					socket.join('store:' + data.storeId + ':employee');
 
-				user.departments.forEach(function (dept) {
-					socket.join('department:' + dept.id);
-				});
-				
+					if (user.departments)
+						user.departments.forEach(function(dept) {
+							socket.join('department:' + dept.id);
+						});
+				}
+
 				socket.info = data;
 				socket.user = user;
 
@@ -73,12 +75,10 @@ function onConnection(socket) {
 					+ '\n    user:   ' + data.userId 
 					+ '\n    socket: ' + socket.id 
 					+ '\n    store:  ' + data.storeId 
-					+ '\n    app:    ' + data.app
-					+ '\n    rooms:  ' + socket.rooms.join(', '));	
-				console.log(socket.rooms);
+					+ '\n    app:    ' + data.app);
 
 			}).catch(function(ex) {
-				debug('Registration Failed: ', ex);
+				debug('Registration Failed: ', ex.stack);
 				// TODO: Should send response back to client
 			});
 	});
@@ -95,9 +95,19 @@ function onConnection(socket) {
 
 			return User.findOneAsync(query)
 				.then(function(user) {
-					if (!user)
+
+					if (user)
+						return user;
+
+					if (data.app !== 'qarin')
 						throw new Error('No user was found');
-					return user;
+
+					user = new User({
+						device: data.deviceId,
+						role: 'device'
+					});
+					return user.saveAsync();
+
 				});
 		} catch (ex) {
 			return Promise.reject(ex);
@@ -105,17 +115,22 @@ function onConnection(socket) {
 	}
 
 	function buildUserQuery(data) {
-		if (data.deviceId)
-			return {
-				device: data.deviceId
-			};
 
-		if (data.userId)
-			return {
-				_id: data.userId
-			};
+		var query = {
+			active: true
+		};
 
-		throw new Error('[' + data.app +  '] Unable to create User query. Require either `data.deviceId` or `device.userId`');
+		if (data.userId) {
+			query._id = data.userId;
+			return query;
+		}
+
+		if (data.deviceId) {
+			query.device = data.deviceId;
+			return query;
+		}
+
+		throw new Error('[' + data.app + '] Unable to create User query. Require either `data.deviceId` or `device.userId`');
 	}
 }
 

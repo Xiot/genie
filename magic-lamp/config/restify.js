@@ -41,6 +41,11 @@ var log = function(text) {
 // });
 
 server.use(metrics.startCapture());
+server.on('after', function(req, res, route, err){
+	console.log('after-request: ' + req.method + ' ' + req.url);
+	metrics.endCapture(req, res, route, err);
+});
+
 
 server.use(logger('dev'));
 server.use(restify.acceptParser(server.acceptable));
@@ -54,9 +59,6 @@ server.use(restify.bodyParser({
 }));
 server.use(restify.conditionalRequest());
 
-server.on('after', function(req, res, route, err){
-	metrics.endCapture(req, res, route, err);
-});
 
 router(server);
 

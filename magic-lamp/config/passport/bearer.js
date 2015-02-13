@@ -6,9 +6,9 @@ var Token = mongoose.model('Token');
 var ObjectId = mongoose.Types.ObjectId;
 var moment = require('moment');
 
-module.exports = new BearerStrategy(authenticate);
+module.exports = new BearerStrategy({ passReqToCallback: true }, authenticate);
 
-function authenticate(encryptedToken, done) {
+function authenticate(req, encryptedToken, done) {
     
     //debug('bearer');
     var jtoken = jwt.decode(encryptedToken);
@@ -32,6 +32,8 @@ function authenticate(encryptedToken, done) {
         var user = token.user;
         user.authType = 'bearer';
         
+        //console.log('setting auth_token: ', token);
+        req.auth_token = token;
         //user.auth = user.auth || {};
         //user.auth.bearer = true;
 

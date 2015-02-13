@@ -2,13 +2,15 @@
     .factory('securityService', securityService);
 
 /* @ngInject */
-function securityService(storageService, $state, httpClient, $q) {
+function securityService(storageService, $state, httpClient, $q, util) {
 
     var _currentUser = null;
     var _listeners = {};
 
     var service = {
-        currentUser: function(){return _currentUser;},
+        currentUser: function() {
+            return _currentUser;
+        },
         requestCurrentUser: _requestCurrentUser,
 
         on: addListener,
@@ -19,18 +21,19 @@ function securityService(storageService, $state, httpClient, $q) {
 
     return service;
 
-    function addListener(eventName, listener){
-        if(!_listeners[eventName])
+    function addListener(eventName, listener) {
+        if (!_listeners[eventName])
             _listeners[eventName] = [];
         _listeners[eventName].push(listener);
     }
-    function fireEvent(eventName, args){
+
+    function fireEvent(eventName, args) {
         var handler = _listeners[eventName];
-        if(!handler) 
+        if (!handler)
             return;
 
         var eventArgs = [].splice.call(arguments, 1);
-        handler.forEach(function(cb){
+        handler.forEach(function(cb) {
             cb.apply(this, eventArgs);
         });
     }
@@ -92,11 +95,22 @@ function securityService(storageService, $state, httpClient, $q) {
     }
 
     function _logout() {
-        storageService.remove('token');
-        $state.go('login');
+
+        var token = storageService.get('auth-token');
+
+        if(!token)
+            return $state.go('login');
+
+        storageService.remove('auth-token');
+        var url = util.join('tokens', 'current');
+
+        return httpClient.delete(url, {auth: {Bearer: token}})
+            .finally(function() {
+                $state.go('login');
+            });
     }
 
-    function _setUser(user){
+    function _setUser(user) {
         _currentUser = user;
         fireEvent('userChanged', user);
     }

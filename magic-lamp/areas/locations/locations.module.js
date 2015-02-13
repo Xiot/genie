@@ -20,32 +20,40 @@ module.exports.init = function(server, config) {
 			var opt = geoUtil.createOptionsKm(distance);
 			//console.log(point);
 
+
+			Store.findById("54bbe9e04c72702035848af9")
+			.populate('organization')
+			.execAsync()
+			.then(function(store){
+				res.send([store]);
+				next();
+			});
+
 			// http://stackoverflow.com/questions/24197235/how-do-i-populate-sub-document-after-geonear
+			// Store.geoNearAsync(point, opt)
+			// 	.spread(function(results, stats) {
+			// 		//console.log(stats);
 
-			Store.geoNearAsync(point, opt)
-				.spread(function(results, stats) {
-					//console.log(stats);
+			// 		var stores = results.map(function(storeData) {
+			// 			var store = new Store(storeData.obj);
+			// 			return store;
+			// 		});
 
-					var stores = results.map(function(storeData) {
-						var store = new Store(storeData.obj);
-						return store;
-					});
+			// 		Store.populateAsync(stores, {
+			// 				path: "organization"
+			// 			})
+			// 			.then(function(obj) {
+			// 				res.send(obj);
+			// 				next();
+			// 			}).catch(function(ex) {
+			// 				next(new ServerError(ex));
+			// 			})
 
-					Store.populateAsync(stores, {
-							path: "organization"
-						})
-						.then(function(obj) {
-							res.send(obj);
-							next();
-						}).catch(function(ex) {
-							next(new ServerError(ex));
-						})
+			// 		//res.send(results);
 
-					//res.send(results);
-
-				}).catch(function(ex) {
-					next(new ServerError(ex));
-				});
+			// 	}).catch(function(ex) {
+			// 		next(new ServerError(ex));
+			// 	});
 
 		});
 
