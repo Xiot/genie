@@ -28,6 +28,11 @@ function TaskService(httpClient, storeService, securityService, socket, eventSer
 		socket.on('chat:message', function(data) {
 			eventService.raise('chat:message', data);
 		});
+		socket.on('ticket:created', function(data) {
+			var task = new Task(data);
+			task.mine = !!task.mine;
+			eventService.raise('ticket:created', task);
+		});
 	}
 
 	function getById(id) {

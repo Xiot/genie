@@ -1,6 +1,6 @@
 {
   "env": {
-    "DEBUG": "magic-lamp*",
+    "DEBUG": "magic-lamp*,mongoose-adapter",
     "PORT": "3000",
     "ETC": "etc"
   }

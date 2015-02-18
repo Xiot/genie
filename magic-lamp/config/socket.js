@@ -13,6 +13,10 @@ module.exports = function(server) {
 	return io;
 };
 
+// Need to build a pub-sub model that is compatible with socket.io-redis using mongoDB.
+//   http://tugdualgrall.blogspot.fr/2015/01/how-to-create-pubsub-application-with.html
+//   https://github.com/Automattic/socket.io-redis/blob/master/index.js
+//   https://devcenter.heroku.com/articles/realtime-polyglot-app-node-ruby-mongodb-socketio
 
 function onConnection(socket) {
 
@@ -63,7 +67,7 @@ function onConnection(socket) {
 
 					if (user.departments)
 						user.departments.forEach(function(dept) {
-							socket.join('department:' + dept.id);
+							socket.join('department:' + dept);
 						});
 				}
 
@@ -76,6 +80,11 @@ function onConnection(socket) {
 					+ '\n    socket: ' + socket.id 
 					+ '\n    store:  ' + data.storeId 
 					+ '\n    app:    ' + data.app);
+
+				// setTimeout(function(){
+				// 	var roomList = socket.rooms.join(', ');
+				// 	console.log(socket.id + ':> ' + roomList);
+				// }, 2000);
 
 			}).catch(function(ex) {
 				debug('Registration Failed: ', ex.stack);
@@ -130,7 +139,7 @@ function onConnection(socket) {
 			return query;
 		}
 
-		throw new Error('[' + data.app + '] Unable to create User query. Require either `data.deviceId` or `device.userId`');
+		throw new Error('[' + data.app + '] Unable to create User query. Require either `deviceId` or `userId`');
 	}
 }
 

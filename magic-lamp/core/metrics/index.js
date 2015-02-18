@@ -1,6 +1,7 @@
 var mongoose = require('mongoose');
 var RequestMetric = mongoose.model('RequestMetric');
 var ua = require('useragent');
+var ipware = require('ipware')();
 
 var service = {
 	startCapture: startCapture,
@@ -16,7 +17,7 @@ function startCapture() {
 		var metrics = new RequestMetric({
 			startTime: Date.now(),
 			url: req.url,
-			method: req.method			
+			method: req.method
 		});
 
 		req._requestStartTick = process.hrtime();
@@ -31,7 +32,7 @@ function endCapture(req, res, route, err) {
 	var metric = req.metric;
 	if (!metric)
 		return;
-
+	
 	metric.statusCode = res.statusCode;
 	metric.timeTaken = calculateResponseTime(req);
 	metric.routeName = route.name;
@@ -41,6 +42,7 @@ function endCapture(req, res, route, err) {
 
 	var o = ua.lookup(userAgentText).toJSON();
 	
+	metric.ip = ipware.get_ip(req).clientIp;
 	metric.userAgent = o;
 	metric.userAgent.source = userAgentText;
 

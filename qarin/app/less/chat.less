@@ -1,7 +1,11 @@
 @import "mixins";
 
 .chat-log-list{
-    overflow: scroll;
+    //overflow: scroll;
+}
+
+.chat-controls {
+    margin-bottom: 5px;
 }
 
 .chat-log-list-item {
@@ -49,36 +53,25 @@
 
 #chat {
     position: relative;
-    //border: 1px solid black;
-    //display: table;
-    //height: 540px;
 }
 
 .chat-window {
-    
-    //height: 100%;
-    
-	position: relative;
+
+	//position: relative;
 
     .message-pane {
-        //display: table-cell;
-        overflow-y: scroll;
-        position: relative;
-        //max-height: 400px;
-        //height: 100%;
-        //height: 400px;
-        .clearfix;
-        border: 1px solid red;
-        padding-bottom: 40px;
+
+        .clearfix; 
+
+        padding-bottom: 5px;
+        padding-left: 10px;
+        padding-right: 10px;
     }
 
-    .chat-controls {
-        //display: table-row;
-        position: absolute;
-        bottom: 1px;
-        //height: 30px;
-        //border: 1px solid red;
-    }
+    // .chat-controls {
+    //     position: absolute;
+    //     bottom: 1px;
+    // }
 }
 
 .chat-bubble {

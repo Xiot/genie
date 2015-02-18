@@ -24,6 +24,9 @@ require('./config/routes.js')(server, io, passport);
 
 require('./areas/chat/chat.service').init(io);
 
+var mongoAdapter = load('~/core/communication/MongoAdapter');
+io.adapter(mongoAdapter(connections.mongoose));
+
 module.exports.run = function (port, callback) {
     server.listen(port, callback);
     return server;

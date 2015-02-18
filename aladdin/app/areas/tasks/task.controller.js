@@ -51,21 +51,6 @@ function TaskController($scope, task, chat, taskService, productService) {
 			});
 	}
 
-	// function acceptTask() {
-	// 	return taskService.accept(vm.task)
-	// 		.then(function(accepted) {
-	// 			angular.extend(vm.task, accepted);
-	// 			vm.task.mine = true;
-	// 		});
-	// }
-
-	// function completeTask(){
-	// 	return taskService.complete(vm.task)
-	// 	.then(function(task){
-	// 		angular.extend(vm.task, task);			
-	// 	});
-	// }
-
 	function updateTimeSince(task){
 		task.timeSince = task.timings && task.timings[task.status]
 			? task.timings[task.status].start
@@ -73,13 +58,13 @@ function TaskController($scope, task, chat, taskService, productService) {
 	}
 
 	function setStatus(status){
-		
+		var changeTime = Date.now();
 		return taskService.setStatus(vm.task, status)
 			.then(function(retVal) {
 
 				angular.extend(vm.task, retVal);
 				vm.task.mine = true;
-
+				vm.task.timeSince = changeTime;
 				updateTimeSince(vm.task);
 			});
 	}

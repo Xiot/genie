@@ -1,4 +1,5 @@
 ﻿@import "colors";
+@import "layout";
 @import "notificiations";
 @import "splash";
 @import "header";
@@ -6,67 +7,3 @@
 @import "chat";
 @import "products";
 @import "organizations";
-
-body, html {
-    margin: 0;
-    padding: 0;
-}
-
-// @media (min-width: 400) {
-//     .device-root {
-//         width: 360px;
-//         height: 640px;
-//         margin: 0 auto;
-//         border: 1px solid black;
-//         position: relative;
-//     }
-// }
-
-body {
-	//overflow-y: hidden;
-}
-
-// http://stackoverflow.com/questions/4069734/cross-browser-fixed-header-footer-and-scrollable-content
-
-.device-root {
-	height: 100vh;
-	position: relative;
-	//overflow-y: scroll;
-	//padding-bottom: 40px;
-
-	width: 100%;
-    //height: 100%;
-    display: flex;
-    flex-direction: column;
-    flex-wrap: nowrap;
-
-border: 1px solid black;
-
-}
-.content-area {
-	overflow-y: scroll;
-	//min-height: 100%;
-	//max-height: 100%;
-	height: 100%;
-}
-
-.debug-hover {
-    position: absolute;
-    &.left {
-        left: 0;
-        top: 0;
-    }
-    &.right {
-        right: 0;
-        top: 0;
-    }
-}
- 
-.device-footer {
-	//position: fixed;
-	bottom: 0;
-	border: 1px solid black;
-	width: 100%;
-	background-color: white;
-	z-index: 900;
-}

@@ -12,9 +12,10 @@ var schema = new mongoose.Schema({
 	process: {type: String, default: pid },
 	machine: {type: String, default: machineName},
 	statusCode: Number,
-	routeName: String,
+	routeName: {type: String, index: true},
 	userAgent: mongoose.Schema.Types.Mixed,
-	params: mongoose.Schema.Types.Mixed
+	params: mongoose.Schema.Types.Mixed,
+	ip: String
 
 },  {collection: 'metrics.requests'});
 

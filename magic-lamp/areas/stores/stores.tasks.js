@@ -155,10 +155,18 @@ module.exports = function(server, passport, io) {
 					})
 					.spread(function(newTask) {
 
+						return newTask
+							.populate('product')
+							.populateAsync('department');						
+					})
+					.then(function(newTask){
 						var channel = io.to('aladdin:' + req.store.id);
 
-						if (newTask.department)
-							channel = channel.to('department:' + newTask.department);
+						if (newTask.department){
+							var departmentChannel = 'department:' + newTask.department;
+							channel = channel.to(departmentChannel);
+							console.log('send to: ' + departmentChannel);
+						}
 
 						channel.emit('ticket:created', newTask);
 

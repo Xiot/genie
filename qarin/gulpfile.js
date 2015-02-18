@@ -88,6 +88,9 @@ gulp.task('compile:app:js', function () {
 gulp.task('compile:app:less', function () {
     return gulp.src(paths.src.lessRoot)
         .pipe(plug.less())
+        .on('error', function(e){
+            console.log('less: ', e);
+        })
         .pipe(gulp.dest(paths.output.css));
 });
 

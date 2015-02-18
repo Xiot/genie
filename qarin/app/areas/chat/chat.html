@@ -1,5 +1,4 @@
-﻿<form id='chat' ng-submit="vm.send()">
-    <h1>Chat</h1>
+﻿<div id="chat">
     <div class="product-box" ng-if="vm.chat.product">
         {{vm.chat.product.name}}
     </div>
@@ -10,16 +9,6 @@
                 <div class="message-body">{{m.message}}</div>
             </div>
         </div>
-
-       <!--  <div class="chat-controls input-group">
-            <input type="text" ng-model="vm.message" class="form-control">
-            <span class="input-group-btn">
-            	<button type="submit" class="btn btn-default">
-                	<i class="glyphicon glyphicon-send"></i>
-            	</button>
-        	</span>
-        </div> -->
     </div>
-    <!--  <input type="text" name="message" ng-model="vm.message" />
-    <button type="submit">Send</button> -->
-</form>
+
+</div>

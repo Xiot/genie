@@ -71,7 +71,7 @@ module.exports = function(server, io) {
 		.get('/', wrap(function(req) {
 			return req.employee;
 		}))
-		.put('/status', function(req) {
+		.put('/status', wrap(function(req) {
 
 			return employeeService
 				.setStatus(req.employee, req.body.status);
@@ -89,7 +89,7 @@ module.exports = function(server, io) {
 			// 		return emp;
 			// 	});
 
-		})
+		}))
 		.patch('/', wrap(function(req) {
 
 			if (!req.body)

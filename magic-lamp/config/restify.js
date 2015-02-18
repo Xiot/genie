@@ -35,14 +35,8 @@ var log = function(text) {
 	}
 }
 
-// server.use(function(req, res, next){
-// 	console.log('random');
-// 	next();
-// });
-
 server.use(metrics.startCapture());
-server.on('after', function(req, res, route, err){
-	console.log('after-request: ' + req.method + ' ' + req.url);
+server.on('after', function(req, res, route, err){	
 	metrics.endCapture(req, res, route, err);
 });
 
