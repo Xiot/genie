@@ -54,6 +54,28 @@ server.use(restify.bodyParser({
 server.use(restify.conditionalRequest());
 
 
+server.use(function(req, res, next){
+
+	req.protocol = (req.isSecure() ? 'https' : 'http');
+
+	req.requestUrl = function(){
+		return req.protocol + '://' + req.header('Host') + req.url;
+	}
+
+	req.link = function(name, params, query){
+		var serverPath = req.protocol + '://' + req.header('Host');
+
+		var relativePath = server.router.render(name, params, query);
+		if(!relativePath)
+			return undefined;
+
+		return serverPath + relativePath;
+	};
+
+	console.log(req.requestUrl());
+	next();
+});
+
 router(server);
 
 module.exports = server;

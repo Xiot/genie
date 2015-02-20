@@ -3,7 +3,7 @@
 
 
 /* @ngInject */
-function StoreService(geoLocation, httpClient, $rootScope, storageService) {
+function StoreService(geoLocation, httpClient, $rootScope, storageService, util) {
 
 	var _current = null;
 	var availableEvents = ['storeChanged'];
@@ -12,7 +12,8 @@ function StoreService(geoLocation, httpClient, $rootScope, storageService) {
 		getById: _getById,
 		getCurrentStore: _getCurrentStore,
 		on: _registerListener,
-		requestHelp: requestHelp
+		requestHelp: requestHelp,
+		getDepartments: getDepartments
 	};
 
 	Object.defineProperty(service, 'current', {
@@ -22,6 +23,14 @@ function StoreService(geoLocation, httpClient, $rootScope, storageService) {
 	});
 
 	return service;
+
+	function getDepartments(storeId){
+		var url = util.join('stores', _current.id, 'departments');
+		return httpClient.get(url)
+		.then(function(res){
+			return res.data;
+		});
+	}
 
 	function requestHelp() {
 		var request = {

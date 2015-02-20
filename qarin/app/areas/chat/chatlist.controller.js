@@ -24,9 +24,9 @@ function ChatListController(httpClient, storeService, $state, chatService) {
 			chats.forEach(function(c){
 				if(c.lastMessage)
 					activeChats.push(c);
-			})
+			});
 			vm.chats = activeChats;
-		})
+		});
 
 		// httpClient.get('/users/me/chats', opts)
 		// 	.then(function(res) {

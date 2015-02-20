@@ -33,14 +33,14 @@ function MongooseFiles(mongoose) {
 		//if(!data.id)
 		//	data.id = new ObjectID();
 
-		debug('put', data);
+		//debug('put', data);
 
 		return new Promise(function(resolve, reject) {
 
 			try {
 				var stream = gfs.createWriteStream(data);
 				stream.on('close', function(file) {
-					debug('stream-close', file);
+					//debug('stream-close', file);
 					resolve(file);
 				});
 				stream.on('error', function(ex) {

@@ -13,7 +13,7 @@
 		// 		vm.chat = res.data;
 		// 	});
 
-		chatService.chat = chat;
+		//chatService.chat = chat;
 		$scope.$on('$destroy', function(){
 			chatService.chat = null;
 		});

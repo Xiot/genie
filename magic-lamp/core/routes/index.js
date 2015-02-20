@@ -11,6 +11,7 @@ var debug = require('debug')('magic-lamp-router');
 	Wrap the handlers in a try-catch.
 	Allow them to return promises.
 	 - Automatically call next() when promise resolves;
+	 - Use the same implementation as promiseRouter
 */
 
 var serverMethods = [
@@ -36,6 +37,10 @@ function RouteBuilder(server, baseRoute, middleware) {
 	this.routesByName = {};
 	//debug('base: ' + this._buildUrl('/'));
 };
+
+RouteBuilder.prototype.link = function(name, params, query){
+	return this.server.router.render(name, params, query);
+}
 
 RouteBuilder.prototype.param = function(name, handler) {
 
@@ -165,6 +170,10 @@ function SubRouteBuilder(builder, route, middleware) {
 	}
 
 	this.middleware = middleware;
+}
+
+SubRouteBuilder.prototype.link = function(name, params, query){
+	return this.builder.link(name, params, query);
 }
 
 SubRouteBuilder.prototype.param = function(name, handler) {

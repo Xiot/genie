@@ -7,21 +7,29 @@ function SearchController(httpClient, storeService, query, $state, $location){
 	var vm = angular.extend(this, {
 		products: [],
 		query: query || '',
-		search: _search
+		search: _search,
+		departments: null
 	});
 
 	_init();
 
 	function _init(){
-		 if(!vm.query)
-		 	return;
-		// 	_search();
+		
+		storeService.getDepartments(storeService.current.id)
+		.then(function(depts){
+			vm.departments = depts;
+		}).catch(function(ex){
+			console.log(ex);
+		});
 
+		if(!vm.query)
+		 	return;
+		
 		var url = '/stores/' + storeService.current.id + '/products?search=' + vm.query;
 		httpClient.get(url)
 		.then(function(res){
 			vm.products = res.data;
-		});
+		});		
 	}
 
 	function _search(){

@@ -115,9 +115,6 @@ function adapter(mongoose) {
 		var self = this;
 		var startupDate = Date.now();
 
-		// this should be filtered to only listen for messages in the rooms that 
-		// the client is currently listening to.
-		
 		var stream = SocketMessage.find({
 				timestamp: {
 					$gt: startupDate

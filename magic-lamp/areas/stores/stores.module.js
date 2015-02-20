@@ -60,6 +60,8 @@ module.exports.init = function(server, config) {
 
 	require('./stores.employees')(storeRoute.route('/employees'), config.io);
 
+	require('./stores.departments')(storeRoute.route('/departments'));
+
 	// TODO: Extract to new file
 	// storeRoute.get('/products',
 	// 	storeMiddleware,

@@ -10,28 +10,14 @@
     </div>
 </form>
 
-<div class="search-results container-fluid">
+<div>
+    <div ng-repeat="dept in vm.departments" class="department-card">
+        <img ng-src="{{dept.image}}">
+        <span class="name">{{dept.name}}</span>
+    </div>
+</div>
 
-<!--     <div class="">
-        <div class="row">
-            <div class="col-xs-3 image-container">
-                <img src="http://placehold.it/250x150" />
-            </div>
-            <div class="col-xs-9">
-                <h2>Title</h2>
-                <p>The description goes here</p>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-xs-3 image-container">
-                <img src="http://placehold.it/350x150" />
-            </div>
-            <div class="col-xs-9">
-                <h2>Title</h2>
-                <p>The description goes here</p>
-            </div>
-        </div>
-    </div> -->
+<div class="search-results container-fluid">
 
      <div ng-repeat="p in vm.products" class="product-box row">
         <div class="col-xs-3 image-container">

@@ -5,7 +5,7 @@ var File = mongoose.model('File');
 module.exports = {
 	init: function(server, config) {
 
-		var route = server.route('images');
+		var route = server.route('/images');
 		// route.param('image_id', function(req, res, next, value){
 		// 	mongoose.files.get(value)
 		// })
@@ -19,7 +19,7 @@ module.exports = {
 				.then(function(image){
 
 					image.send(res);
-
+					next();
 					// var stream = image.openRead();
 					// res.writeHead(200, {
 					// 	'Content-Type': image.contentType

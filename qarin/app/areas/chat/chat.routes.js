@@ -6,14 +6,14 @@ function configureRoutes($stateProvider) {
 	$stateProvider
 		.state('chat-list', {
 			url: '/chat',
-			parent: 'layout',
+			//parent: 'layout',
 			templateUrl: 'app/areas/chat/chatlist.html',
 			controller: 'ChatListController',
 			controllerAs: 'vm'
 		})
 		.state('chat', {
 			url: '/chat/:chatId',
-			parent: 'layout',
+			//parent: 'layout',
 
 			resolve: {
 				chatId: function($stateParams) {
@@ -21,6 +21,9 @@ function configureRoutes($stateProvider) {
 				},
 				chat: function(chatId, chatService) {
 					return chatService.getById(chatId);
+				},
+				product: function(chat){
+
 				}
 			},
 			views: {
@@ -32,35 +35,13 @@ function configureRoutes($stateProvider) {
 				'footer@': {
 					templateUrl: 'app/areas/chat/chat.controls.html',
 					controllerAs: 'vm',
-					controller: 'BoxServiceController'
+					controller: 'ChatControlsController'
+				},
+				'header@': {
+					templateUrl: 'app/areas/chat/chat.product.html',
+					controllerAs: 'vm',
+					controller: 'ChatProductController'
 				}
 			}
 		});
-}
-
-angular.module('qarin.chat')
-	.controller('BoxServiceController', boxService);
-
-function boxService(chatService, chat) {
-
-	var vm = angular.extend(this, {
-		chat: chat,
-		message: '',
-		send: sendMessage
-	});
-
-	function sendMessage() {
-		var message = vm.message;
-		vm.message = '';
-
-		chatService.sendMessage(chat._id, message)
-			.then(function(msg) {
-				vm.chat.messages.push({
-					message: msg.message,
-					time: msg.time,
-					user: msg.user,
-					sent: true
-				});
-			});
-	}
 }

@@ -51,6 +51,6 @@ function TicketService(storeService, httpClient, util, socket){
 		
 		return function() {
 			socket.removeListener(message, handler);
-		}
+		};
 	}
 }
