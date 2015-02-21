@@ -21,19 +21,34 @@ module.exports = function(server){
 
 	});
 
-	server.get('/', wrap(function(req){
-
+	server.get('/', wrap(async function(req) {
 		var query = {
 			store: req.store._id,
 			parents: {$size: 0}
 		};
-
-		return Department.findAsync(query)
-		.then(function(depts){
-			return formatter.format(depts, req);
-		});
-
+		
+		var depts = await Department.findAsync(query);
+		return formatter.format(depts, req);
 	}));
+
+	// server.get('/', wrap(async function(req){
+
+	// 	var query = {
+	// 		store: req.store._id,
+	// 		parents: {$size: 0}
+	// 	};
+
+	// 	var depts = await Deparment.findAsync(query);
+	// 	return formatter.format(depts, req);
+
+	// 	// return Department.findAsync(query)
+	// 	// .then(function(depts){
+	// 	// 	return formatter.format(depts, req);
+	// 	// });
+
+	// }));
+
+	
 
 	server.post('/', wrap(function(req){
 

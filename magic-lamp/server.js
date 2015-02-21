@@ -1,6 +1,9 @@
 ﻿//#!/usr/bin/env node
 
-var mod = require('getmod');
+require('babel/register')({experimental: true});
+//require('babel').transform('code', {optional: ['selfContained', 'bluebirdCoroutines']})
+
+var mod = require('getmod')();
 mod.mark({'~':'.'});
 global.load = mod;
 

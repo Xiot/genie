@@ -1,7 +1,10 @@
 {
-  "env": {
-    "DEBUG": "magic-lamp*,mongoose-adapter",
-    "PORT": "3000",
-    "ETC": "etc"
-  }
+	"execMap": {
+		"js": "node --harmony"
+	},
+	"env": {
+		"DEBUG": "magic-lamp*,mongoose-adapter",
+		"PORT": "3000",
+		"ETC": "etc"
+	}
 }

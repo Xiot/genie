@@ -1,6 +1,4 @@
-﻿var express = require('express');
-//var router = express.Router();
-var mongoose = require('mongoose');
+﻿var mongoose = require('mongoose');
 
 var Organization = mongoose.model('Organization');
 var Store = mongoose.model('OrganizationLocation');

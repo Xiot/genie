@@ -94,4 +94,6 @@ function isPromise(obj) {
 	return obj && typeof(obj) === 'object' && obj.then !== undefined;
 }
 
+wrap.wrapped = true;
+
 module.exports = wrap;

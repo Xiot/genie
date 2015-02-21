@@ -2,7 +2,7 @@
     this.statusCode = statusCode;
     this.message = msg;
     Error.call(this, msg);
-    Error.captureStackTrace(this, arguments.callee);
+    //Error.captureStackTrace(this, arguments.callee);
     
     // Remove bluebird from the stack trace
     var s = /^    .+?\\bluebird\\.+$/gm;

@@ -72,7 +72,7 @@ server.use(function(req, res, next){
 		return serverPath + relativePath;
 	};
 
-	console.log(req.requestUrl());
+	//console.log(req.requestUrl());
 	next();
 });
 
@@ -80,6 +80,7 @@ router(server);
 
 module.exports = server;
 
+// Should move formatter into here.
 function formatJSON(req, res, body) {
 	if (body instanceof Error) {
 		// snoop for RestError or HttpError, but don't rely on
