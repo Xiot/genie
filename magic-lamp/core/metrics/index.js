@@ -42,7 +42,11 @@ function endCapture(req, res, route, err) {
 
 	var o = ua.lookup(userAgentText).toJSON();
 	
+try {
 	metric.ip = ipware.get_ip(req).clientIp;
+} catch(ex){
+console.log('unable to get ip.', ex);
+}
 	metric.userAgent = o;
 	metric.userAgent.source = userAgentText;
 

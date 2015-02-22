@@ -79,7 +79,7 @@ server.use(function(req, res, next){
 var router = load('~/core/routes/index.es6');
 router(server);
 
-server.get(/.*/, restify.serveStatic({
+server.get(/loaderio-c7e2eb31d553b6100da33fb876222607/, restify.serveStatic({
 	directory: './static'
 }));
 
