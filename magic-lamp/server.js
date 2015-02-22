@@ -1,6 +1,9 @@
 ﻿//#!/usr/bin/env node
 
-require('babel/register')({experimental: true});
+require('babel/register')({
+	experimental: true,
+	playground: true
+});
 //require('babel').transform('code', {optional: ['selfContained', 'bluebirdCoroutines']})
 
 var mod = require('getmod')();

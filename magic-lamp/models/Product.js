@@ -8,7 +8,15 @@ var productSchema = new Schema({
     description: { type: String, required: false },
     store: {type: id, ref: 'OrganizationLocation'},
     image: {type: id},
-    department: {type: id, ref: 'Department'}
+    department: {type: id, ref: 'Department'},
+
+    specs: {type: Schema.Types.Mixed},
+    upc: String,
+    location: String,
+
+    price: Number,
+    rating: Number
+    //images: []
 });
 
 productSchema.index({name: 'text', description: 'text'});

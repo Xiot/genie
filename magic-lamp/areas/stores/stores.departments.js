@@ -15,7 +15,7 @@ module.exports = function(server){
 		};		
 
 		if(obj.image)
-			value.image = req.link('getimagesimage_id', {image_id: obj.image});
+			value.image = req.link('get-image', {image_id: obj.image});
 
 		return value;
 
@@ -28,27 +28,8 @@ module.exports = function(server){
 		};
 		
 		var depts = await Department.findAsync(query);
-		return formatter.format(depts, req);
+		return depts;
 	}));
-
-	// server.get('/', wrap(async function(req){
-
-	// 	var query = {
-	// 		store: req.store._id,
-	// 		parents: {$size: 0}
-	// 	};
-
-	// 	var depts = await Deparment.findAsync(query);
-	// 	return formatter.format(depts, req);
-
-	// 	// return Department.findAsync(query)
-	// 	// .then(function(depts){
-	// 	// 	return formatter.format(depts, req);
-	// 	// });
-
-	// }));
-
-	
 
 	server.post('/', wrap(function(req){
 

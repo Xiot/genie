@@ -2,7 +2,7 @@ var Promise = require('bluebird');
 
 var wrap = function(handler) {
 
-	return function(req, res, next) {
+	var wrapper = function(req, res, next) {
 
 		var nextReason;
 
@@ -77,6 +77,10 @@ var wrap = function(handler) {
 			return;
 		}
 	}
+
+	wrapper.wrapped = true;
+	return wrapper;
+
 }
 
 function isError(ex){
@@ -93,7 +97,5 @@ function ensureError(ex) {
 function isPromise(obj) {
 	return obj && typeof(obj) === 'object' && obj.then !== undefined;
 }
-
-wrap.wrapped = true;
 
 module.exports = wrap;

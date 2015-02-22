@@ -24,9 +24,11 @@
             <img ng-src="{{p.imageUrl}}" />
         </div>
         <div class="col-xs-9">
-            <a ui-sref="product({productId: p._id})">
+            <a ui-sref="product({productId: p.id})">
                 <h5 class="product-name">{{p.name}}</h5>
-                <div class="product-description">{{p.description}}</div>
+                <div>{{p.price}}</div>
+                <div>{{p.rating}}</div>
+                <!-- <div class="product-description">{{p.description}}</div> -->
             </a>
         </div>
     </div>

@@ -3,9 +3,8 @@ var logger = require('morgan');
 var multer = require('multer');
 var mongoose = require('mongoose');
 
-var router = load('~/core/routes');
-
 var metrics = load('~/core/metrics');
+var formatter = load('~/core/services/formatter');
 
 var server = restify.createServer({
 	formatters: {
@@ -76,7 +75,13 @@ server.use(function(req, res, next){
 	next();
 });
 
+
+var router = load('~/core/routes/index.es6');
 router(server);
+
+server.get(/.*/, restify.serveStatic({
+	directory: './static'
+}));
 
 module.exports = server;
 
@@ -110,7 +115,9 @@ function formatJSON(req, res, body) {
 		body = body.toString('base64');
 	}
 
-	var data = JSON.stringify(body);
+	var formattedData = formatter.format(body, req);
+
+	var data = JSON.stringify(formattedData);
 	res.setHeader('Content-Length', Buffer.byteLength(data));
 
 	return (data);

@@ -2,6 +2,8 @@
 	"execMap": {
 		"js": "node --harmony"
 	},
+	"ext": "js es es6",
+	"restartable": "rs",
 	"env": {
 		"DEBUG": "magic-lamp*,mongoose-adapter",
 		"PORT": "3000",

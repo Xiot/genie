@@ -35,7 +35,7 @@ module.exports.init = function(server, config) {
 				next(ex);
 			});
 	});
-
+	
 	var storeRoute = route.route('/:store_id')
 		.param('store_id', storeMiddleware)
 		.get('/', 'stores-id', function(req, res, next){

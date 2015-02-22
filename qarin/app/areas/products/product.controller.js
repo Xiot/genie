@@ -19,7 +19,7 @@ function ProductController(productService, product, $state, chatService, ticketS
 
 	function _createChat(){
 
-		chatService.create({product: product._id})
+		chatService.create({product: product.id})
 		.then(function(chat){
 			$state.go('chat', {id: chat._id});
 		}).catch(function(ex){

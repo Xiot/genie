@@ -9,7 +9,7 @@ module.exports = {
 		// route.param('image_id', function(req, res, next, value){
 		// 	mongoose.files.get(value)
 		// })
-		route.get('/:image_id', function(req, res, next) {
+		route.get('/:image_id', 'get-image', function(req, res, next) {
 			debug('images-get');
 
 			try {

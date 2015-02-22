@@ -1,6 +1,6 @@
 var url = require('url');
 var debug = require('debug')('magic-lamp-router');
-
+var wrap = require('./promiseRouter');
 
 /*
 	TODO: Rename SubRouteBuilder -> RouteBuilder
@@ -38,7 +38,7 @@ function RouteBuilder(server, baseRoute, middleware) {
 	//debug('base: ' + this._buildUrl('/'));
 };
 
-RouteBuilder.prototype.link = function(name, params, query){
+RouteBuilder.prototype.link = function(name, params, query) {
 	return this.server.router.render(name, params, query);
 }
 
@@ -101,29 +101,46 @@ serverMethods.forEach(function(method) {
 
 		this.routesByName[name] = def;
 
-		var handlers = this.middleware.concat(def.handlers);
-
-		//debug(handlers);
+		var handlers = _prepareHandlers(this.middleware.concat(def.handlers));
 
 		this.server[method]({
 			name: name,
 			path: def.route
 		}, handlers);
 
-		// debug(httpMethod + ' ' + routeUrl + ' [' + handlers.length + ']');
-
-		// if(method === 'patch')
-		// 	debug('', handlers[0], handlers[1], handlers[2]);
-
 		return this;
 	};
 });
 
-// 	this[method] = function(route, name, handlers) {
-// 		_add(method, route, name, handlers);
-// 		return this;
-// 	}
-// })
+function _prepareHandlers(handlers) {
+		var allHandlers = [];
+		for (var h of handlers) {
+
+			if (h.wrapped) {
+				allHandlers.push(h);
+				continue;
+			}
+
+			if (h.length === 1) {
+				//console.log(`auto wrapped ${method} ${url}`);
+				//allHandlers.push(wrap(h));
+
+				console.log('wrapping', h);
+				var wrapped = wrap(h);
+				console.log('wrapped', wrapped);
+				
+				allHandlers.push(h);
+				continue;
+			}
+			allHandlers.push(h);
+		}
+		return allHandlers;
+	}
+	// 	this[method] = function(route, name, handlers) {
+	// 		_add(method, route, name, handlers);
+	// 		return this;
+	// 	}
+	// })
 
 RouteBuilder.prototype.route = function(route) {
 
@@ -172,7 +189,7 @@ function SubRouteBuilder(builder, route, middleware) {
 	this.middleware = middleware;
 }
 
-SubRouteBuilder.prototype.link = function(name, params, query){
+SubRouteBuilder.prototype.link = function(name, params, query) {
 	return this.builder.link(name, params, query);
 }
 

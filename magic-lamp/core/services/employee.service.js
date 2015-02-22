@@ -16,32 +16,23 @@ function init(io) {
 	_io = io;
 }
 
-function setStatus(employeeId, status) {
+async function setStatus(employeeId, status) {
 
 	//var employeeId = employee.id || employee;
 
-	return getEmployee(employeeId)
-		.then(function(employee) {
+	var employee = await getEmployee(employeeId);
 
-			employee.status = status;
-			return employee.saveAsync()
-				.spread(function(emp) {
-					console.log('set status: ' + employee.username + ': ' + employee.status);
-					
-					_io.to('store:' + emp.store + ':employee')
-						.emit('employee:status', {
-							employee: emp
-						});
-					return emp;
-				})
-		})
+	employee.status = status;
+	await employee.saveAsync();
+	
+	console.log('set status: ' + employee.username + ': ' + employee.status);
 
+	_io.to('store:' + employee.store + ':employee')
+		.emit('employee:status', {
+			employee: employee
+		});
 
-	// return User.updateAsync({status: status}, {_id: employee})
-	// .then(function(user){
-	// 	_io.to('store:' + )
-	// })
-
+	return employee;
 }
 
 

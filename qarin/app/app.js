@@ -1,9 +1,10 @@
 ﻿
 angular.module('qarin', [    
+    'ngAnimate',
     'symbiote.common',
     'qarin.partials',
-    'ui.router',
-    'ngAnimate',
+    'ui.router',        
+    'ui.bootstrap',
     'btford.socket-io',
 
     'qarin.interceptors',

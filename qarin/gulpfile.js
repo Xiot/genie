@@ -46,7 +46,7 @@ gulp.task('compile:vendor:js', function () {
     }).js;
 
     return gulp.src(vendor)
-        //.pipe(list('vendor files'))
+        .pipe(list('vendor files'))
         .pipe(plug.concat('vendor.js'))
         .pipe(plug.if(minify, plug.uglify()))
         .pipe(gulp.dest(paths.output.js));
