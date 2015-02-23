@@ -1,0 +1,28 @@
+<h1>Search</h1>
+<form ng-submit="vm.search()">
+    <div class="input-group">
+        <input type="text" ng-model="vm.query" class="form-control">
+        <span class="input-group-btn">
+        	<button type="submit" class="btn btn-default">
+            	<i class="glyphicon glyphicon-search"></i>
+        	</button>
+    	</span>
+    </div>
+</form>
+
+<div class="search-results container-fluid">
+
+     <div ng-repeat="p in vm.products" class="product-box row">
+        <div class="col-xs-3 image-container">
+            <img ng-src="{{p.imageUrl}}" />
+        </div>
+        <div class="col-xs-9">
+            <a ui-sref="product({productId: p.id})">
+                <h5 class="product-name">{{p.name}}</h5>
+                <div>{{p.price}}</div>
+                <div>{{p.rating}}</div>
+                <!-- <div class="product-description">{{p.description}}</div> -->
+            </a>
+        </div>
+    </div>
+</div>

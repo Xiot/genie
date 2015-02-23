@@ -5,13 +5,15 @@ var upload = load('~/core/services/image.upload');
 
 var formatter = load('~/core/services/formatter');
 
-module.exports = function(server){
+formatter.handle(Department, function(obj, req) {
+	
 
-	formatter.handle(Department, function(obj, req) {
-		
 		var value = {
 			id: obj.id, 
-			name: obj.name
+			name: obj.name,
+			_links: {
+				store: req.link('stores-id', {store_id: obj.store})
+			}
 		};		
 
 		if(obj.image)
@@ -21,15 +23,19 @@ module.exports = function(server){
 
 	});
 
-	server.get('/', wrap(async function(req) {
+module.exports = function(server){
+
+
+	server.get('/', async function(req) {
 		var query = {
 			store: req.store._id,
 			parents: {$size: 0}
 		};
 		
 		var depts = await Department.findAsync(query);
+		//var depts = await Department.find(query).populate('store').execAsync();
 		return depts;
-	}));
+	});
 
 	server.post('/', wrap(function(req){
 

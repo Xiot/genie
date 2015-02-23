@@ -1,6 +1,9 @@
 var _ = require('lodash');
 var uuid = require('node-uuid');
 
+// This should be optional if this module promoted to its own project
+var mongoose = require('mongoose');
+
 var mappings = [];
 var keyedMappings = {};
 

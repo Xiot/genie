@@ -52,9 +52,7 @@ function TaskController($scope, task, chat, taskService, productService) {
 	}
 
 	function updateTimeSince(task){
-		task.timeSince = task.timings && task.timings[task.status]
-			? task.timings[task.status].start
-			: task.created_at;
+		task.timeSince = task.timings && task.timings[task.status] ? task.timings[task.status].start : task.created_at;
 	}
 
 	function setStatus(status){

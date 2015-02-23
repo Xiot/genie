@@ -40,6 +40,7 @@ function ensureAuthenticated($rootScope, $state, securityService, $timeout, stor
 	var waitingForView = false;
 	$rootScope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams) {
 
+		console.log('stateChangeSuccess: ' + toState.name, toParams);
 		if (!$rootScope.showSplash)
 			return;
 

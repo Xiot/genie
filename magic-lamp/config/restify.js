@@ -64,6 +64,18 @@ server.use(function(req, res, next){
 	req.link = function(name, params, query){
 		var serverPath = req.protocol + '://' + req.header('Host');
 
+		if(params) {
+			for(var key in params) {
+				let value = params[key];
+				params[key] = getValueOrId(value);
+				// if(value instanceof mongoose.Types.ObjectId) {
+				// 	params[key] = value.toString();
+				// } else if(typeof value === 'object') {
+				// 	params[key] = value && (value._id || value.id);
+				// }
+			}
+		}
+
 		var relativePath = server.router.render(name, params, query);
 		if(!relativePath)
 			return undefined;
@@ -74,6 +86,19 @@ server.use(function(req, res, next){
 	//console.log(req.requestUrl());
 	next();
 });
+
+function getValueOrId(value){
+	if(!value)
+		return value;
+
+	if(typeof value !== 'object')
+		return value;
+
+	if(value instanceof mongoose.Types.ObjectId)
+		return value.toString();
+
+	return value._id || value.id || value;
+}
 
 
 var router = load('~/core/routes/index.es6');

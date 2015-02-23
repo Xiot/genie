@@ -94,7 +94,7 @@ gulp.task('compile:app:js', function() {
 	.pipe(plug.wrapJs('(function() {\r\n"use strict";\r\n%= body %\r\n})();', {
 			newline: '\r\n'
 		}))
-		//.on('error', function() {})
+		.on('error', function() {})
 
 	.pipe(plug.ngAnnotate({gulpWarnings:true}))
 
