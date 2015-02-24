@@ -14,7 +14,8 @@
         'app.chat',
         'app.employees',
         'symbiote.common',
-        'ngAnimate'
+        'ngAnimate',
+        'googlechart'
     ]);
 
 angular.module('solomon')

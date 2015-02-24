@@ -16,6 +16,8 @@ var RequestMetric = mongoose.model('RequestMetric');
 var Product = mongoose.model('Product');
 //var Product = load('~/models/Product');
 
+//Promise.promisify(mongoose.Aggregate);
+
 var upload = load('~/core/services/image.upload');
 
 formatter.handle(Product, function(product, req) {
@@ -25,16 +27,23 @@ formatter.handle(Product, function(product, req) {
 	delete obj._id;
 	delete obj.__v;
 
-	var href = req.link('product-detail', {store_id: req.store.id, product_id: product.id});
+	var href = req.link('product-detail', {
+		store_id: req.store.id,
+		product_id: product.id
+	});
 	obj.id = product.id;
 
 	obj._links = {
 		self: href,
-		store: req.link('stores-id', {store_id: req.store.id})
+		store: req.link('stores-id', {
+			store_id: req.store.id
+		})
 	};
 
 	if (obj.image) {
-		obj.imageUrl = req.link('get-image', {image_id: obj.image});
+		obj.imageUrl = req.link('get-image', {
+			image_id: obj.image
+		});
 		obj._links.image = obj.imageUrl;
 	}
 	return obj;
@@ -54,37 +63,89 @@ module.exports = function(server, passport) {
 	server.route('/products')
 
 	// TODO: Move stats to its own module
-	.get('/stats/search', 'product_stats_search', wrap(function(req) {
+	.get('/stats/search', 'product_stats_search',
+		async function(req) {
+			
+			var lastWeek = new Date();
+			lastWeek.setDate(lastWeek.getDate() - 7);
 
-		return new Promise(function(resolve, reject) {
-
-			RequestMetric.aggregate()
+			var q = await RequestMetric.aggregate()
 				.match({
 					'params.store_id': req.store.id,
-					routeName: 'productsall'
+					'params.search': {
+						$ne: null
+					},
+					routeName: 'productsall',
+					startTime: {$gt: lastWeek}
 				})
 				.group({
-					_id: '$params.search',
-					count: {
-						$sum: 1
-					}
+					_id: {q: '$params.search', day: {$dayOfYear: '$startTime'}, year: {$year: '$startTime'}},
+					//day: {$dayOfYear: '$startTime'},
+					//year: {$year: '$startTime'},
+					count: {$sum: 1},
+					date: {$min: '$startTime'}
 				})
-				.sort({
-					count: -1
+				.sort({'_id.q': 1, '_id.day': 1, '_id.year': 1})
+				.group({
+					_id: '$_id.q',
+					count: {$sum: '$count'},
+					items: {$push: {
+						day: '$_id.day',
+						year: '$_id.year',
+						date: '$date',
+						count: '$count'
+					}}
 				})
+				.sort({count: -1})
+				.limit(5)
 				.project({
 					_id: 0,
 					search: '$_id',
-					count: '$count'
+					count: '$count',
+					items: '$items'
 				})
-				.exec(function(err, ret) {
-					if (err)
-						return reject(err);
+				.exec();
 
-					resolve(ret);
-				});
-		});
-	}))
+			// var q = await RequestMetric.aggregate()
+			// 	.match({
+			// 		'params.store_id': req.store.id,
+			// 		'params.search': {
+			// 			$ne: null
+			// 		},
+			// 		routeName: 'productsall'
+			// 	})
+			// 	.group({
+			// 		_id: '$params.search',
+			// 		count: {
+			// 			$sum: 1
+			// 		}
+			// 		// ,
+			// 		// items: {
+			// 		// 	$push: {
+			// 		// 		day: {
+			// 		// 			$dayOfYear: '$startTime'
+			// 		// 		},
+			// 		// 		year: {
+			// 		// 			$year: '$startTime'
+			// 		// 		}
+			// 		// 	}
+			// 		// }
+			// 	})
+			// 	.sort({
+			// 		count: -1
+			// 	})
+			// 	.limit(5)
+			// 	.project({
+			// 		_id: 0,
+			// 		search: '$_id',
+			// 		count: '$count',
+			// 		items: '$items'
+			// 	})
+			// 	.exec();
+
+			return q;
+
+		})
 
 	.get('/stats/product-details', 'product_stats_details', wrap(function(req) {
 
@@ -167,25 +228,29 @@ module.exports = function(server, passport) {
 			.execAsync()
 			.then(function(products) {
 
-				return products;				
+				return products;
 			});
 	}))
 
 	.post('/', 'products-new', async function(req) {
-		
-		var images = await upload(req, {metadata: {store: req.store.id}});
 
-		var p = new Product(req.body);
-		p.store = req.store;
-		p.image = images[0];
+			var images = await upload(req, {
+				metadata: {
+					store: req.store.id
+				}
+			});
 
-		p.images = images.slice(1);
+			var p = new Product(req.body);
+			p.store = req.store;
+			p.image = images[0];
 
-		await p.saveAsync();
+			p.images = images.slice(1);
 
-		return p;
+			await p.saveAsync();
 
-	})
+			return p;
+
+		})
 
 	.param('product_id', function(req, res, next, value) {
 
@@ -207,7 +272,7 @@ module.exports = function(server, passport) {
 	})
 
 	.get('/:product_id', 'product-detail', wrap(function(req) {
-		return req.product;		
+		return req.product;
 	}));
 };
 //module.exports = router;

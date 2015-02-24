@@ -1,7 +1,7 @@
 angular.module('aladdin.products')
 	.controller('SearchController', SearchController);
 
-function SearchController(productService, $state, $scope) {
+function SearchController(productService, $state) {
 
 	console.log('SearchController.ctor');
 
@@ -11,7 +11,7 @@ function SearchController(productService, $state, $scope) {
 
 		products: [],
 
-		dispose: dispose
+		$dispose: dispose
 	});
 
 	if (vm.query)
@@ -25,12 +25,9 @@ function SearchController(productService, $state, $scope) {
 		}
 	});
 
-	$scope.$on('$destroy', function() {
+	function dispose() {
+		console.log('i was disposed');
 		off();
-	});
-
-	function dispose(){
-		console.log('i was disposed', vm === this);
 	}
 
 	function search() {

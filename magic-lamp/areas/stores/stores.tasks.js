@@ -71,7 +71,6 @@ module.exports = function(server, passport, io) {
 						$in: departmentList
 					}
 				}
-				console.log(query);
 
 				return Task.find(query)
 					.populate('product')
