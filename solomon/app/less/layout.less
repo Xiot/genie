@@ -4,6 +4,7 @@
 }
 body {
     font-family: "Source Sans Pro", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    background-color: rgb(240, 243, 244);
 }
 
 .content {
@@ -21,12 +22,48 @@ body {
     margin-left: 200px;
 }
 
+.chart {
+ width: 500px;
+ height: 200px;
+}
+
+.row-sm {
+    margin-right: -10px;
+    margin-left: -10px;
+
+    & > div{
+        padding-right: 10px;
+        padding-left: 10px;
+    }
+}
+
 .card {
-	margin-bottom: 20px;
-	background-color: #fff;
-	border: 1px solid transparent;
-	border-radius: 4px;
-	
+    margin-bottom: 10px;
+    margin-top: 10px;
+
+    //margin: 5px;
+
+    background-color: #fff;
+    border: 1px solid transparent;
+    // border-radius: 4px;
+    
     -webkit-box-shadow: 0 1px 1px rgba(0,0,0,0.05);
-	box-shadow: 0 1px 1px rgba(0,0,0,0.05);
+    box-shadow: 0 1px 1px rgba(0,0,0,0.05);
+    text-align: center;
+}
+
+.stat-card {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    // background-color: gray;
+
+    .stat-value {
+        font-size: 36px;
+        font-weight: 300;
+    }
+    .stat-label {
+        font-size: 12px;
+        color: #98a6ad;
+    }
+
 }

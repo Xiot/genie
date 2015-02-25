@@ -13,40 +13,57 @@ function DashboardController(httpClient, storeService, util) {
 	var url = util.join('stores', storeService.currentStore.id, 'products', 'stats', 'search');
 	httpClient.get(url)
 		.then(function(res) {
-			vm.searchStats = res.data;
+			vm.searchStats = res.data.q; 
 
-
-			var options = {
-				type: "BarChart",
-				displayed: true,
-				data: {
-					cols: [
-					{
-						id: 'search',
-						label: 'Search',
-						type: 'string'
-					}, 
-					{
-						id: 'count',
-						label: 'count',
-						type: 'number'
-					}],
-					rows: []
-				}
+			var data = {
+				series: [],
+				data: []
 			};
 
-			_.forEach(res.data, function(item) {
-
-				options.data.rows.push({
-					c: [{
-						v: item.search
-					}, {
-						v: item.count
-					}]
-				});
-
+			_.forEach(res.data.q, function(tag){
+				data.series.push(tag.search);
 			});
-			vm.chartOptions = options;
+
+			_.forEach(res.data.r, function(item){
+				var point = addValues(data.series, item);
+				data.data.push(point);
+			});
+			vm.data = data;
 
 		});
+
+vm.config = {
+    title: 'Search Terms by Day',
+    tooltips: false,
+    labels: false,
+    lineCurveType: 'linear',
+    mouseover: function() {},
+    mouseout: function() {},
+    click: function() {},
+    legend: {
+      display: false,
+      //could be 'left, right'
+      position: 'left',
+      htmlEnabled: false,
+
+    }
+  };
+
+
+
+	function addValues(series, item){
+
+		var x = moment.utc(item.date).startOf('day').format('DD');
+
+		var y = [];
+
+		_.forEach(series, function(s){
+			var value = _.find(item.values, function(x) {
+				return x.search == s;
+			});
+
+			y.push(value && value.count || 0);
+		});
+		return {x: x, y:y};
+	}
 }

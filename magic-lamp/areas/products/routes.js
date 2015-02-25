@@ -69,7 +69,8 @@ module.exports = function(server, passport) {
 			var lastWeek = new Date();
 			lastWeek.setDate(lastWeek.getDate() - 7);
 
-			var q = await RequestMetric.aggregate()
+
+			var query = RequestMetric.aggregate()
 				.match({
 					'params.store_id': req.store.id,
 					'params.search': {
@@ -103,8 +104,23 @@ module.exports = function(server, passport) {
 					search: '$_id',
 					count: '$count',
 					items: '$items'
+				});
+
+			var q = await query.exec();
+
+			var r = await query
+				.unwind('items')
+				.group({
+					_id: {day: '$items.day', year: '$items.year'},
+					date: {$min: '$items.date'},
+					values: {$push: {
+						search: '$search',
+						count: '$items.count'
+					}}
 				})
+				.sort({'_id.year': 1, '_id.day': 1})
 				.exec();
+
 
 			// var q = await RequestMetric.aggregate()
 			// 	.match({
@@ -143,7 +159,7 @@ module.exports = function(server, passport) {
 			// 	})
 			// 	.exec();
 
-			return q;
+			return {q,r};
 
 		})
 

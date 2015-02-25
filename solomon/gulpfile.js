@@ -220,5 +220,5 @@ gulp.task('watch', function () {
 });
 
 gulp.task('dev', function (cb) {
-    run('default', 'watch', 'serve', cb);
+    run('default', 'compile:src:img', 'watch', 'serve', cb);
 });

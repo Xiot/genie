@@ -15,7 +15,10 @@
         'app.employees',
         'symbiote.common',
         'ngAnimate',
-        'googlechart'
+        
+        'googlechart',
+        'angularCharts'
+
     ]);
 
 angular.module('solomon')

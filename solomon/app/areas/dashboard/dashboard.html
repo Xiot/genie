@@ -1,14 +1,23 @@
-﻿Stuff
+﻿
+<h2>Dashboard</h2>
 
-<h2>Dashboard</h2> {{vm.message}}
+<h4>Search Terms</h4>
+<div class="row row-sm">
+    <div class="col-md-6">
+        <div class="row row-sm">
+            <div ng-repeat="stat in vm.searchStats" class="col-md-4 ">
 
-<div>
-    <div ng-repeat="stat in vm.searchStats" class="card">
-        <!-- <pre>{{stat | json}}</pre> -->
-        {{stat.search}}
+                <div class="card stat-card">
+                    <div class="stat-value">{{stat.count}}</div>
+                    <div class="stat-title">{{stat.search}}</div>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <div google-chart chart="vm.chartOptions">
-    	
+    <!--  <div google-chart chart="vm.chartOptions">
+    </div> -->
+    <div class="col-md-6">
+        <div ac-chart="'line'" ac-data="vm.data" ac-config="vm.config" id='chart' class='chart'></div>
     </div>
 </div>
