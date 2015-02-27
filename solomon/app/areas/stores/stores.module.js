@@ -17,7 +17,7 @@ function getStates() {
             controllerAs: 'vm',
             templateUrl: 'app/areas/stores/stores.html',
             settings: {
-                module: true,
+                module: false,
                 order: 2,
                 icon: ['glyphicon', 'glyphicon-map-marker']
             }

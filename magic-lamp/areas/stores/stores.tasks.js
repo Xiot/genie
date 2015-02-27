@@ -4,6 +4,7 @@ var Task = mongoose.model('Task');
 var Chat = mongoose.model('ChatLog');
 var Product = mongoose.model('Product');
 var Department = mongoose.model('Department');
+var User = mongoose.model('User');
 
 var _ = require('lodash');
 var wrap = load("~/core/routes/promiseRouter");
@@ -12,6 +13,27 @@ var Promise = require('bluebird');
 
 var ticketService = load('~/core/services/ticket.service');
 var employeeService = load('~/core/services/employee.service');
+
+var formatter = load('~/core/services/formatter');
+
+formatter.handle(Task, function(obj, req) {
+	
+	var value = obj.toObject();
+
+	value.id = obj.id;
+	delete value._id;
+	delete value.__v;
+	
+	if(obj.product && obj.product instanceof Product) {
+		value.product = formatter.format(obj.product, req);
+	}
+
+	if(obj.assigned_to && obj.assigned_to instanceof User)
+		value.assigned_to = formatter.format(obj.assigned_to, req);
+
+	return value;
+
+});
 
 module.exports = function(server, passport, io) {
 
@@ -135,6 +157,12 @@ module.exports = function(server, passport, io) {
 				});
 				chat.participants.push(req.user);
 
+				if(task.searchText){
+					chat.messages.push({
+						user: req.user,
+						message: 'I am looking for \'' + task.searchText + '\'. Can you help me?'
+					});
+				}
 
 				return chat.saveAsync()
 					.spread(function(savedChat) {
@@ -176,7 +204,8 @@ module.exports = function(server, passport, io) {
 	var taskRoute = route.route('/:task_id')
 		.param('task_id', function(req, res, next, value) {
 
-			Task.findByIdAsync(req.params.task_id)
+			ticketService.get(value)
+			//Task.findByIdAsync(req.params.task_id)
 				.then(function(task) {
 
 					if (!task)

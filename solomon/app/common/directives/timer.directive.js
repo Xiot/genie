@@ -1,4 +1,4 @@
-angular.module('aladdin')
+angular.module('solomon')
 .directive('timer', timerDirective);
 
 function timerDirective($interval) {
@@ -37,9 +37,9 @@ function timerDirective($interval) {
 			var diff = moment.utc().diff(startMoment);
 			var duration = moment.duration(diff);
 
-			var formatted = duration.format('h[h] mm[m] ss[s]');
+			//var formatted = duration.format('h[h] mm[m] ss[s]');			
+			//scope.formatted = formatted;
 			
-			scope.formatted = formatted;
 			scope.duration = {
 				hours: Math.floor(duration.asHours()),
 				minutes: duration.minutes(),

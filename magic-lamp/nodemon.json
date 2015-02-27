@@ -1,6 +1,6 @@
 {
-	"execMap": {
-		"js": "node --harmony"
+	"execMap1": {
+		"js": "node"
 	},
 	"ext": "js es es6",
 	"restartable": "rs",

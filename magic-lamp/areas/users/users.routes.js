@@ -8,6 +8,27 @@ var ChatLog = mongoose.model('ChatLog');
 var debug = require('debug')('magic-lamp-users');
 var Promise = require('bluebird');
 
+var formatter = load('~/core/services/formatter');
+
+formatter.handle(User, function(obj, req) {
+    
+    var value = obj.toObject();
+
+    value.id = obj.id;
+    delete value._id;
+    delete value.__v;
+    
+    delete value.password_hash;
+    delete value.password_salt;
+
+    // if(obj.product && obj.product instanceof Product) {
+    //     value.product = formatter.format(obj.product, req);
+    // }
+
+    return value;
+
+});
+
 module.exports = function (server, passport){
 
     var router = server.route('/users')

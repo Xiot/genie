@@ -28,7 +28,15 @@ angular.module('solomon')
 function config(httpClientProvider, $httpProvider, env){
 	httpClientProvider.baseUri = env.apiRoot; //"http://localhost:3000";
 
-        $httpProvider.defaults.useXDomain = true;
+    $httpProvider.defaults.useXDomain = true;
     $httpProvider.defaults.withCredentials = true;
     $httpProvider.defaults.cache = true;
+
 }
+
+angular.module('solomon')
+.run(function($state, $rootScope){
+    $rootScope.$state = $state;
+});
+
+// TODO:  http://stackoverflow.com/questions/21841426/add-http-header-in-javascript-to-requests-for-images

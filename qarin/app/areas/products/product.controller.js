@@ -11,7 +11,7 @@ function ProductController(productService, product, $state, chatService, ticketS
 	});
 
 	function createTicket(){
-		ticketService.create(vm.product)
+		ticketService.create({product: vm.product})
 		.then(function(ticket){
 			$state.go('chat', {chatId: ticket.chat});
 		});

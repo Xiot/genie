@@ -26,7 +26,7 @@ angular.module('aladdin.socket')
 
 				var details = {
 					storeId: storeService.currentStore && storeService.currentStore.id,
-					userId: user && user._id,
+					userId: user && user.id,
 					deviceId: device,
 					app: 'aladdin'
 				};

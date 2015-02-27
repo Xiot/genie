@@ -13,7 +13,7 @@ function EmployeesController(storeService, eventService, httpClient, socket, $sc
 
 	var unlisten = socket.on('employee:status', function(data) {
 		var found = _.find(vm.employees, function(emp){
-			return emp._id === data.employee._id;
+			return emp.id === data.employee.id;
 		});
 
 		if(found){
@@ -23,7 +23,8 @@ function EmployeesController(storeService, eventService, httpClient, socket, $sc
 	});
 
 	$scope.$on('$destroy', function(){
-		unlisten();
+		if(unlisten)
+			unlisten();
 	});
 
 	refreshEmployees(storeService.currentStore);

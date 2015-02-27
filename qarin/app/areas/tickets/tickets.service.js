@@ -24,14 +24,17 @@ function TicketService(storeService, httpClient, util, socket){
 		});
 	}
 
-	function createTicket(product){
+	function createTicket(opts){
 		var request = {
-			type: 'request'			
+			type: 'request',
+			searchText: opts.searchText
 		};
 
-		if(product){
-			request.product= product.id || product._id || product;
-		}
+		opts = opts || {};
+
+		if(opts.product){
+			request.product= opts.product.id || opts.product._id || opts.product;
+		}	
 
 		var url = util.join('stores', store.id, 'tasks');
 		return httpClient.post(url, request)

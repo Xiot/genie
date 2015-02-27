@@ -22,6 +22,8 @@ var schema = new mongoose.Schema({
     department: {type: id, ref: 'Department'},
     chat: {type: id, ref: 'ChatLog'},
     
+    searchText: {type: String},
+
     status: {type: String, enum: ['unassigned', 'assigned', 'engaged', 'complete'], default: 'unassigned'},
     complete: { type: Boolean, default: false },
 

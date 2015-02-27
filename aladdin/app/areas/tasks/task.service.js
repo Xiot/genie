@@ -44,7 +44,7 @@ function TaskService(httpClient, storeService, securityService, socket, eventSer
 	}
 
 	function setStatus(task, status) {
-		var url = join('stores', store.id, 'tasks', task._id, 'status');
+		var url = join('stores', store.id, 'tasks', task.id, 'status');
 		var body = {
 			status: status
 		};
@@ -83,7 +83,7 @@ function TaskService(httpClient, storeService, securityService, socket, eventSer
 	}
 
 	function getAvailableTasks() {
-		var url = '/stores/' + storeService.currentStore.id + '/tasks/open?employee=' + user._id;
+		var url = '/stores/' + storeService.currentStore.id + '/tasks/open?employee=' + user.id;
 
 		return httpClient.get(url, {cache: false})
 			.then(function(res) {

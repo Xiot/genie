@@ -53,7 +53,7 @@ function HeaderController(securityService, storeService, eventService, util, htt
 	}
 
 	function setStatus(status){
-		var url = util.join('stores', vm.store.id, 'employees', vm.user._id, 'status');
+		var url = util.join('stores', vm.store.id, 'employees', vm.user.id, 'status');
 		return httpClient.put(url, {status: status});
 	}
 }

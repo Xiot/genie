@@ -8,7 +8,8 @@ function TicketService(httpClient, util, storeService, $q) {
 	var service = {
 		getById: getById,
 		getAllOpen: getAllOpen,
-		getStats: getStats
+		getStats: getStats,
+		assignTo: assignTicket
 	};
 
 	init();
@@ -29,7 +30,6 @@ function TicketService(httpClient, util, storeService, $q) {
 			});
 	}
 
-
 	function getAllOpen() {
 
 		if (!_store) {			
@@ -43,6 +43,14 @@ function TicketService(httpClient, util, storeService, $q) {
 					return new Task(t);
 				});
 			});
+	}
+
+	function assignTicket(ticket, employee){
+		var url = util.join('stores', _store.id, 'tasks', ticket.id, 'assignee');
+		return httpClient.put(url, {employee: employee.id})
+		.then(function(res){
+			return res.data;
+		});
 	}
 
 	function getStats(){

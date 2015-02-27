@@ -22,6 +22,7 @@ restify.CORS.ALLOW_HEADERS.push('withcredentials');
 restify.CORS.ALLOW_HEADERS.push('x-requested-with');
 restify.CORS.ALLOW_HEADERS.push('authorization');
 restify.CORS.ALLOW_HEADERS.push('x-device');
+restify.CORS.ALLOW_HEADERS.push('x-auth');
 
 server.use(restify.CORS({
 	credentials: true
@@ -111,7 +112,7 @@ server.get(/loaderio-c7e2eb31d553b6100da33fb876222607/, restify.serveStatic({
 module.exports = server;
 
 // Should move formatter into here.
-function formatJSON(req, res, body) {
+function formatJSON(req, res, body, cb) {
 	if (body instanceof Error) {
 		// snoop for RestError or HttpError, but don't rely on
 		// instanceof
@@ -140,10 +141,13 @@ function formatJSON(req, res, body) {
 		body = body.toString('base64');
 	}
 
+	//console.log('async: ', cb);
 	var formattedData = formatter.format(body, req);
 
 	var data = JSON.stringify(formattedData);
 	res.setHeader('Content-Length', Buffer.byteLength(data));
+
+	// to make the formatter async, return `this` and use the `cb` to pass the value back;
 
 	return (data);
 }

@@ -19,7 +19,7 @@ function ChatListController(storeService, httpClient, eventService, chatService,
 
 	$rootScope.$on('chat-message', function(e, msg) {
 
-		if(securityService.currentUser()._id == msg.user)
+		if(securityService.currentUser().id == msg.user)
 			return;
 
 		var chat = getChat(msg.chat);

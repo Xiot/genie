@@ -13,7 +13,8 @@ function StoreService(geoLocation, httpClient, $rootScope, storageService, util)
 		getCurrentStore: _getCurrentStore,
 		on: _registerListener,
 		requestHelp: requestHelp,
-		getDepartments: getDepartments
+		getDepartments: getDepartments,
+		getDepartment: getDepartment
 	};
 
 	Object.defineProperty(service, 'current', {
@@ -24,12 +25,20 @@ function StoreService(geoLocation, httpClient, $rootScope, storageService, util)
 
 	return service;
 
-	function getDepartments(storeId){
+	function getDepartments() {
 		var url = util.join('stores', _current.id, 'departments');
 		return httpClient.get(url)
-		.then(function(res){
-			return res.data;
-		});
+			.then(function(res) {
+				return res.data;
+			});
+	}
+
+	function getDepartment(departmentId) {
+		var url = util.join('stores', _current.id, 'departments', departmentId);
+		return httpClient.get(url)
+			.then(function(res) {
+				return res.data;
+			});
 	}
 
 	function requestHelp() {

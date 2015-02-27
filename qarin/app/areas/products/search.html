@@ -1,4 +1,8 @@
 <h1>Search</h1>
+<div ng-if="vm.department">
+    in '{{vm.department.name}}' <a ng-click="vm.removeDepartment()">X</a>
+</div>
+
 <form ng-submit="vm.search()">
     <div class="input-group">
         <input type="text" ng-model="vm.query" class="form-control">
@@ -10,15 +14,23 @@
     </div>
 </form>
 
-<div>
+<div ng-if="!(vm.department || vm.query)">
     <div ng-repeat="dept in vm.departments" class="department-card">
-        <img ng-src="{{dept.image}}">
-        <span class="name">{{dept.name}}</span>
+        <a ui-sref="search({department: dept.id})">
+            <img ng-src="{{dept.image}}">
+            <span class="name">{{dept.name}}</span>
+        </a>
     </div>
 </div>
 
 <div class="search-results container-fluid">
-
+    <div ng-if="vm.noResults">
+        <div>No results were found for '{{vm.query}}'</div>
+        <div>Try refining your search or selecting a different department</div>
+        <div>
+            <button class="btn btn-default" ng-click="vm.requestHelp()">Call for Help</button>
+        </div>
+    </div>
      <div ng-repeat="p in vm.products" class="product-box row">
         <div class="col-xs-3 image-container">
             <img ng-src="{{p.imageUrl}}" />

@@ -1,12 +1,35 @@
 ﻿var mongoose = require('mongoose');
 var ChatLog = mongoose.model('ChatLog');
+var Product = mongoose.model('Product');
 
 var errors = load('~/core/errors');
 var chatService = require('./chat.service');
 
+var formatter = load('~/core/services/formatter');
+
+formatter.handle(ChatLog, function(obj, req) {
+    
+    var value = obj.toObject();
+
+    value.id = obj.id;
+    delete value._id;
+    delete value.__v;
+    
+    if(obj.product && obj.product instanceof Product) {
+    	value.product = formatter.format(obj.product, req);
+    }
+
+	//var obj = chat.toObject();
+	obj.messages.forEach(function(m){
+		m.sent = m.user == req.user.id;
+	});
+
+    return value;
+
+});
 module.exports = function(server, io, passport) {
 
-	server.get('/chat', function(req, res, next) {
+	server.get('/', function(req, res, next) {
 		ChatLog.findAsync()
 			.then(function(results) {
 
@@ -25,7 +48,7 @@ module.exports = function(server, io, passport) {
 			});
 	});
 
-	server.post('/chat', function(req, res, next) {
+	server.post('/', function(req, res, next) {
 		var newChat = new ChatLog();
 		newChat.saveAsync()
 			.spread(function(s) {			
@@ -38,31 +61,21 @@ module.exports = function(server, io, passport) {
 			});
 	});
 
-	server.get('/chat/:chat_id', function(req, res, next) {
-		
-try{
-		ChatLog.findById(req.params.chat_id)
+	server.get('/:chat_id', function(req) {
+
+		return ChatLog.findById(req.params.chat_id)
 			.populate('participants product')
 			.execAsync()
 			.then(function(chat) {
 
-				var obj = chat.toObject();
-				obj.messages.forEach(function(m){
-					m.sent = m.user == req.user.id;
-				});
+				
 
-				res.send(obj);
-				next();
+				return chat;
 
-			}).catch(function(ex) {
-				next(new Error(ex));
 			});
-		} catch(ex){
-			next(new Error(ex));
-		}
 	})
 
-	server.post('/chat/:chat_id/messages', function(req, res, next) {
+	server.post('/:chat_id/messages', function(req, res, next) {
 
 		var message = {
 			message: req.body.message,

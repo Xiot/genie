@@ -2,6 +2,7 @@ var mongoose = require('mongoose');
 var wrap = load('~/core/routes/promiseRouter');
 var Department = mongoose.model('Department');
 var upload = load('~/core/services/image.upload');
+var restify = require('restify');
 
 var formatter = load('~/core/services/formatter');
 
@@ -55,4 +56,12 @@ module.exports = function(server){
 		});
 
 	}));
+
+	server.get('/:department_id', async function(req){
+
+		var dept = await Department.findByIdAsync(req.params.department_id);
+		if(!dept)
+			throw new restify.NotFoundError();
+		return dept;
+	});
 }

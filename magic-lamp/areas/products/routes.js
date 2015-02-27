@@ -28,15 +28,16 @@ formatter.handle(Product, function(product, req) {
 	delete obj.__v;
 
 	var href = req.link('product-detail', {
-		store_id: req.store.id,
+		store_id: product.store, //req.store.id,
 		product_id: product.id
 	});
+
 	obj.id = product.id;
 
 	obj._links = {
 		self: href,
 		store: req.link('stores-id', {
-			store_id: req.store.id
+			store_id: product.store//req.store.id
 		})
 	};
 
@@ -231,11 +232,15 @@ module.exports = function(server, passport) {
 			var log = new SearchLog({
 				store: req.store,
 				user: req.user,
-				searchText: req.query.search
+				searchText: req.query.search,
+				department: req.query.department
 			});
 
 			log.saveAsync();
 		}
+
+		if(req.query.department)
+			query.department = req.query.department;
 
 		return Product.find(query)
 			.sort({

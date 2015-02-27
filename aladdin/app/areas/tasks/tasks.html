@@ -4,7 +4,7 @@
     <h3>Assigned to me</h3>
     <ul class="task-list">
         <li ng-repeat="task in vm.tasks | filter: {mine: true}" ng-class="['task', task.type, task.selected ? 'selected' : '', isMe(task.assigned_to) ? 'mine' : '']">
-            <a ui-sref='task-details({taskId: task._id})'>
+            <a ui-sref='task-details({taskId: task.id})'>
                 <div>{{task.displayTitle}}</div>
                 <div>{{task.department.name}}</div>
                 <div>{{task.product.name}}</div>
@@ -18,7 +18,7 @@
     <h3>Available</h3>
     <ul class="task-list">
         <li ng-repeat="task in vm.tasks | filter: {mine: false}" ng-class="['task', task.type, task.selected ? 'selected' : '', isMe(task.assigned_to) ? 'mine' : '']">
-            <a ui-sref='task-details({taskId: task._id})'>
+            <a ui-sref='task-details({taskId: task.id})'>
                 <div>{{task.displayTitle}}</div>
                 <div>{{task.department.name}}</div>
                 <div>{{task.product.name}}</div>

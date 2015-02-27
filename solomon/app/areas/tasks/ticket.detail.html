@@ -1,1 +1,32 @@
-<h1>{{vm.ticket.displayTitle}}</h1>
+
+	<section>
+		<h1>{{vm.ticket.displayTitle}}</h1>
+		<pre>{{vm.ticket | json}}</pre>
+	</section>
+
+	<aside>
+		<h2>Details</h2>
+
+		<div class="detail-block" ng-if="vm.ticket.assigned_to">
+			<div>Assigned To</div>
+			<div class="value">{{vm.ticket.assigned_to.firstName}} {{vm.ticket.assigned_to.lastName}}</div>
+		</div>
+
+		<div class="detail-block">
+			<div class="task-status">{{vm.ticket.status}}</div>
+			<timer ng-if="!vm.ticket.complete" start-time="vm.ticket.timeSince"></timer>
+		</div>
+
+		<div ng-if="vm.ticket.status == 'unassigned'" class="detail-block">
+			<select ng-model='vm.selectedEmployee' ng-options='emp.firstName for emp in vm.availableEmployees'></select>
+			<button class="btn btn-default" ng-click="vm.assignTo(vm.selectedEmployee)">Assign</button>
+		</div>
+
+		<div ng-if="vm.ticket.product">
+			<h3>Product</h3>
+			<span>{{vm.ticket.product.name}}</span>
+			<div class="image-container">
+				<img ng-src="{{vm.ticket.product._links.image}}">
+			</div>
+		</div>
+	</aside>

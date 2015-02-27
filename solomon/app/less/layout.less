@@ -1,4 +1,7 @@
-﻿html, body {
+﻿
+// http://philipwalton.github.io/solved-by-flexbox/demos/holy-grail/
+
+html, body {
     margin: 0;
     padding: 0;
 }
@@ -8,10 +11,11 @@ body {
 }
 
 .content {
-    border: 1px solid black;
-    height: 100%;
-    margin-left: 200px;
-    padding: 15px;
+    //border: 1px solid black;
+    //height: 100%;
+    //margin-left: 200px;
+    flex: 2;
+    //padding: 15px;
 }
 
 .float-container {
@@ -66,4 +70,31 @@ body {
         color: #98a6ad;
     }
 
+}
+
+.shell {
+    //border: 1px solid green;
+    min-height: 100vh;
+    position: relative;
+
+    display: flex;
+    flex-direction: column;
+
+
+    &>main {
+        //height:100%;
+
+        flex: 1;
+        display: flex;
+        flex-direction: row;
+
+        //flex: 2 100%;
+        //width: 100%;
+
+         &>aside {
+            //flex: 2 0;
+            flex: 0 0 200px;
+            order: -1;
+        }
+    }
 }

@@ -12,12 +12,12 @@ function addGlobals($rootScope, securityService) {
 		if(!currentUser)
 			return false;
 
-		var currentUserId = currentUser.id || currentUser._id;
+		var currentUserId = currentUser.id;
 
 		if(typeof user === 'string')
 			return currentUserId === user;
 
-		var id = user.id || user._id;
+		var id = user.id;
 		return currentUserId === id;
 
 	};

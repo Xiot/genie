@@ -1,6 +1,5 @@
-<aside ng-controller="AsideController as vm">
-    sidebar
-    <ul class="nav">
+<!-- <aside  class="left-bar"> -->
+    <ul ng-controller="AsideController as vm" class="nav">
         <li ng-repeat="item in vm.sections">
             <!-- <a ng-href="{{item.url}}"> {{item.name}}</a> -->
             <a ui-state="item.name" ui-sref-active="active">
@@ -11,4 +10,4 @@
     </ul>
 
 
-</aside>
+<!-- </aside> -->

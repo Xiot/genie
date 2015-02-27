@@ -7,5 +7,5 @@ module.exports = {
 
 function initialize(server, config) {
     //server.use('/chat', routes);
-    routes(server, config.io, config.passport);
+    routes(server.route('/chat'), config.io, config.passport);
 }

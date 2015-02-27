@@ -1,15 +1,19 @@
-﻿<div ng-controller="ShellController as vm">
+﻿<div class="shell" ng-controller="ShellController as vm">
 
-    <div ng-include="'app/layout/header.html'"></div>
-
-    <div class="float-container">
-        <div class="side-bar" ng-include="'app/areas/aside/aside.html'"></div>
-
-        <div ui-view class="content">
+    <header>
+        <div ng-include="'app/layout/header.html'"></div>
+    </header>
+   
+    <main>
+        <div ui-view class="content container" ng-class="['content', 'container', $state.current.name]">
             {{vm.message}}
         </div>
-    </div>
-
+         <aside class="left-bar side-bar" ng-include="'app/areas/aside/aside.html'">
+            
+        </aside>
+       
+    </main>
+    <!-- <footer>foot</footer> -->
   <!--   <div class="debug-panel">
         <pre>{{$state.current | json}}</pre>
     </div> -->

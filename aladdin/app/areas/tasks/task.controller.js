@@ -32,12 +32,13 @@ function TaskController($scope, task, chat, taskService, productService) {
 		$scope.$on('$destroy', function() {
 			unbindMessage();
 		});
-
+ 
 		if(task.product){
-			productService.getById(task.product)
-			.then(function(product){
-				vm.product = product;
-			});
+			vm.product = task.product;
+			// productService.getById(task.product)
+			// .then(function(product){
+			// 	vm.product = product;
+			// });
 		}
 	}
 

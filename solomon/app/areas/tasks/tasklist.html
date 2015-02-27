@@ -8,7 +8,7 @@
 <div>
 	<h2>Open</h2>
     <div ng-repeat="task in vm.tasks" ng-class="['task', task.type, task.status]">
-         <a ui-sref='ticket-detail({ticketId: task._id})'>
+         <a ui-sref='ticket-detail({ticketId: task.id})'>
                 <div>{{task.displayTitle}}</div>
                 <div>{{task.department.name}}</div>
                 <div>{{task.product.name}}</div>

@@ -9,7 +9,8 @@ var _io;
 
 var service = {
 	init: init,
-	assignTicket: assignTicket
+	assignTicket: assignTicket,
+	get: getTicket
 };
 
 
@@ -45,19 +46,12 @@ function assignTicket(employeeId, taskId) {
 		_io.to(ticket.customer)
 		.emit('task:assigned', {
 			employee: employee,
-			task: task
+			ticket: ticket
 		});
 	}).then(function(){
 		return ticket;
 	});
 
-	// var p = [getTicket(task), getEmployee(employee)];
-
-	// Promise.all(p)
-	// 	.then(function(values) {
-	// 		employee = values[0];
-	// 		task = values[0];
-	// 	});		
 }
 
 function getEmployee(employee) {
@@ -71,10 +65,13 @@ function getEmployee(employee) {
 }
 
 function getTicket(task) {
-	if (task && task.id)
+	if (task instanceof Task)
 		return Promise.resolve(task);
 
-	return Task.findByIdAsync(task);
+	return Task.findById(task)
+		.populate('product')
+		.populate('assigned_to')
+		.execAsync();
 }
 
 function isObjectId(n) {

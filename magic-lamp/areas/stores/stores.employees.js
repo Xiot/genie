@@ -11,6 +11,9 @@ module.exports = function(server, io) {
 
 		var includeDeleted = req.query.includeInactive === 'true';
 
+		var department = req.query.department;
+		var onlyAvailable = req.query.available == true;
+
 		var query = {
 			store: req.store.id,
 			role: 'employee'
@@ -19,6 +22,13 @@ module.exports = function(server, io) {
 		if (!includeDeleted) {
 			query.active = true;
 		};
+
+		if (department){
+			query.department = department
+		};
+
+		if(onlyAvailable)
+			query.status = 'available';
 
 		return User.findAsync(query);
 	}));
