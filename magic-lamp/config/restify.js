@@ -140,14 +140,30 @@ function formatJSON(req, res, body, cb) {
 	} else if (Buffer.isBuffer(body)) {
 		body = body.toString('base64');
 	}
-
-	//console.log('async: ', cb);
+		
 	var formattedData = formatter.format(body, req);
+
+	// to make the formatter async, return `this` and use the `cb` to pass the value back;
+	if(isPromise(formattedData)){
+
+		formattedData.then(function(x){
+			var data = JSON.stringify(formattedData);
+			res.setHeader('Content-Length', Buffer.byteLength(data));
+			cb(data);
+		})
+		.catch(function(ex){
+			ch(ex);
+		});
+		return this;
+	}
 
 	var data = JSON.stringify(formattedData);
 	res.setHeader('Content-Length', Buffer.byteLength(data));
 
-	// to make the formatter async, return `this` and use the `cb` to pass the value back;
 
 	return (data);
+}
+
+function isPromise(obj) {
+   return obj && typeof(obj) === 'object' && obj.then !== undefined;
 }

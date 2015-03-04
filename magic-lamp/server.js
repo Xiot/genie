@@ -2,7 +2,8 @@
 
 require('babel/register')({
 	experimental: true,
-	playground: true
+	playground: true,
+	sourceMap: 'inline'
 });
 //require('babel').transform('code', {optional: ['selfContained', 'bluebirdCoroutines']})
 

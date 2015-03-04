@@ -66,9 +66,9 @@ module.exports = function(server, passport) {
 	// TODO: Move stats to its own module
 	.get('/stats/search', 'product_stats_search',
 		async function(req) {
-			
+
 			var lastWeek = new Date();
-			lastWeek.setDate(lastWeek.getDate() - 7);
+			lastWeek.setDate(lastWeek.getDate() - 14);
 
 
 			var query = RequestMetric.aggregate()

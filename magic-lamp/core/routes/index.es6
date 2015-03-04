@@ -1,9 +1,10 @@
 import _ from 'lodash';
 import wrap from './promiseRouter';
+import Promise from 'bluebird';
 
 class RouteBuilder {
 
-	_template = null;
+	//_template = null;
 
 	constructor(server, baseUri, middleware) {
 		this._server = server;
@@ -19,7 +20,7 @@ class RouteBuilder {
 	route(route) {
 
 		var childRoute = this._urlJoin(this.template, route);
-		
+
 		return new RouteBuilder(this._server, childRoute, this.middleware);
 	}
 
@@ -39,7 +40,7 @@ class RouteBuilder {
 		return this._methodHandler('GET', args.route, args.name, args.handlers);
 	}
 
-	post(route, name, ...handlers) {		
+	post(route, name, ...handlers) {
 		var args = this._extractRouteArgs([].slice.call(arguments));
 		return this._methodHandler('POST', args.route, args.name, args.handlers);
 	}
@@ -80,8 +81,8 @@ class RouteBuilder {
 			path: url,
 			name: args.name
 		};
-				
-		var allHandlers = this._prepareHandlers(this.middleware, args.handlers);
+
+		var allHandlers = this._prepareHandlers(args.name, this.middleware, args.handlers);
 
 		this._server[classMethod](def, allHandlers);
 		return this;
@@ -97,13 +98,13 @@ class RouteBuilder {
 		}
 	}
 
-	_prepareHandlers(middleware, handlers){
+	_prepareHandlers(name, middleware, handlers){
 		var allHandlers = [];
 		for(var h of middleware)
 			allHandlers.push(h);
 
 		for(var h of handlers){
-			
+
 			if(h.wrapped) {
 				allHandlers.push(h);
 				continue;
@@ -111,6 +112,20 @@ class RouteBuilder {
 
 			if(h.length === 1) {
 				allHandlers.push(wrap(h));
+				// if(h.name.startsWith('callee$')){
+				// 	allHandlers.push(Promise.coroutine(h));
+				// } else {
+				// 	allHandlers.push(wrap(h));
+				// }
+
+				// if(name === 'gen-test'){
+				// 	console.log(h.name);
+				// 	console.log(name, h);
+				// 	allHandlers.push(Promise.coroutine(h));
+				// }
+				// else {
+				// 	allHandlers.push(wrap(h));
+				// }
 				continue;
 			}
 			allHandlers.push(h);
@@ -149,7 +164,7 @@ class RouteBuilder {
 
 		var handlers = [];
 
-		if (Array.isArray(args[handlerIndex])) {			
+		if (Array.isArray(args[handlerIndex])) {
 			handlers = args[handlerIndex];
 		} else {
 			handlers = args.slice(handlerIndex);
@@ -207,7 +222,6 @@ class RouteBuilder {
 
 		return uri;
 	}
-
 }
 
 export default function initialize(server) {
