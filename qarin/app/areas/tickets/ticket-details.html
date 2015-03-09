@@ -1,1 +1,7 @@
 <h2>Ticket Details</h2>
+<div>{{vm.ticket.product.name}}</div>
+
+<div class="vertical-button-container">
+    <button class="btn btn-lg btn-block btn-default" ui-sref="chat({chatId: vm.ticket.chat})">Open Chat</button>
+    <button class="btn btn-lg btn-block btn-danger" ng-click="vm.cancel()">Cancel Request</button>
+</div>

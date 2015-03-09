@@ -13,7 +13,8 @@ var locationSchema = new Schema({
         state: String,
         postalCode: String
     },
-    geo: {type: [Number], index:'2dsphere'}
+    geo: {type: [Number], index:'2dsphere'},
+    alias: {type: String, index: true}
 });
 
 locationSchema.options.toJSON = {

@@ -6,24 +6,30 @@ function ProductController(productService, product, $state, chatService, ticketS
 
 	var vm = angular.extend(this, {
 		product: product,
-		createTicket: createTicket,
-		createChat: _createChat
+		createChat: _createChat,
+		callAssociate: _callAssociate
 	});
-
-	function createTicket(){
-		ticketService.create({product: vm.product})
-		.then(function(ticket){
-			$state.go('chat', {chatId: ticket.chat});
-		});
-	}
 
 	function _createChat(){
 
-		chatService.create({product: product.id})
-		.then(function(chat){
-			$state.go('chat', {id: chat._id});
+		ticketService.create({
+			product: product.id,
+			type: 'chat'
+		})
+		.then(function(ticket){
+			$state.go('chat', {chatId: ticket.chat});
 		}).catch(function(ex){
 			console.log(ex);
+		});
+	}
+
+	function _callAssociate(){
+		ticketService.create({
+			product: vm.product,
+			type: 'call-associate'
+		})
+		.then(function(ticket){
+			$state.go('ticket-created', {ticketId: ticket.id});
 		});
 	}
 }

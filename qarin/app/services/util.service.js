@@ -7,5 +7,5 @@ function UtilService(){
 		var args = [].slice.call(arguments);
 		return '/' + args.join('/');
 	};
-	
+
 }

@@ -4,7 +4,7 @@
     <!-- <span class="pull-right">{{vm.task.created_at | fromNow}}</span> -->
 
     <div class="pull-right" >
-        {{vm.task.status}}        
+        {{vm.task.status}}
     </div>
 
     <timer class="pull-right" ng-if="!vm.task.complete" start-time="vm.task.timeSince"></timer>
@@ -24,6 +24,7 @@
         <button class="btn btn-primary" ng-click="vm.accept()" ng-if="vm.task.status == 'unassigned'">Accept</button>
         <button class="btn btn-primary" ng-click="vm.engage()" ng-if="vm.task.status == 'assigned'">Engage</button>
         <button class="btn btn-primary" ng-click="vm.complete()" ng-if="vm.task.status == 'engaged'">Complete</button>
+        <button class="btn btn-danger" ng-click="vm.abort()" ng-if="vm.task.status == 'engaged'">Abort</button>
     </div>
 
 </header>
@@ -33,7 +34,7 @@
     <div class="task-details">
         <section >
             <!-- <h2>Chat</h2> -->
-                        
+
             <form name="chat" class="chat-form" ng-submit="vm.sendMessage()">
                 <div class="chat-window">
                     <div class="message-pane" scroll-glue>
@@ -68,7 +69,7 @@
         </section>
 
     </div>
-    <!-- 
+    <!--
     <div class="product-detail" ng-if="vm.product">
         <section>
             <h2>product</h2>

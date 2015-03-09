@@ -1,0 +1,9 @@
+{
+  "name": "flot.orderBars",
+  "version": "0.2.0",
+  "main": "jquery.flot.orderBars.js",
+  "dependencies": {
+    "flot": ">= 0.8.0"
+  },
+  "homepage": "http://en.benjaminbuffet.com/labs/flot/"
+}

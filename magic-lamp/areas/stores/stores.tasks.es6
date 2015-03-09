@@ -65,7 +65,7 @@ module.exports = function(server, passport, io) {
     wrap(function(req) {
         var employeeId = req.params.employee;
         if (!employeeId)
-        return null;
+            return null;
 
         if (employeeId === 'me' || employeeId === req.user.id) {
             req.employee = req.user;
@@ -96,18 +96,21 @@ module.exports = function(server, passport, io) {
             query.department = {
                 $in: departmentList
             }
+        } else if(req.user.isCustomer){
+            query.customer = req.user._id;
         }
+        console.log(query);
 
         return Task.find(query)
-        .populate('product')
-        .populate('department')
-        .sort({
-            created_at: -1
-        })
-        .execAsync()
-        .then(function(tasks) {
-            return Department.populateAsync(tasks, 'product.department');
-        });
+            .populate('product')
+            .populate('department')
+            .sort({
+                created_at: -1
+            })
+            .execAsync()
+            .then(function(tasks) {
+                return Department.populateAsync(tasks, 'product.department');
+            });
     }))
     .get('/stats', function(req) {
         // http://lostechies.com/derickbailey/2013/10/28/group-by-count-with-mongodb-and-mongoosejs/
@@ -135,7 +138,7 @@ module.exports = function(server, passport, io) {
             return stats;
         });
     })
-    
+
     .get('/stats/response', async function(req) {
 
         var o = {
@@ -208,16 +211,23 @@ module.exports = function(server, passport, io) {
         return g;
 
     })
-    .post('/',
-    wrap(function(req) {
+    .post('/',async function(req) {
 
         var task = new Task(req.body);
         task.store = req.store;
         task.created_by = req.user;
+        //task.type = 'blah';
 
-        if (task.isRequest) {
+        if (!task.isInternal && !task.customer) {
             task.customer = req.user;
         }
+
+        var validationResult = await (task.validateAsync()
+             .then(function(){ return true;})
+             .catch(function(ex) {return ex;}));
+
+        if(validationResult !== true)
+            return validationResult;
 
         var chat = new Chat({
             store: req.store,
@@ -225,49 +235,41 @@ module.exports = function(server, passport, io) {
         });
         chat.participants.push(req.user);
 
-        if (task.searchText) {
+        if (task.type === 'chat' && !task.product && task.searchText) {
             chat.messages.push({
                 user: req.user,
                 message: 'I am looking for \'' + task.searchText + '\'. Can you help me?'
             });
         }
 
-        return chat.saveAsync()
-        .spread(function(savedChat) {
+        var chatResult = await chat.saveAsync();
+        var chat = chatResult[0];
 
-            task.chat = savedChat;
+        task.chat = chat;
 
-            if (task.product && !task.department) {
-                return Product.findByIdAsync(task.product)
-                .then(function(product) {
-                    task.department = product.department;
-                    return task;
-                });
+        if (task.product && !task.department) {
+            var product = await Product.findByIdAsync(task.product);
+            if(product){
+                task.department = product.department;
             }
-            return task;
-        }).then(function(newTask) {
-            return newTask.saveAsync();
-        })
-        .spread(function(newTask) {
+        }
 
-            return newTask
-            .populate('product')
-            .populateAsync('department');
-        })
-        .then(function(newTask) {
-            var channel = io.to('aladdin:' + req.store.id);
+        await task.saveAsync();
 
-            if (newTask.department) {
-                var departmentChannel = 'department:' + newTask.department;
-                channel = channel.to(departmentChannel);
-                console.log('send to: ' + departmentChannel);
-            }
+        await task.populate('product').populateAsync('department');
 
-            channel.emit('ticket:created', newTask);
+        var channel = io.to('aladdin:' + req.store.id);
+        if (task.department) {
+            var departmentChannel = 'department:' + task.department;
+            channel = channel.to(departmentChannel);
+            console.log('send to: ' + departmentChannel);
+        }
 
-            return newTask;
-        });
-    }));
+        channel.emit('ticket:created', task);
+
+        return task;
+
+    });
 
     var taskRoute = route.route('/:task_id')
     .param('task_id', function(req, res, next, value) {
@@ -390,5 +392,30 @@ module.exports = function(server, passport, io) {
         // .then(function(){
         // 	return task.saveAsync();
         // });
-    }));
+    }))
+
+    .post('/transfer', async function(req){
+
+        if(req.task.type !== 'chat')
+            return new restify.BadRequestError('Only `chat` tickets can be transfered.');
+
+        var chatTicket = req.task;
+        var newTask = new Task();
+        newTask.chat = chatTicket.chat;
+        newTask.created_by = req.user;
+        newTask.store = chatTicket.store;
+        newTask.department = chatTicket.department;
+        newTask.product = chatTicket.product;
+        newTask.customer = chatTicket.customer;
+        newTask.searchText = chatTicket.searchText;
+        newTask.transfered_from = chatTicket;
+        await newTask.saveAsync();
+
+        chatTicket.transfered_to = newTask;
+        chatTicket.status = 'closed';
+        chatTicket.log.push({action: 'transfered', value: newTask.id});
+        await chatTicket.saveAsync();
+
+        return newTask;
+    })
 }

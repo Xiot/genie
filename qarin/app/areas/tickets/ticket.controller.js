@@ -5,12 +5,8 @@ function TicketController($scope, ticket, ticketService, $state) {
 
 	var vm = angular.extend(this, {
 		ticket: ticket,
-		chat: gotoChat
+		cancel: cancelRequest
 	});
-
-	function gotoChat(){
-		return $state.go('chat', {chatId: ticket.chat});
-	}
 
 	var unbind = ticketService.on('task:assigned', function(data){
 		console.log('task:assigned', data);
@@ -21,4 +17,11 @@ function TicketController($scope, ticket, ticketService, $state) {
 		unbind();
 	});
 
+	function cancelRequest(){
+		return ticketService.cancel(vm.ticket)
+		.then(function(ret){
+			console.log('your ticket has been cancelled.');
+			$state.go('home');
+		});
+	}
 }

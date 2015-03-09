@@ -1,0 +1,16 @@
+<h2>My Tickets</h2>
+
+<div class="">
+    <div ng-repeat="ticket in vm.openTickets" class="">
+        <a ui-sref="ticket-info({ticketId: ticket.id})">
+            <div>{{ticket.type}}</div>
+            <div>{{ticket.status}}</div>
+
+            <!-- <h5>{{chat.users}}</h5>
+            <p>
+                {{chat.lastMessage.message}}
+            </p> -->
+        </a>
+    </div>
+    <!-- <div class="add-bubble" ng-click="vm.create()">+</div> -->
+</div>

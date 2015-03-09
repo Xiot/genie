@@ -13,7 +13,8 @@ function TaskController($scope, task, chat, taskService, productService) {
 
 		accept: acceptTask,
 		complete: completeTask,
-		engage: engaged,		
+		engage: engaged,
+		abort: abortTask
 	});
 
 	init();
@@ -32,7 +33,7 @@ function TaskController($scope, task, chat, taskService, productService) {
 		$scope.$on('$destroy', function() {
 			unbindMessage();
 		});
- 
+
 		if(task.product){
 			vm.product = task.product;
 			// productService.getById(task.product)
@@ -73,9 +74,13 @@ function TaskController($scope, task, chat, taskService, productService) {
 	}
 
 	function completeTask(task) {
-		return setStatus('complete');
+		return setStatus('closed');
 	}
 	function engaged(task){
 		return setStatus('engaged');
+	}
+
+	function abortTask(task){
+		return setStatus('aborted');
 	}
 }

@@ -10,7 +10,7 @@ var env = plug.util.env;
 
 var paths = {
     src: {
-        js: 'app/**/*.js',        
+        js: 'app/**/*.js',
         less: 'app/less/**/*.less',
         lessRoot: 'app/less/app.less',
         index: 'index.html',
@@ -53,7 +53,7 @@ gulp.task('wiredep', function () {
 
     var wiredep = require('wiredep').stream;
     var index = './index.html';
-    
+
     return gulp.src(index)
         .pipe(wiredep({
             directory: './bower_components/',
@@ -81,13 +81,13 @@ gulp.task('inject',['build-vendor', 'build-app'], function () {
 
     return gulp.src(paths.src.index)
         //.pipe(gulp.dest(paths.output.root))
-        
+
         .pipe(plug.inject(gulp.src([
             vendorJs, vendorCss
             , appJs, appCss, appHtml
         ], { read: false }), options))
         //.pipe(plug.inject(gulp.src([appJs, appCss], { read: false }), options))
-        
+
         .pipe(gulp.dest(paths.output.root));
 });
 
@@ -96,16 +96,16 @@ gulp.task('compile:src:js', function () {
         .pipe(plug.jshint())
         .pipe(plug.jshint.reporter('default'))
         .pipe(plug.sourcemaps.init())
-        
+
         .pipe(plug.wrapJs('(function() {\r\n"use strict";\r\n%= body %\r\n})();', { newline: '\r\n' }))
         .on('error', function(){})
-        
+
         .pipe(plug.ngAnnotate())
-        
+
         .pipe(plug.angularFilesort())
         .pipe(plug.concat('app.js'))
         //.pipe(plug.uglify())
-        .pipe(plug.sourcemaps.write())        
+        .pipe(plug.sourcemaps.write())
         .pipe(gulp.dest(paths.output.js));
 });
 
@@ -121,20 +121,33 @@ gulp.task('compile:src:less', function () {
 gulp.task('compile:vendor:js', function () {
 
     var vendor = wiredep({
-        exclude: ['bootstrap.js', 'jquery.js'],
+        exclude: ['bootstrap.js', 'jquery.js', 'angular-charts.js'],
         overrides: {
             'socket.io-client': {
                 'main': 'socket.io.js'
+            },
+            'flot': {
+                'main': [
+                    'jquery.flot.js',
+                    'jquery.flot.time.js',
+                    'jquery.flot.resize.js',
+                    'jquery.flot.navigate.js',
+                    'jquery.flot.pie.js'
+                    ]
             }
         }
     }).js;
-    return gulp.src(vendor)
-        
-        .pipe(plug.using())
-       .pipe(plug.concat('vendor.js'))
-       //.pipe(plug.uglify())
-       .pipe(plug.size({title:'vendor gzip', gzip: true}))
-       .pipe(gulp.dest(paths.output.js))
+
+    return es.merge(
+        gulp.src(vendor)
+            .pipe(plug.using())
+            .pipe(plug.concat('vendor.js'))
+            //.pipe(plug.uglify())
+            .pipe(plug.size({title:'vendor gzip', gzip: true}))
+            .pipe(gulp.dest(paths.output.js)),
+       gulp.src('bower_components/jquery/dist/jquery.js')
+        .pipe(gulp.dest(paths.output.js))
+   );
 });
 
 gulp.task('compile:vendor:css', function () {
@@ -151,7 +164,7 @@ gulp.task('fonts', function(){
 
     fontTypes.forEach(function (ext) {
         fonts.push("resources/fonts/**/*" + ext);
-        fonts.push('bower_components/bootstrap/dist/fonts/*' + ext);        
+        fonts.push('bower_components/bootstrap/dist/fonts/*' + ext);
         fonts.push('bower_components/font-awesome/fonts/*' + ext);
     });
 
@@ -214,7 +227,7 @@ gulp.task('watch', function () {
     gulp.watch(paths.src.index, ['inject']);
     //gulp.watch('wwwroot/**').on('change', function (e) {
     //    console.log('File ' + e.path + ' was ' + e.type);
-    //    plug.connect.reload(e);        
+    //    plug.connect.reload(e);
     //});
     gulp.watch(paths.output.root + '/**').on('change', plug.livereload.changed);
 });

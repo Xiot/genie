@@ -8,12 +8,34 @@ function TicketService(storeService, httpClient, util, socket){
 	var service = {
 		create: createTicket,
 		get: getTicket,
-		on: addHandler
+		on: addHandler,
+		getOpen: getOpenTickets,
+		cancel: cancelRequest
 	};
 
 	init();
 
 	return service;
+
+	function cancelRequest(ticket){
+		if(!ticket)
+			throw new Error('TicketService.cancelRequest requires a ticket.');
+
+		var ticketId = ticket.id || ticket._id || ticket;
+		var url = util.join('stores', store.id, 'tasks', ticketId, 'status');
+		return httpClient.put(url, {status: 'aborted'})
+		.then(function(res){
+			return res.data;
+		});
+	}
+
+	function getOpenTickets(){
+		var url = util.join('stores', store.id, 'tasks', 'open');
+		return httpClient.get(url)
+		.then(function(res){
+			return res.data;
+		});
+	}
 
 	function getTicket(id){
 		var url = util.join('stores', store.id, 'tasks', id);
@@ -26,7 +48,8 @@ function TicketService(storeService, httpClient, util, socket){
 
 	function createTicket(opts){
 		var request = {
-			type: 'request',
+			//type: 'request',
+			type: opts.type,
 			searchText: opts.searchText
 		};
 
@@ -34,7 +57,7 @@ function TicketService(storeService, httpClient, util, socket){
 
 		if(opts.product){
 			request.product= opts.product.id || opts.product._id || opts.product;
-		}	
+		}
 
 		var url = util.join('stores', store.id, 'tasks');
 		return httpClient.post(url, request)
@@ -51,7 +74,7 @@ function TicketService(storeService, httpClient, util, socket){
 
 	function addHandler(message, handler){
 		socket.on(message, handler);
-		
+
 		return function() {
 			socket.removeListener(message, handler);
 		};

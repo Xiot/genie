@@ -35,11 +35,11 @@ module.exports.init = function(server, config) {
 				next(ex);
 			});
 	});
-	
+
 	var storeRoute = route.route('/:store_id')
 		.param('store_id', storeMiddleware)
 		.get('/', 'stores-id', function(req, res, next){
-			
+
 			req.store.populateAsync('organization')
 			.then(function(s){
 
@@ -47,8 +47,8 @@ module.exports.init = function(server, config) {
 				//obj.style = ".device"
 
 				res.send(req.store);
-				next();	
-			});			
+				next();
+			});
 		});
 
 
@@ -61,6 +61,8 @@ module.exports.init = function(server, config) {
 	require('./stores.employees')(storeRoute.route('/employees'), config.io);
 
 	require('./stores.departments')(storeRoute.route('/departments'));
+
+	require('./stats/stats.routes')(storeRoute.route('/stats'));
 
 	// TODO: Extract to new file
 	// storeRoute.get('/products',
@@ -201,7 +203,7 @@ module.exports.init = function(server, config) {
 	// 	});
 }
 
-//function 
+//function
 
 
 function storeMiddleware(req, res, next, value) {
@@ -210,8 +212,18 @@ function storeMiddleware(req, res, next, value) {
 	if (storeId === 'undefined')
 		next(new Error('StoreId not found.'));
 
-	if (!mongoose.Types.ObjectId.isValid(storeId))
-		return next(new NotFound('The store can not be found.'));
+	if (!mongoose.Types.ObjectId.isValid(storeId)) {
+
+		Store.findOneAsync({alias: storeId})
+		.then(function(store){
+			if(!store)
+				return next(new NotFound('The store can not be found.'));
+
+			req.store = store;
+			next();
+		});
+		return;
+	}
 
 	Store.findByIdAsync(storeId)
 		.then(function(store) {

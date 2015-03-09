@@ -3,7 +3,14 @@ angular.module('qarin')
 
 function configureRoutes($stateProvider){
 
-	$stateProvider.state('ticket-info', {
+	$stateProvider
+	.state('my-tickets', {
+		url: '/tickets',
+		controller: 'MyTicketsController',
+		controllerAs: 'vm',
+		templateUrl: 'app/areas/tickets/my-tickets.html'
+	})
+	.state('ticket-info', {
 		url: '/tickets/:ticketId',
 		controller: 'TicketController',
 		controllerAs: 'vm',
@@ -25,7 +32,7 @@ function configureRoutes($stateProvider){
 				var id = $stateParams.ticketId;
 				return ticketService.get(id);
 			}
-		}	
+		}
 	});
 
 }

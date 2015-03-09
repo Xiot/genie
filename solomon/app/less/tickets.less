@@ -53,9 +53,12 @@
     &.engaged {
         border-color: yellow;
     }
-    &.complete {
+    &.complete, &.closed {
         border-color: green;
-    }    
+    }
+	&.aborted {
+		border-color: red;
+	}
 }
 
 .stat-value-lg {
@@ -70,14 +73,14 @@
 }
 
 .ticket-detail {
-    
+
     position: relative;
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
 
     border: 1px solid black;
-    
+
     section {
         margin-left: -15px;
         //margin-right: -15px;
@@ -86,7 +89,7 @@
         padding-right: 15px;
 
         flex: 1 auto;
-        //border: 1px solid blue;        
+        //border: 1px solid blue;
     }
 
     aside {
@@ -95,11 +98,11 @@
 
         padding-left: 15px;
         padding-right: 15px;
-        
+
         flex: 0 0 250px;
-        
+
         background-color: gray;
-        
+
         .image-container {
             width: 50px;
         }

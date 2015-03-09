@@ -1,4 +1,5 @@
-﻿<div>
+
+<div>
     <h1>{{vm.store.organization.name}}</h1>
 
     <div>
@@ -6,11 +7,12 @@
     </div>
 
     <div class="vertical-button-container">
-    <button class="btn btn-lg btn-default btn-block" ui-sref="search">Self Help</button>
+        <button class="btn btn-lg btn-default btn-block" ui-sref="search">Self Help</button>
 
-        <button class="btn btn-lg btn-default btn-block" ui-sref="chat-list">Chat</button>
+        <!-- <button class="btn btn-lg btn-default btn-block" ui-sref="chat-list">Chat</button> -->
+        <button class="btn btn-lg btn-default btn-block" ui-sref="my-tickets">Tickets</button>
         <button class="btn btn-lg btn-default btn-block" ng-click="vm.requestHelp()">Call an associate</button>
-        
+
     </div>
 </div>
 <!--<h2>Home</h2>

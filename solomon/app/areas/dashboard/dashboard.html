@@ -1,4 +1,3 @@
-﻿
 <h2>Dashboard</h2>
 
 <h4>Search Terms</h4>
@@ -18,6 +17,29 @@
     <!--  <div google-chart chart="vm.chartOptions">
     </div> -->
     <div class="col-md-6">
-        <div ac-chart="'line'" ac-data="vm.data" ac-config="vm.config" id='chart' class='chart'></div>
+        <!-- <div ac-chart="'line'" ac-data="vm.data" ac-config="vm.config" id='chart' class='chart'></div> -->
+        <flot height="300px" width="100%" dataset="vm.productSearch.data" options="vm.productSearch.options"></flot>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-3">
+        <div class="chart card">
+            <div class="chart-title">Tasks by Type</div>
+            <flot height="150px" width="100%", dataset="vm.tasksByType.data" options="vm.tasksByType.options"></flot>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <div class="chart card">
+            <div class="chart-title">Status</div>
+            <flot height="300px" width="100%" dataset="vm.statusCount.data" options="vm.statusCount.options"></flot>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="chart card">
+            <div class="chart-title">Response Times</div>
+            <flot height="300px" width="100%" dataset="vm.responseTime.data" options="vm.responseTime.options"></flot>
+        </div>
     </div>
 </div>

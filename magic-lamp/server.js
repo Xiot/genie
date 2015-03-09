@@ -3,7 +3,8 @@
 require('babel/register')({
 	experimental: true,
 	playground: true,
-	sourceMap: 'inline'
+	optional: ['asyncToGenerator'],
+	//sourceMap: 'inline'
 });
 //require('babel').transform('code', {optional: ['selfContained', 'bluebirdCoroutines']})
 

@@ -12,14 +12,14 @@ var userSchema = new mongoose.Schema({
     username: { type: String, validate: [oodv('username'), '"{PATH}" is required for non-device accounts.'], default: null  },
 
     email: { type: String, required: false },
-    
+
     password_hash: { type: String, required: false },
     password_salt: { type: String },
-    
-    role: { 
-        type: String, 
-        enum: ['admin', 'org_admin', 'store_admin', 'employee', 'customer', 'device'], 
-        required: true 
+
+    role: {
+        type: String,
+        enum: ['admin', 'org_admin', 'store_admin', 'employee', 'customer', 'device'],
+        required: true
     },
     auth: {
         orgs: { type: [oid], ref: 'Organization' },
@@ -75,14 +75,14 @@ userSchema.pre('save', function(next){
         console.log('clearing');
         this.username = undefined;
         this.firstName = undefined;
-        this.lastName = undefined;        
+        this.lastName = undefined;
     }
     next();
 })
 
 userSchema.options.toJSON = {
   transform: function(user) {
-    
+
     var obj = user.toObject();
     delete obj.password_hash;
     delete obj.password_salt;
@@ -92,15 +92,15 @@ userSchema.options.toJSON = {
 };
 
 userSchema.methods = {
-    
+
     authenticate: function (plainText) {
         return this.encryptPassword(plainText) === this.password_hash;
     },
-    
+
     makeSalt: function () {
         return Math.round((new Date().valueOf() * Math.random())) + '';
     },
-    
+
     encryptPassword: function (password) {
         if (!password)
             return '';
@@ -118,18 +118,18 @@ userSchema.methods = {
 };
 
 function ood(name){
-    
-    return function isFieldRequired(value){    
+
+    return function isFieldRequired(value){
         var required = this.role !== 'device';
-        // var required = (this.role === 'device') || value; 
+        // var required = (this.role === 'device') || value;
         //console.log('ood.' + name + ': role: ' + this.role + ' required: ' + required);
         // return isValid;
         return required;
     }
 }
 function oodv(name){
-    return function optionalOnDevice(value){    
-        var isValid = (this.role === 'device') || !!value; 
+    return function optionalOnDevice(value){
+        var isValid = (this.role === 'device') || !!value;
         //console.log('oodv.' + name + ': role: ' + this.role + ' valid: ' + isValid);
         return isValid;
     }

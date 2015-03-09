@@ -110,22 +110,9 @@ class RouteBuilder {
 				continue;
 			}
 
-			if(h.length === 1) {
+			// the generator functions dont have any parameters
+			if(h.length === 1 || h.length === 0) {
 				allHandlers.push(wrap(h));
-				// if(h.name.startsWith('callee$')){
-				// 	allHandlers.push(Promise.coroutine(h));
-				// } else {
-				// 	allHandlers.push(wrap(h));
-				// }
-
-				// if(name === 'gen-test'){
-				// 	console.log(h.name);
-				// 	console.log(name, h);
-				// 	allHandlers.push(Promise.coroutine(h));
-				// }
-				// else {
-				// 	allHandlers.push(wrap(h));
-				// }
 				continue;
 			}
 			allHandlers.push(h);

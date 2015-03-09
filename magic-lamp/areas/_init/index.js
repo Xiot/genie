@@ -2,6 +2,9 @@
 //var router = express.Router();
 var mongoose = require('mongoose');
 var User = mongoose.model('User');
+var Task = mongoose.model('Task');
+var Store = mongoose.model('OrganizationLocation');
+//var Prod
 
 module.exports = {
   init: initialize
@@ -10,7 +13,7 @@ module.exports = {
 function initialize(server, config) {
 
 
-  server.post('/init', function(req, res, next) {
+  server.post('/init/user', function(req, res, next) {
 
     User.removeAsync()
       .then(function() {
@@ -33,10 +36,8 @@ function initialize(server, config) {
       });
   });
 
+  server.post('/init/tasks', async function(req){
+    return null;
+  })
   //server.use('/init', router);
-}
-
-function testMe(f, d, e) {
-
-  return other();
 }

@@ -1,4 +1,4 @@
-﻿angular.module('app.dashboard', ['app.sections'])
+angular.module('app._init', ['app.sections'])
     .run(appRun);
 
 function appRun(sectionManager) {
@@ -10,14 +10,14 @@ function appRun(sectionManager) {
 function getStates() {
     return [
         {
-            name: 'dashboard',
-            url: '/',
-            controller: 'DashboardController',
+            name: 'init',
+            url: '/init',
+            controller: 'TestDataController',
             controllerAs: 'vm',
-            templateUrl: 'app/areas/dashboard/dashboard.html',
+            templateUrl: 'app/areas/_init/init.html',
             settings: {
                 module: true,
-                order: 1,
+                order: 4,
                 icon: ['glyphicon', 'glyphicon-stats']
             }
         }

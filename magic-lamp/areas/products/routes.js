@@ -64,11 +64,39 @@ module.exports = function(server, passport) {
 	server.route('/products')
 
 	// TODO: Move stats to its own module
+	.get('/recent-searches', async function(req){
+
+		var lastWeek = new Date();
+		lastWeek.setDate(lastWeek.getDate() - 7);
+
+		return SearchLog.aggregate()
+			.match({
+				store: req.store._id,
+				timestamp: { $gt: lastWeek}
+			})
+			.group({
+				_id: '$searchText',
+				times: {$push: '$timestamp'},
+				count: {$sum: 1}
+			})
+			.sort({count: 1})
+			.exec();
+
+		// return SearchLog.find()
+		// .where({store: req.store.id})
+		// .limit(200)
+		// .sort({timestamp: 1})
+		// .lean()
+		// .select('timestamp searchText')
+		// .execAsync();
+
+
+	})
 	.get('/stats/search', 'product_stats_search',
 		async function(req) {
 
 			var lastWeek = new Date();
-			lastWeek.setDate(lastWeek.getDate() - 14);
+			lastWeek.setDate(lastWeek.getDate() - 7);
 
 
 			var query = RequestMetric.aggregate()

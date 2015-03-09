@@ -1,6 +1,7 @@
 ﻿var mongoose = require('mongoose');
 var ChatLog = mongoose.model('ChatLog');
 var Product = mongoose.model('Product');
+var restify = require('restify');
 
 var errors = load('~/core/errors');
 var chatService = require('./chat.service');
@@ -8,13 +9,13 @@ var chatService = require('./chat.service');
 var formatter = load('~/core/services/formatter');
 
 formatter.handle(ChatLog, function(obj, req) {
-    
+
     var value = obj.toObject();
 
     value.id = obj.id;
     delete value._id;
     delete value.__v;
-    
+
     if(obj.product && obj.product instanceof Product) {
     	value.product = formatter.format(obj.product, req);
     }
@@ -51,7 +52,7 @@ module.exports = function(server, io, passport) {
 	server.post('/', function(req, res, next) {
 		var newChat = new ChatLog();
 		newChat.saveAsync()
-			.spread(function(s) {			
+			.spread(function(s) {
 
 				res.send(s);
 				next();
@@ -68,7 +69,8 @@ module.exports = function(server, io, passport) {
 			.execAsync()
 			.then(function(chat) {
 
-				
+				if(!chat)
+                    return new restify.NotFoundError();
 
 				return chat;
 
@@ -94,7 +96,7 @@ module.exports = function(server, io, passport) {
 			console.log(ex.message);
 			console.log(ex.stack);
 			next(new Error(ex));
-			
+
 		});
 
 	});

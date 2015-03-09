@@ -36,7 +36,7 @@ var log = function(text) {
 }
 
 server.use(metrics.startCapture());
-server.on('after', function(req, res, route, err){	
+server.on('after', function(req, res, route, err){
 	metrics.endCapture(req, res, route, err);
 });
 
@@ -140,7 +140,7 @@ function formatJSON(req, res, body, cb) {
 	} else if (Buffer.isBuffer(body)) {
 		body = body.toString('base64');
 	}
-		
+
 	var formattedData = formatter.format(body, req);
 
 	// to make the formatter async, return `this` and use the `cb` to pass the value back;
