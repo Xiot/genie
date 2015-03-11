@@ -68,14 +68,19 @@ schema.post('init', function(){
     }
 });
 
+schema.post('save', function(doc){
+    if(!doc.original)
+        doc.original = {};
+    doc.original.status = this.status;
+})
 schema.pre('save', function(next){
 
     this.increment();
 
-    var now = Date.now();
+    var now = this.logDate || Date.now();
 
 	if(this.isModified('assigned_to') && !this.assigned_at) {
-		this.assigned_at = Date.now();
+		this.assigned_at = now;
         this.status = 'assigned';
     }
 

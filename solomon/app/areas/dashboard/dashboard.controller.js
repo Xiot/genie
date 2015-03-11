@@ -3,7 +3,7 @@ angular.module('app.dashboard')
     .controller('DashboardController', DashboardController);
 
 // @ngInject
-function DashboardController(httpClient, storeService, util) {
+function DashboardController(httpClient, storeService, util, slaCharts) {
 
     var vm = angular.extend(this, {
         message: "Hello World",
@@ -24,13 +24,19 @@ function DashboardController(httpClient, storeService, util) {
         tasksByType: {
             data: [],
             options: {}
-        }
+        },
+
+        sla: {}
     });
 
     prepareStatusCountChart();
 	prepareProductSearchChart();
     prepareResponseTimeChart();
     prepareTasksByTypeChart();
+
+    slaCharts.get().then(function(ret){
+        vm.sla = ret;
+    });
 
     function prepareTasksByTypeChart(){
         vm.tasksByType.options = {

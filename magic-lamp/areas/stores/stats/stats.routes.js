@@ -74,7 +74,7 @@ module.exports = function(server) {
                         continue;
 
                     emit(log.value, log.timestamp - lastTime);
-                    //lastTime = log.timestamp;
+                    lastTime = log.timestamp;
                 }
 
             },
@@ -148,24 +148,59 @@ module.exports = function(server) {
             return _.indexOf(order, x.id);
         });
 
-        //
-        // var departmentList = await Promise.all(g.map(function(d) {
-        //     if (!d.id)
-        //         return null;
-        //     return Department.findByIdAsync(d.id);
-        // }));
-        //
-        // for (var i = 0; i < departmentList.length; i++) {
-        //     var dept = departmentList[i];
-        //     if (dept)
-        //         dept = {
-        //             id: dept._id,
-        //             name: dept.name
-        //         };
-        //     g[i].deptarment = dept;
-        // }
-
         return g;
 
-    });
+    })
+    .get('/within-sla', async function(req){
+
+        //var sla = req.store.sla;
+
+        var o = {
+            map: function(){
+                var lastTime = this.created_at;
+                for(var i = 0; i < this.log.length; i++){
+                    var log = this.log[i];
+                    if(log.action !== 'status')
+                        continue;
+                    if(log.value === 'created')
+                        continue;
+
+                    var slaTime = sla[log.value];
+                    if(!slaTime)
+                        continue;
+
+                    emit(log.value, (log.timestamp - lastTime) / slaTime);
+                    lastTime = log.timestamp;
+                }
+            },
+            reduce: function(key, times){
+
+                var slaTime = sla[key];
+                var d = {status: key, sla: slaTime, countTotal: 0, count80: 0, count100: 0, count120: 0, countOver: 0};
+
+                times.forEach(function(time){
+                    d.countTotal ++;
+
+                    if(time < 0.8)
+                        d.count80++;
+                    else if (time <= 1.0)
+                        d.count100++;
+                    else if (time <= 1.2)
+                        d.count120++;
+                    else
+                        d.countOver++;
+
+                });
+
+                return d;
+            },
+            query: {store: req.store._id},
+            scope: {sla: req.store.sla}
+        }
+
+        var results = await Task.mapReduce(o).then(function(ret, stats){
+                return ret;
+            });
+        return results;
+    })
 }

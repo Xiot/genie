@@ -14,12 +14,13 @@ var locationSchema = new Schema({
         postalCode: String
     },
     geo: {type: [Number], index:'2dsphere'},
-    alias: {type: String, index: true}
+    alias: {type: String, index: true},
+    sla: Schema.Types.Mixed
 });
 
 locationSchema.options.toJSON = {
   transform: function(store) {
-    
+
     var obj = store.toObject();
 
     obj.id = obj._id;
@@ -35,7 +36,7 @@ locationSchema.links = {
 }
 
 locationSchema.statics.nearInKmAsync = function (coords, distance, cb) {
-    return geoUtil.nearInKmAsync(this, coords, distance, cb);    
+    return geoUtil.nearInKmAsync(this, coords, distance, cb);
 }
 
 var model = mongoose.model('OrganizationLocation', locationSchema);
