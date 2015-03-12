@@ -70,15 +70,18 @@ module.exports = function(server) {
                 var lastTime = this.created_at;
                 for(var i = 0; i < this.log.length; i++){
                     var log = this.log[i];
-                    if(log.action !== 'status')
-                        continue;
-
-                    emit(log.value, log.timestamp - lastTime);
-                    lastTime = log.timestamp;
+                    if(log.action === 'status') {
+                        emit(log.value, log.timestamp - lastTime);
+                        lastTime = log.timestamp;
+                    }
                 }
 
             },
+            // http://www.mongovue.com/2010/11/03/yet-another-mongodb-map-reduce-tutorial/
+            // reduce may be called multiple times, with the results of the first reduce being used
+            // as the input of the second.
             reduce: function(stage, times) {
+                //return {stage, times}
                 var d = {
                     id: stage,
                     sum: 0,
@@ -88,7 +91,14 @@ module.exports = function(server) {
                     max: 0
                 };
 
+                if(typeof times[0] === 'object')
+                    d = times[0];
+
                 times.forEach(function(t) {
+
+                    if(typeof t !== 'number')
+                        return;
+
                     d.count++;
                     d.sum += t;
 
@@ -108,6 +118,8 @@ module.exports = function(server) {
                 // },
                 store: req.store._id
             },
+            jsMode: true,
+            //out: 'response-time-chart',
             finalize: function(key, value) {
                 value._count = value.count || -1;
                 if (value.count > 0) {
@@ -203,4 +215,29 @@ module.exports = function(server) {
             });
         return results;
     })
+
+    .get('/chat-conversions', async function(req){
+
+        var transfered = await Task.countAsync({
+            type: 'chat',
+            transfered_to: {$exists: true}
+        });
+
+        var closed = await Task.countAsync({
+            type: 'chat',
+            transfered_to: {$exists: false},
+            status: 'closed'
+        });
+        var aborted = await Task.countAsync({
+            type: 'chat',
+            status: 'aborted'
+        });
+
+        return {
+            transfered,
+            closed,
+            aborted
+        };
+
+    });
 }

@@ -35,8 +35,13 @@ function TaskCreator() {
 
     this.cycleTicket = async function(ticket) {
 
-        var states = ['unassigned', 'assigned', 'engaged', 'closed'];
+        var states = ticket.type === 'call-associate' ?
+            ['unassigned', 'assigned', 'engaged', 'closed']
+            : ['unassigned', 'assigned', 'closed'] ;
+
         var lastTime = ticket.created_at;
+
+        var shouldPromote = false;
 
         for(var i = 1; i < states.length; i++){
 
@@ -60,13 +65,24 @@ function TaskCreator() {
                 //ticket.chat.participants.push(employee);
             }
 
+            if(ticket.type === 'chat' && i === 2 && !shouldAbort) {
+
+                shouldPromote = random(1, 100) < 40;
+                if(shouldPromote)
+                    return await promoteToCall(ticket);
+            }
+
             await ticket.saveAsync();
             if(shouldAbort)
                 break;
         }
+        return null;
     }
 
     this.createTicket = async function(type) {
+
+        if(!type)
+            type = random(1,100) < 60 ? 'chat' : 'call-associate';
 
         var customer = oneOf(users);
 
@@ -102,6 +118,33 @@ function TaskCreator() {
         await task.saveAsync();
         return task;
     }
+
+    async function promoteToCall(ticket){
+
+        var newTask = new Task();
+        newTask.type = 'call-associate';
+        newTask.chat = ticket.chat;
+        newTask.created_by = ticket.created_by;
+        newTask.store = ticket.store;
+        newTask.department = ticket.department;
+        newTask.product = ticket.product;
+        newTask.customer = ticket.customer;
+        newTask.searchText = ticket.searchText;
+        newTask.transfered_from = ticket;
+
+        newTask.logDate = ticket.logDate;
+        newTask.created_at = ticket.logDate;
+
+        await newTask.saveAsync();
+
+        ticket.transfered_to = newTask;
+        ticket.status = 'closed';
+        ticket.log.push({action: 'transfered', value: newTask.id, timestamp: ticket.logDate});
+        await ticket.saveAsync();
+
+        return newTask;
+    }
+
 }
 
 function randomRange(low1, low2, high1, high2){

@@ -45,16 +45,21 @@ function initialize(server, config) {
         var creator = new Creator();
         await creator.init();
 
-
         var count = (req.body && parseInt(req.body.count)) || 1;
 
         var results = [];
         for (var i = 0; i < count; i++) {
-            var ticket = await creator.createTicket('call-associate');
-            await creator.cycleTicket(ticket);
+
+            var ticket = await creator.createTicket();
             results.push(ticket);
+
+            var promotedTicket = await creator.cycleTicket(ticket);
+            if(promotedTicket) {
+                await creator.cycleTicket(promotedTicket);
+                results.push(promotedTicket);
+            }
         }
-        return results;
+        return {count: results.length, tickets: results};
     })
 
 

@@ -16,9 +16,10 @@ angular.module('solomon', [
     'symbiote.common',
     'ngAnimate',
 
-    'googlechart',
+    //'googlechart',
     //'angularCharts',
-    'angular-flot'
+    'angular-flot',
+    'app.charts'
 
 ]);
 

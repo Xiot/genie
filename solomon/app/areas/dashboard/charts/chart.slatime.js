@@ -1,4 +1,4 @@
-angular.module('app.dashboard')
+angular.module('app.charts')
     .factory('slaCharts', slaChart);
 
 function slaChart(httpClient, util, storeService) {

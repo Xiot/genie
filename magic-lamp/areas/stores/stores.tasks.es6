@@ -401,6 +401,7 @@ module.exports = function(server, passport, io) {
 
         var chatTicket = req.task;
         var newTask = new Task();
+        newTask.type = 'call-associate';
         newTask.chat = chatTicket.chat;
         newTask.created_by = req.user;
         newTask.store = chatTicket.store;
