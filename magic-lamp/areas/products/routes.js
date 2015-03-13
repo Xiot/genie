@@ -8,6 +8,7 @@ var fs = require('fs');
 var wrap = load("~/core/routes/promiseRouter");
 var Promise = require('bluebird');
 var _ = require('lodash');
+var moment = require('moment');
 
 var formatter = load('~/core/services/formatter');
 
@@ -67,20 +68,61 @@ module.exports = function(server, passport) {
 	.get('/recent-searches', async function(req){
 
 		var lastWeek = new Date();
-		lastWeek.setDate(lastWeek.getDate() - 7);
+		lastWeek.setDate(lastWeek.getDate() - 28);
 
-		return SearchLog.aggregate()
+		var query = SearchLog.aggregate()
 			.match({
-				store: req.store._id,
-				timestamp: { $gt: lastWeek}
+				'store': req.store._id,
+				timestamp: {$gt: lastWeek}
 			})
 			.group({
-				_id: '$searchText',
-				times: {$push: '$timestamp'},
-				count: {$sum: 1}
+				_id: {text: '$searchText', day: {$dayOfYear: '$timestamp'}, year: {$year: '$timestamp'}},
+				//day: {$dayOfYear: '$startTime'},
+				//year: {$year: '$startTime'},
+				count: {$sum: 1},
+				date: {$min: '$timestamp'}
 			})
-			.sort({count: 1})
-			.exec();
+			.sort({'_id.text': 1, '_id.day': 1, '_id.year': 1})
+			.group({
+				_id: '$_id.text',
+				count: {$sum: '$count'},
+				items: {$push: {
+					day: '$_id.day',
+					year: '$_id.year',
+					date: '$date',
+					count: '$count'
+				}}
+			})
+			.sort({count: -1})
+			.limit(5)
+			.project({
+				_id: 0,
+				search: '$_id',
+				count: '$count',
+				items: '$items'
+			});
+
+		var results = await query.exec();
+
+		results.forEach(function(stat){
+			stat.items.forEach(function(item){
+				item.date = moment.utc(item.data).startOf('day').toDate();
+			});
+		});
+		return results;
+
+		// return SearchLog.aggregate()
+		// 	.match({
+		// 		store: req.store._id,
+		// 		timestamp: { $gt: lastWeek}
+		// 	})
+		// 	.group({
+		// 		_id: '$searchText',
+		// 		times: {$push: '$timestamp'},
+		// 		count: {$sum: 1}
+		// 	})
+		// 	.sort({count: 1})
+		// 	.exec();
 
 		// return SearchLog.find()
 		// .where({store: req.store.id})
@@ -96,7 +138,7 @@ module.exports = function(server, passport) {
 		async function(req) {
 
 			var lastWeek = new Date();
-			lastWeek.setDate(lastWeek.getDate() - 7);
+			lastWeek.setDate(lastWeek.getDate() - 28);
 
 
 			var query = RequestMetric.aggregate()

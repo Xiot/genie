@@ -120,10 +120,10 @@ function DashboardController(httpClient, storeService, util, slaCharts, chatConv
         .then(function(res){
             var data = res.data.map(function(item){
                 var i = 0;
-                var seriesData = item.times.map(function(point){
-                    return [moment(point).valueOf(), ++i];
+                var seriesData = item.items.map(function(point){
+                    return [moment(point).valueOf(), point.count];
                 });
-                return {label: item._id, data: seriesData}
+                return {label: item.search, data: seriesData}
             });
             vm.productSearch.data = data;
         })
