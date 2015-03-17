@@ -5,7 +5,7 @@
 	"ext": "js es es6",
 	"restartable": "rs",
 	"env": {
-		"DEBUG": "magic-lamp*,mongoose-adapter",
+		"DEBUG": "magic-lamp*",
 		"PORT": "3000",
 		"ETC": "etc"
 	}

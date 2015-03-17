@@ -24,7 +24,7 @@ module.exports = function(server, io) {
 		};
 
 		if (department){
-			query.department = department
+			query.departments = department
 		};
 
 		if(onlyAvailable)

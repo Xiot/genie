@@ -30,6 +30,7 @@ var schema = new mongoose.Schema({
     chat: {type: id, ref: 'ChatLog'},
 
     searchText: {type: String},
+    productDetails: {type: mongoose.Schema.Types.Mixed},
 
     //status: {type: String, enum: ['unassigned', 'assigned', 'engaged', 'complete'], default: 'unassigned'},
     status: {type: String, enum: ['unassigned', 'assigned', 'engaged', 'closed', 'aborted'], default: 'unassigned'},

@@ -6,6 +6,7 @@ function ProductController(productService, product, $state, chatService, ticketS
 
 	var vm = angular.extend(this, {
 		product: product,
+		details: {},
 		createChat: _createChat,
 		callAssociate: _callAssociate
 	});
@@ -14,7 +15,8 @@ function ProductController(productService, product, $state, chatService, ticketS
 
 		ticketService.create({
 			product: product.id,
-			type: 'chat'
+			type: 'chat',
+			productDetails: vm.details
 		})
 		.then(function(ticket){
 			$state.go('chat', {chatId: ticket.chat});
@@ -26,7 +28,8 @@ function ProductController(productService, product, $state, chatService, ticketS
 	function _callAssociate(){
 		ticketService.create({
 			product: vm.product,
-			type: 'call-associate'
+			type: 'call-associate',
+			productDetails: vm.details
 		})
 		.then(function(ticket){
 			$state.go('ticket-created', {ticketId: ticket.id});

@@ -14,8 +14,21 @@
 
 <div>{{vm.product.description}}</div>
 
-<div class="product-specs">
-
+<div class="product-specs container-fluid">
+    <div ng-repeat="spec in vm.product.specs" class="row">
+        <div class="col-md-3">
+            {{spec.display || spec.name}}
+        </div>
+        <div class="col-md-9">
+            <div ng-if="spec.type == 'select'">
+                <select ng-model="vm.details[spec.name]" ng-options="x for x in spec.options">
+                </select>
+            </div>
+            <div ng-if="spec.type == 'text'">
+                <input type="text" ng-model="vm.details[spec.name]">
+            </div>
+        </div>
+    </div>
 </div>
 
 <button ng-click="vm.createChat()">Ask About</button>

@@ -1,4 +1,5 @@
 var Promise = require('bluebird');
+var debug = require('debug')('magic-lamp-router');
 
 var wrap = function(handler) {
 
@@ -7,13 +8,13 @@ var wrap = function(handler) {
         var nextReason;
 
         var takesNext = handler.length >= 3;
+        var nextCalled = false;
 
         var promiseNext = function(reason) {
             nextReason = reason;
 
-            if (takesNext) {
-                next(reason);
-            }
+            next(reason);
+            nextCalled = true;
         };
 
         try {
@@ -24,26 +25,23 @@ var wrap = function(handler) {
             if (isPromise(ret)) {
                 ret.then(function(value) {
 
-                    // check if value is a response object
-                    // if then then write it out to the actual response
-
                     // Promisified Mongoose saveAsync returns an array with [value, recordsAffected]
                     // if we get this, then just return the value;
                     if (Array.isArray(value) && value.length == 2 && typeof value[1] === 'number')
                         value = value[0];
 
-                    res.send(value);
-                    next();
+                    if (value)
+                        res.send(value);
+
+                    if (!nextCalled)
+                        next();
 
                 }).catch(function(ex) {
-                    //console.log(ex);
 
                     if (!(ex instanceof Error)) {
                         ex = new Error(ex);
                     }
 
-                    //res.send(400, ex);
-                    //next();
                     next(ex);
                 });
             } else if (isError(ret)) {

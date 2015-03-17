@@ -111,10 +111,10 @@ class RouteBuilder {
 			}
 
 			// the generator functions dont have any parameters
-			if(h.length === 1 || h.length === 0) {
+			//if(h.length === 1 || h.length === 0) {
 				allHandlers.push(wrap(h));
 				continue;
-			}
+			//}
 			allHandlers.push(h);
 		}
 		return allHandlers;

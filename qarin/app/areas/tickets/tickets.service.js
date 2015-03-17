@@ -50,7 +50,8 @@ function TicketService(storeService, httpClient, util, socket){
 		var request = {
 			//type: 'request',
 			type: opts.type,
-			searchText: opts.searchText
+			searchText: opts.searchText,
+			productDetails: opts.productDetails
 		};
 
 		opts = opts || {};

@@ -3,54 +3,23 @@ var debug = require('debug')('magic-lamp-images');
 var File = mongoose.model('File');
 
 module.exports = {
-	init: function(server, config) {
+    init: function(server, config) {
 
-		var route = server.route('/images');
-		// route.param('image_id', function(req, res, next, value){
-		// 	mongoose.files.get(value)
-		// })
-		route.get('/:image_id', 'get-image', function(req, res, next) {
-			debug('images-get');
+        var route = server.route('/images');
+        // route.param('image_id', function(req, res, next, value){
+        // 	mongoose.files.get(value)
+        // })
+        route.get('/:image_id', 'get-image', async function(req, res) {
 
-			try {
-				var imageId = req.params.image_id;
+            var imageId = req.params.image_id;
 
-				File.findByIdAsync(imageId)
-				.then(function(image){
+            var image = await File.findByIdAsync(imageId)
 
-					image.send(res);
-					next();
-					// var stream = image.openRead();
-					// res.writeHead(200, {
-					// 	'Content-Type': image.contentType
-					// });
-					// stream.pipe(res);
-				}).catch(function(ex){
-					next(new Error(ex));
-				});
 
-				// mongoose.files.getInfo(imageId).then(function(info) {
-				// 	info = info[0];
-				// 	debug('info', info);
+            image.send(res);
+			//next();
+            //return null;
 
-				// 	var stream = mongoose.files.get(req.params.image_id);
-
-				// 	res.writeHead(200, {
-				// 		'Content-Type': info.contentType
-				// 	});
-
-				// 	stream.pipe(res);
-				// 	stream.on('close', function(f) {
-				// 		next();
-				// 	});
-
-				// }).catch(function(ex) {
-				// 	next(new Error(ex));
-				// });
-
-			} catch (ex) {
-				next(new Error(ex));
-			}
-		});
-	}
+        });
+    }
 }

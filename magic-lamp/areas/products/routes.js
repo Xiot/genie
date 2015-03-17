@@ -349,6 +349,9 @@ module.exports = function(server, passport) {
 		return Product.findByIdAsync(req.params.product_id)
 			.then(function(p) {
 
+				if(!p)
+					return next(new errors.NotFound('product not found.'));
+
 				if (p.store != req.store.id) {
 					return next(new errors.NotFound('no product. wrong store'));
 				}

@@ -81,21 +81,24 @@ module.exports = function(server, passport, io) {
     wrap(function(req) {
 
         var query = {
-            store: req.store.id,
+            store: req.store._id,
             complete: false
         };
 
         if (req.employee) {
-            query.assigned_to = {
-                $in: [req.employee._id, null]
-            }
+
+            var orClause = query['$or'] = [{
+                assigned_to: {$in: [req.employee._id, null]}
+            }];
 
             var departmentList = req.employee.departments;
             departmentList.push(null);
 
-            query.department = {
-                $in: departmentList
-            }
+            orClause.push({
+                department: {
+                    $in: departmentList
+                }
+            });
         } else if(req.user.isCustomer){
             query.customer = req.user._id;
         }
@@ -109,6 +112,7 @@ module.exports = function(server, passport, io) {
             })
             .execAsync()
             .then(function(tasks) {
+                console.log('then', tasks);
                 return Department.populateAsync(tasks, 'product.department');
             });
     }))

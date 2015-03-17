@@ -7,6 +7,7 @@ function TaskController($scope, task, chat, taskService, productService) {
 		task: task,
 		chat: chat,
 		product: null,
+		productDetails: [],
 
 		message: '',
 		sendMessage: sendMessage,
@@ -36,10 +37,25 @@ function TaskController($scope, task, chat, taskService, productService) {
 
 		if(task.product){
 			vm.product = task.product;
-			// productService.getById(task.product)
-			// .then(function(product){
-			// 	vm.product = product;
-			// });
+
+			var data = [];
+			if(vm.product.specs && task.productDetails){
+				vm.product.specs.forEach(function(spec){
+					if(task.productDetails[spec.name]){
+
+						var specValue = angular.extend({}, spec, {value: task.productDetails[spec.name]});
+						specValue.display = specValue.display || specValue.name;
+						data.push(specValue);
+
+						// data.push({
+						// 	name: spec.name,
+						// 	display: spec.display || spec.name,
+						// 	value: task.productDetails[spec.name]
+						// });
+					}
+				})
+			}
+			vm.productDetails = data;
 		}
 	}
 

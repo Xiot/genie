@@ -24,7 +24,7 @@
         <button class="btn btn-primary" ng-click="vm.accept()" ng-if="vm.task.status == 'unassigned'">Accept</button>
         <button class="btn btn-primary" ng-click="vm.engage()" ng-if="vm.task.status == 'assigned'">Engage</button>
         <button class="btn btn-primary" ng-click="vm.complete()" ng-if="vm.task.status == 'engaged'">Complete</button>
-        <button class="btn btn-danger" ng-click="vm.abort()" ng-if="vm.task.status == 'engaged'">Abort</button>
+        <button class="btn btn-danger" ng-click="vm.abort()" ng-if="!vm.task.complete">Abort</button>
     </div>
 
 </header>
@@ -65,6 +65,11 @@
                 <h2>{{vm.product.name}}</h2>
                 <img ng-src="{{vm.product.imageUrl}}">
                 <p>{{vm.product.description}}</p>
+            </div>
+            <div>
+                <div ng-repeat="spec in vm.productDetails">
+                    {{spec.display}} = {{spec.value}}
+                </div>
             </div>
         </section>
 
