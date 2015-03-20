@@ -18,7 +18,7 @@ CommunicationService.prototype.send = function(user, data){
 }
 
 CommunicationService.prototype.getUser = function(){
-	
+
 }
 
 var service = new CommunicationService();

@@ -5,7 +5,7 @@ angular.module('aladdin.data')
 function StoreService(httpClient, eventService, $q, securityService) {
 
 	var _currentStore;
-	var _currentOrg;	
+	var _currentOrg;
 
 	var service = {
 		on: _listen,
@@ -21,7 +21,7 @@ function StoreService(httpClient, eventService, $q, securityService) {
 	return service;
 
 	function getTasks(options){
-		var url = '/stores/' + service.currentStore.id + '/tasks/open';	
+		var url = '/stores/' + service.currentStore.id + '/tasks/open';
 
 		return httpClient.get(url)
 		.then(function(res){

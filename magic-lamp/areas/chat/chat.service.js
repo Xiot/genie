@@ -11,7 +11,7 @@ Notes
 static service
 get(user)
  - gets the local service for the user.
- - 
+ -
 
 Take in io + user.
 this should be a transient service
@@ -69,7 +69,7 @@ function ChatRoom(id, io) {
 
 				// return ChatLog.findById(id, 'store participants')
 				// 	.execAsync()
-				// 	.then(function(chat) {					
+				// 	.then(function(chat) {
 
 						// if (chat.participants.length <= 1)
 						// 	return msg;
@@ -127,7 +127,7 @@ function ChatService() {
 		try {
 			var newChat = new ChatLog();
 			newChat.store = opts.store; //req.params.store_id;
-			newChat.product = opts.product; 
+			newChat.product = opts.product;
 			newChat.participants.push(opts.user);
 
 			return newChat.saveAsync()
@@ -145,7 +145,7 @@ function ChatService() {
 					});
 
 					return room;
-					
+
 				}).catch(function(ex) {
 					//next(new Error(ex));
 					return ex;
@@ -191,7 +191,7 @@ function ChatService() {
 			});
 
 			socket.join('store-' + storeId);
-			
+
 
 			if(data.app){
 				socket.join(data.app);

@@ -239,5 +239,7 @@ module.exports = function(server) {
             aborted
         };
 
-    });
+    })
+
+    ;
 }

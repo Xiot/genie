@@ -24,4 +24,28 @@ function HeaderController(storeService, socket, $state) {
 	storeService.on('storeChanged', function(e, args) {
 		vm.store = args.store;
 	});
+
+	socket.on('ticket:updated', function(data){
+		console.log('ticket:updated', data);
+
+		vm.notifications.push({
+			type: 'ticket',
+			timestamp: Date.now(),
+			viewed: false,
+			status: 'updated',
+			message: 'ticket was updated',
+			action: function(){
+				$state.go('ticket-info', {ticketId: data.id})
+			}
+		});
+	});
+
+	vm.notifications.push({
+		type: 'ticket',
+		timestamp: Date.now(),
+		viewed: 'false',
+		status: 'updated',
+		message: 'ticket was updated',
+		action: function(){}
+	});
 }

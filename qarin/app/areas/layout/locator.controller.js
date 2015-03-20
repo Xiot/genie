@@ -4,6 +4,6 @@
 /* @ngInject */
 function LocatorController($scope, storeService) {
 
-    
+
 
 }

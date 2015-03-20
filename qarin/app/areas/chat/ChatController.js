@@ -5,7 +5,8 @@
 			chat: chat,
 			//send: sendMessage,
 			message: '',
-			product: null
+			product: null,
+			associate: chat
 		});
 
 		// httpClient.get('/chat/' + chatId)
@@ -19,7 +20,7 @@
 		});
 
 		$rootScope.$on('chat-message', function(e, msg) {
-			if(msg.chat === vm.chat._id)
+			if(msg.chat === vm.chat.id)
 				vm.chat.messages.push(msg);
 		});
 

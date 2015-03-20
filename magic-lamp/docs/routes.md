@@ -1,7 +1,7 @@
 #Routes
 /tokens
 	- POST - creates a token
-	
+
 	/:id
 		- GET 		- gets information about the token
 		- DELETE 	- releases the token

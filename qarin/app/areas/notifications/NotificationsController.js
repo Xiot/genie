@@ -10,4 +10,8 @@
     socket.on('chat-message', function(data){
 
     });
+
+    socket.on('ticket:updated', function(data){
+        console.log('ticket:updated', data);
+    });
 });

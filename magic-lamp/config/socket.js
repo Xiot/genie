@@ -52,7 +52,7 @@ function onConnection(socket) {
 
 				data.userId = user.id;
 
-				//debug('registered: ' + socket.id + ' app: ' + data.app + ' store: ' + data.storeId);	
+				//debug('registered: ' + socket.id + ' app: ' + data.app + ' store: ' + data.storeId);
 
 				socket.join(data.userId);
 				socket.join('store:' + data.storeId);
@@ -74,11 +74,11 @@ function onConnection(socket) {
 				socket.info = data;
 				socket.user = user;
 
-				debug('registered: ' 
-					+ '\n    device: ' + data.deviceId 
-					+ '\n    user:   ' + data.userId 
-					+ '\n    socket: ' + socket.id 
-					+ '\n    store:  ' + data.storeId 
+				debug('registered: '
+					+ '\n    device: ' + data.deviceId
+					+ '\n    user:   ' + data.userId
+					+ '\n    socket: ' + socket.id
+					+ '\n    store:  ' + data.storeId
 					+ '\n    app:    ' + data.app);
 
 				// setTimeout(function(){

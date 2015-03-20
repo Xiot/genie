@@ -10,7 +10,8 @@ var _io;
 var service = {
 	init: init,
 	assignTicket: assignTicket,
-	get: getTicket
+	get: getTicket,
+	saveAsync: saveTicket
 };
 
 
@@ -18,6 +19,14 @@ module.exports = service;
 
 function init(socket){
 	_io = socket;
+}
+
+async function saveTicket(ticket){
+	await ticket.saveAsync();
+
+	var group = getTicketChannels(ticket);
+	group.emit('ticket:updated', ticket);
+	return ticket;
 }
 
 function assignTicket(employeeId, taskId) {
@@ -76,4 +85,15 @@ function getTicket(task) {
 
 function isObjectId(n) {
 	return mongoose.Types.ObjectId.isValid(n);
+}
+
+function getTicketChannels(ticket){
+	var channel = _io
+		.to(`solomon:${ticket.store}`)
+		.to(`aladdin:${ticket.store}`);
+
+	if(ticket.customer)
+		channel = channel.to(ticket.customer);
+
+	return channel;
 }

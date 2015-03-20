@@ -61,7 +61,7 @@ function TaskListController($scope, taskService, securityService) {
 
 	function sendChatMessage(task, message){
 		vm.message = "";
-		
+
 		return taskService.postMessage(task, message)
 		.then(function(msg){
 			msg.sent = true;

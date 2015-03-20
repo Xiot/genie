@@ -10,7 +10,9 @@ function TicketService(storeService, httpClient, util, socket){
 		get: getTicket,
 		on: addHandler,
 		getOpen: getOpenTickets,
-		cancel: cancelRequest
+		cancel: cancelRequest,
+
+		requestAssociate: createAssociateRequest
 	};
 
 	init();
@@ -46,15 +48,21 @@ function TicketService(storeService, httpClient, util, socket){
 		});
 	}
 
+	function createAssociateRequest(opts){
+		opts = angular.extend({}, opts, {type: 'call-associate'});
+		return createTicket(opts);
+	}
+
 	function createTicket(opts){
+
+		opts = opts || {};
+
 		var request = {
 			//type: 'request',
 			type: opts.type,
 			searchText: opts.searchText,
 			productDetails: opts.productDetails
 		};
-
-		opts = opts || {};
 
 		if(opts.product){
 			request.product= opts.product.id || opts.product._id || opts.product;

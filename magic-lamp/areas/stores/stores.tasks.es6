@@ -112,7 +112,7 @@ module.exports = function(server, passport, io) {
             })
             .execAsync()
             .then(function(tasks) {
-                console.log('then', tasks);
+                //console.log('then', tasks);
                 return Department.populateAsync(tasks, 'product.department');
             });
     }))
@@ -315,7 +315,7 @@ module.exports = function(server, passport, io) {
         return task.saveAsync();
     }))
 
-    .put('/status', wrap(function(req) {
+    .put('/status', async function(req) {
 
         var task = req.task;
 
@@ -323,7 +323,7 @@ module.exports = function(server, passport, io) {
         var status = req.body.status;
 
         if (!status)
-        return new restify.BadRequestError('status is required.');
+            return new restify.BadRequestError('status is required.');
 
         var now = Date.now();
         var oldStatus = task.status;
@@ -339,25 +339,17 @@ module.exports = function(server, passport, io) {
         }
 
         // TODO: Create a user service that will set the current status, and send the notification
-        var savedTask = null;
-        return task.saveAsync()
-        .spread(function(task) {
-            savedTask = task;
+        await ticketService.saveAsync(task);
 
-            if (status === 'assigned') {
-                return employeeService.setStatus(employee, 'busy').then(function() {
-                    return savedTask;
-                });
-            } else if (status === 'complete') {
-                return employeeService.setStatus(employee, 'available')
-                .then(function() {
-                    return savedTask;
-                })
-            }
+        if (status === 'assigned') {
+            await employeeService.setStatus(employee, 'busy');
 
-            return savedTask;
-        });
-    }))
+        } else if (status === 'complete') {
+            await employeeService.setStatus(employee, 'available');
+        }
+
+        return task;
+    })
 
     .put('/assignee', wrap(function(req) {
 

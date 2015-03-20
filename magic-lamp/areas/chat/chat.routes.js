@@ -21,7 +21,7 @@ formatter.handle(ChatLog, function(obj, req) {
     }
 
 	//var obj = chat.toObject();
-	obj.messages.forEach(function(m){
+	value.messages.forEach(function(m){
 		m.sent = m.user == req.user.id;
 	});
 

@@ -10,7 +10,7 @@ function NotificationService(io){
 	init();
 
 	function init(){
-		this._io.on('connection', onConnection);	
+		this._io.on('connection', onConnection);
 	}
 
 	function sendMessage(target, message, data){

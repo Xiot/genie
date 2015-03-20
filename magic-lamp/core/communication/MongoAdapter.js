@@ -14,7 +14,7 @@ function adapter(mongoose) {
 		source: {type: String, default: instanceId},
 		rooms: {
 			type: [String]
-		},		
+		},
 		data: mongoose.Schema.Types.Mixed
 	}, {
 		collection: 'socket.io.messages',
@@ -62,7 +62,7 @@ function adapter(mongoose) {
 		Adapter.prototype.broadcast.call(this, packet, opts);
 
 		if (remote)
-			return;	
+			return;
 
 		var name = packet.data[0];
 		var data = packet.data[1];
@@ -101,7 +101,7 @@ function adapter(mongoose) {
 		debug('delAll', id);
 	}
 
-	MongoAdapter.prototype._initialize = function() {		
+	MongoAdapter.prototype._initialize = function() {
 
 		if (mongoose.connection.readyState !== 1 /* connected */ ) {
 

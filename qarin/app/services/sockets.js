@@ -20,7 +20,7 @@
             socket.io = myIoSocket;
 
             function register() {
-                
+
                 //var user = securityService.currentUser();
                 socket.emit('register', {
                     storeId: storeService.current && storeService.current.id,
@@ -31,9 +31,9 @@
             }
 
             socket.on('connect', register);
-            
+
             storeService.on('storeChanged', register);
-            
+
             return socket;
         };
 
@@ -43,4 +43,3 @@
     .factory('socket', function(socketBuilder) {
         return socketBuilder();
     });
-    

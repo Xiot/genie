@@ -14,7 +14,7 @@ function ChatControlsController(chatService, chat) {
 		var message = vm.message;
 		vm.message = '';
 
-		chatService.sendMessage(chat._id, message)
+		chatService.sendMessage(chat.id, message)
 			.then(function(msg) {
 				vm.chat.messages.push({
 					message: msg.message,

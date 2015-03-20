@@ -28,5 +28,10 @@
 			<div class="image-container">
 				<img ng-src="{{vm.ticket.product._links.image}}">
 			</div>
+			<div>
+                <div ng-repeat="spec in vm.productDetails">
+                    {{spec.display}} = {{spec.value}}
+                </div>
+            </div>
 		</div>
 	</aside>

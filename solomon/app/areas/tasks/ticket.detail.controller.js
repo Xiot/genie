@@ -6,14 +6,38 @@ function TicketDetailController(ticket, ticketService, util, httpClient) {
 	var vm = angular.extend(this, {
 		ticket: ticket,
 		assignTo: assignToEmployee,
-		availableEmployees: []
-	}); 
-	
+		availableEmployees: [],
+		product: ticket.product,
+		productDetails: []
+	});
+
 	init();
 
 	function init(){
 		updateTimeSince(vm.ticket);
 		getAvailableEmployees();
+		prepareProductDetails();
+	}
+
+	function prepareProductDetails(){
+		var data = [];
+		if(vm.product.specs && vm.ticket.productDetails){
+			vm.product.specs.forEach(function(spec){
+				if(vm.ticket.productDetails[spec.name]){
+
+					var specValue = angular.extend({}, spec, {value: vm.ticket.productDetails[spec.name]});
+					specValue.display = specValue.display || specValue.name;
+					data.push(specValue);
+
+					// data.push({
+					// 	name: spec.name,
+					// 	display: spec.display || spec.name,
+					// 	value: task.productDetails[spec.name]
+					// });
+				}
+			})
+		}
+		vm.productDetails = data;
 	}
 
 	function getAvailableEmployees(){

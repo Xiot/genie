@@ -1,10 +1,24 @@
 <div ng-controller="HeaderController as vm">
-	<span class="pull-right">
-		<i class="glyphicon glyphicon-bell"></i>
-		<span class="badge">
-			{{vm.notifications.length}}
-		</span>
-	</span>
+    <ul class="nav navbar-nav pull-right">
+        <li class="dropdown" dropdown>
+            <a class="dropdown-toggle" dropdown-toggle>
+                <i class="glyphicon glyphicon-bell"></i>
+                <span class="badge">
+                    {{vm.notifications.length}}
+                </span>
+			</a>
+			<ul class="dropdown-menu dropdown-menu-right" role="menu" ng-if="vm.notifications.length > 0">
+				<li ng-repeat="item in vm.notifications">
+					<a ng-click="item.action()" ng-class="['notification', 'notification-' + item.type, item.viewed ? 'read' : 'unread']">
+						<span>
+							{{item.message}}
+						</span>
+					</a>
+				</li>
+			</ul>
+        </li>
+
+    </ul>
     <div class="brand">
         <a ui-sref="home">qarin</a>
     </div>

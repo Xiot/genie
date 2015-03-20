@@ -9,7 +9,7 @@ function GeoLocationService($q, $window, $rootScope) {
     return {
         getGps: _currentPosition,
     };
-    
+
     function _currentPosition() {
 
         if (!$window.navigator.geolocation)
@@ -28,7 +28,7 @@ function GeoLocationService($q, $window, $rootScope) {
                     case 3: return defer.reject('Timeout');
                     default: return defer.reject('Unkown');
                 }
-                
+
             });
         });
         return defer.promise;

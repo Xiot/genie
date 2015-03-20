@@ -3,13 +3,13 @@ angular.module('aladdin')
 
 
 function addExtensions($rootScope){
-	 
+
 	 // Override the $destroy method on the scope to call the `dispose` method 
     //  on the $scope or on the $scope.vm object
     var ctor = $rootScope.constructor;
     (function(destroy) {
         ctor.prototype.$destroy = function() {
-            
+
             // call the original destroy
             destroy.apply(this, arguments);
 

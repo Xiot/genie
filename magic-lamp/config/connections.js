@@ -13,7 +13,22 @@ var grid = require('./gridfs');
 bluebird.promisifyAll(mongoose);
 
 // Should get location and credentials from config
-mongoose.connect('mongodb://genie:solomon@htpc/genie');
+var mongoUrl = 'mongodb://genie:solomon@htpc/genie';
+mongoose.connect(mongoUrl, {server: {auto_reconnect: true}},  function(err){
+    if(err){
+        console.error('Failed to connect to mongo. ', err);
+    }
+});
+
+mongoose.connection.on('error', function(err){
+    console.error('mongoose connection failed. ', err);
+});
+
+mongoose.connection.on('disconnected', function(){
+    console.log('mongoose disconnected.');
+})
+
+
 //mongoose.connect('mongodb://genie:solomon@symbiotesoftware.com:17027/genie');
 var gfs = grid(mongoose);
 

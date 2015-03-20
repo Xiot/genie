@@ -5,15 +5,15 @@ function HomeController($scope, $http, env, socket, storeService, ticketService,
 
     var vm = angular.extend(this, {
         store: storeService.current,
-        requestHelp: _requestHelp        
+        requestHelp: _requestHelp
     });
 
-    function _requestHelp() { 
+    function _requestHelp() {
         //return storeService.requestHelp();
 
-        return ticketService.create()
+        return ticketService.requestAssociate()
         .then(function(ticket){
-            return $state.go('ticket-created', {ticketId: ticket._id});
+            return $state.go('ticket-created', {ticketId: ticket.id});
         });
     }
 
